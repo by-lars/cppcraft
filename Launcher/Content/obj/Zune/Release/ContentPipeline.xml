@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <TargetPlatform>Zune</TargetPlatform>
+      <BuildConfiguration>Release</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>S:\Dev\C++\ZuneCraft\Launcher\Content\</RootDirectory>
+      <LoggerRootDirectory>S:\Dev\C++\ZuneCraft\Launcher\</LoggerRootDirectory>
+      <IntermediateDirectory>S:\Dev\C++\ZuneCraft\Launcher\Content\obj\Zune\Release\</IntermediateDirectory>
+      <OutputDirectory>S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\WINDOWS\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.1.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2022-03-04T00:05:57.9920914+01:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>

@@ -1,0 +1,6 @@
+[submodule "ZuneCraft/ext/glm"]
+	path = ZuneCraft/ext/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "ZuneCraft/ext/nothings/stb"]
+	path = ZuneCraft/ext/nothings/stb
+	url = https://github.com/nothings/stb.git

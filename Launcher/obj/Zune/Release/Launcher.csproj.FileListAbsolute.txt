@@ -1,0 +1,15 @@
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\main.nvbf
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\ZuneCraft.exe
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\PostProcess.nvbv
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\DebugShader.nvbv
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\PostProcess.nvbf
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\Icons.png
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\atlas.png
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\main.nvbv
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Content\DebugShader.nvbf
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Launcher.exe
+S:\Dev\C++\ZuneCraft\Launcher\bin\Zune\Release\Launcher.pdb
+S:\Dev\C++\ZuneCraft\Launcher\obj\Zune\Release\ResolveAssemblyReference.cache
+S:\Dev\C++\ZuneCraft\Launcher\obj\Zune\Release\Microsoft.Xna.Framework.RuntimeProfile.txt
+S:\Dev\C++\ZuneCraft\Launcher\obj\Zune\Release\Launcher.exe
+S:\Dev\C++\ZuneCraft\Launcher\obj\Zune\Release\Launcher.pdb

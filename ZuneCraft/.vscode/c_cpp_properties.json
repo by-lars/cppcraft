@@ -1,0 +1,38 @@
+{
+    "configurations": [
+        {
+            "name": "arm",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/ext/glm/**",
+                "${workspaceFolder}/ext/nothings/**",
+                "C:/Program Files (x86)/NVIDIA Corporation/ce6_tegra_250_5265393/include",
+                "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/ce/include",
+                "C:/Program Files (x86)/Windows CE Tools/wce600/OpenZDK/Include/Armv4i",
+                "C:/Program Files (x86)/Windows CE Tools/wce600/OpenZDK/include/",
+                "C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/ce/atlmfc/include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "ZUNE_HD",
+                "_WIN32_WCE=0x600",
+                "UNDER_CE",
+                "WINCE",
+                "DEBUG",
+                "_WINDOWS",
+                "ARM",
+                "_ARM_",
+                "_CRT_SECURE_NO_WARNINGS",
+                "ZC_PLATFORM_ZUNE"
+            ],
+            "windowsSdkVersion": "10.0.20348.0",
+            "compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.30.30705/bin/Hostx64/x64/cl.exe",
+            "cStandard": "c99",
+            "cppStandard": "c++03",
+            "intelliSenseMode": "windows-msvc-arm"
+        }
+    ],
+    "version": 4
+}

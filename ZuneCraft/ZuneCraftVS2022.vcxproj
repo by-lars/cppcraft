@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{0042e41f-ef51-4bf2-a9ef-ab23525ff119}</ProjectGuid>
+    <RootNamespace>ZuneCraftVS2022</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(ProjectDir)ext\Platform\Win\boost;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(ProjectDir)ext\Platform\Win\boost;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ZC_PLATFORM_WIN32;_GLFW_WIN32;_CRT_SECURE_NO_WARNINGS;DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ZC_PLATFORM_WIN32;_GLFW_WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="ext\Platform\Win\glfw\src\context.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\egl_context.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\init.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\input.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\monitor.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\null_init.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\null_joystick.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\null_monitor.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\null_window.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\osmesa_context.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\platform.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\vulkan.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\wgl_context.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\win32_init.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\win32_joystick.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\win32_module.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\win32_monitor.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\win32_thread.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\win32_time.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\win32_window.c" />
+    <ClCompile Include="ext\Platform\Win\glfw\src\window.c" />
+    <ClCompile Include="src\Build\glad.cpp" />
+    <ClCompile Include="src\Core\EntryPoint.cpp" />
+    <ClCompile Include="src\Core\Game.cpp" />
+    <ClCompile Include="src\Core\GLWindow.cpp" />
+    <ClCompile Include="src\Geometry\Mesher.cpp" />
+    <ClCompile Include="src\Geometry\Vertex.cpp" />
+    <ClCompile Include="src\Graphics\Camera.cpp" />
+    <ClCompile Include="src\Graphics\DeviceResources.cpp" />
+    <ClCompile Include="src\Graphics\RenderAPI.cpp" />
+    <ClCompile Include="src\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Build\stb_image.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGL4API.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsLogger.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Utility\File.cpp" />
+    <ClCompile Include="src\World\Chunk.cpp" />
+    <ClCompile Include="src\World\World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ext\Platform\Win\glfw\src\internal.h" />
+    <ClInclude Include="ext\Platform\Win\glfw\src\mappings.h" />
+    <ClInclude Include="ext\Platform\Win\glfw\src\null_joystick.h" />
+    <ClInclude Include="ext\Platform\Win\glfw\src\null_platform.h" />
+    <ClInclude Include="ext\Platform\Win\glfw\src\platform.h" />
+    <ClInclude Include="ext\Platform\Win\glfw\src\win32_joystick.h" />
+    <ClInclude Include="ext\Platform\Win\glfw\src\win32_platform.h" />
+    <ClInclude Include="ext\Platform\Win\glfw\src\win32_thread.h" />
+    <ClInclude Include="ext\Platform\Win\glfw\src\win32_time.h" />
+    <ClInclude Include="src\Core\Base.h" />
+    <ClInclude Include="src\Core\Game.h" />
+    <ClInclude Include="src\Core\Input.h" />
+    <ClInclude Include="src\Core\Logger.h" />
+    <ClInclude Include="src\Core\GLWindow.h" />
+    <ClInclude Include="src\Geometry\Material.h" />
+    <ClInclude Include="src\Geometry\Mesher.h" />
+    <ClInclude Include="src\Geometry\Vertex.h" />
+    <ClInclude Include="src\Geometry\VoxelStorage.h" />
+    <ClInclude Include="src\Graphics\Camera.h" />
+    <ClInclude Include="src\Graphics\DeviceResources.h" />
+    <ClInclude Include="src\Graphics\GL.h" />
+    <ClInclude Include="src\Graphics\RenderAPI.h" />
+    <ClInclude Include="src\Graphics\Renderer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGL4API.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\Utility\File.h" />
+    <ClInclude Include="src\Utility\Hash.h" />
+    <ClInclude Include="src\Utility\StrongHandle.h" />
+    <ClInclude Include="src\World\Chunk.h" />
+    <ClInclude Include="src\World\World.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ext\Platform\Win\glfw\src\mappings.h.in" />
+    <CopyFileToFolders Include="src\Assets\Shader\GL46\DebugShader.fs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GL46\DebugShader.vs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GL46\main.fs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GL46\main.vs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GL46\PostProcess.fs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GL46\PostProcess.vs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="src\Assets\Image\Icons.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\image</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\image</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="src\Assets\Image\atlas.png">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)assets\image</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)assets\image</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
