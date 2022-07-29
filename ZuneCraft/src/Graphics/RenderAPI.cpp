@@ -11,7 +11,7 @@ namespace ZuneCraft {
 		switch (s_API) {
 			case RenderAPI::API::NONE: ZC_ASSERT(false, "RenderAPI None is currently not supported."); break;
 			case RenderAPI::API::OPENGL_4: return new OpenGL4API(); break;
-		//	case RenderAPI::API::OPENGL_ES_2: return new OpenGLES2API(); break;
+			case RenderAPI::API::OPENGL_ES_2: ZC_ASSERT(false, "OpenGLES 2.0 is currently not supported"); break;
 			default: ZC_FATAL_ERROR("Unknown RenderAPI."); break;
 		}
 	}

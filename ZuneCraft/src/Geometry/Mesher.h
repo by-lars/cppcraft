@@ -5,52 +5,27 @@
 #include "Geometry/Vertex.h"
 
 namespace ZuneCraft {
-	namespace Mesher {
-		void VoxelToGreedy(const VoxelStorage& voxels, Vertex* _out_VertexData, size_t* _out_VertCount);
+    class PolyMesh {
+    public:
+        PolyMesh(PolyMesh&& other);
+        PolyMesh(size_t vertexCount);
+        ~PolyMesh();
 
-		const float CubeVertices[] = {
-            -0.5f, -0.5f, -0.5f, // Bottom-left
-             0.5f,  0.5f, -0.5f, // top-right
-             0.5f, -0.5f, -0.5f, // bottom-right         
-             0.5f,  0.5f, -0.5f, // top-right
-            -0.5f, -0.5f, -0.5f, // bottom-left
-            -0.5f,  0.5f, -0.5f, // top-left
-            // Front face
-            -0.5f, -0.5f,  0.5f, // bottom-left
-             0.5f, -0.5f,  0.5f, // bottom-right
-             0.5f,  0.5f,  0.5f, // top-right
-             0.5f,  0.5f,  0.5f, // top-right
-            -0.5f,  0.5f,  0.5f, // top-left
-            -0.5f, -0.5f,  0.5f, // bottom-left
-            // Left face
-            -0.5f,  0.5f,  0.5f, // top-right
-            -0.5f,  0.5f, -0.5f, // top-left
-            -0.5f, -0.5f, -0.5f, // bottom-left
-            -0.5f, -0.5f, -0.5f, // bottom-left
-            -0.5f, -0.5f,  0.5f, // bottom-right
-            -0.5f,  0.5f,  0.5f, // top-right
-            // Right face
-             0.5f,  0.5f,  0.5f, // top-left
-             0.5f, -0.5f, -0.5f, // bottom-right
-             0.5f,  0.5f, -0.5f, // top-right         
-             0.5f, -0.5f, -0.5f, // bottom-right
-             0.5f,  0.5f,  0.5f, // top-left
-             0.5f, -0.5f,  0.5f, // bottom-left     
-            // Bottom face
-            -0.5f, -0.5f, -0.5f, // top-right
-             0.5f, -0.5f, -0.5f, // top-left
-             0.5f, -0.5f,  0.5f, // bottom-left
-             0.5f, -0.5f,  0.5f, // bottom-left
-            -0.5f, -0.5f,  0.5f, // bottom-right
-            -0.5f, -0.5f, -0.5f, // top-right
-            // Top face
-            -0.5f,  0.5f, -0.5f, // top-left
-             0.5f,  0.5f,  0.5f, // bottom-right
-             0.5f,  0.5f, -0.5f, // top-right     
-             0.5f,  0.5f,  0.5f, // bottom-right
-            -0.5f,  0.5f, -0.5f, // top-left
-            -0.5f,  0.5f,  0.5f // bottom-left   
-		};
+        Vertex& operator[] (int index);
+
+        Vertex* GetVertexStream();
+        size_t GetVertexCount();
+        size_t GetSizeInBytes();
+
+        void SetVertexCount(size_t count);
+
+    private:
+        Vertex* m_VertexStream;
+        size_t m_VertexCount;
+    };
+    
+    namespace Mesher {
+		PolyMesh VoxelToGreedy(const VoxelStorage& voxels);
 
         const float LineCubeVertices[] = {
             -0.5f, -0.5f, -0.5f,
@@ -80,5 +55,23 @@ namespace ZuneCraft {
             -0.5f, -0.5f, 0.5f,
             -0.5f, 0.5f, 0.5f,
         };
+
+        #ifdef ZC_PLATFORM_ZUNE
+        //Texture coords are rotated, to render in landscape on a portrait buffer
+        const unsigned char FullscreenQuad[] = {
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            1, 1, 0, 1,
+            1, 0, 1, 1
+        };
+        #elif ZC_PLATFORM_WIN32
+        const unsigned char FullscreenQuad[] = {
+            0, 1, 0, 1,
+            0, 0, 0, 0,
+            1, 1, 1, 1,
+            1, 0, 1, 0
+        };
+        #endif
+
 	};
 }

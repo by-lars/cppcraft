@@ -7,6 +7,7 @@
 namespace ZuneCraft {
 	class Image {
 	public:
+		Image(Image&& other);
 		Image(const std::string& path);
 		~Image();
 

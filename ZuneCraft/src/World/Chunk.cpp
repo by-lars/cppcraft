@@ -2,6 +2,7 @@
 #include "World/Chunk.h"
 #include "Graphics/GL.h"
 #include "Geometry/Mesher.h"
+#include "Graphics/Renderer.h"
 
 #include <time.h>
 #include <fastnoise/FastNoiseLite.h>
@@ -10,8 +11,8 @@ namespace ZuneCraft {
 	Chunk::Chunk(const glm::ivec2& index) {
 		SetIndex(index);
 
-		glGenBuffers(1, &m_GPUBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, m_GPUBuffer);
+	//	glGenBuffers(1, &m_GPUBuffer);
+	//	glBindBuffer(GL_ARRAY_BUFFER, m_GPUBuffer);
 
 		GenTerrain();
 	}
@@ -96,19 +97,20 @@ namespace ZuneCraft {
 	}
 
 	void Chunk::Update() {
-		Vertex* vertices = new Vertex[CHUNK_SIZE_QUBED];;
 
-		Mesher::VoxelToGreedy(m_Voxels, vertices, &m_VertCount);
+		PolyMesh mesh = Mesher::VoxelToGreedy(m_Voxels);
+		m_VertCount = mesh.GetVertexCount();
 
-		glBindBuffer(GL_ARRAY_BUFFER, m_GPUBuffer);
-		Vertex::SetVertexFormat();
-		glBufferData(GL_ARRAY_BUFFER, m_VertCount * sizeof(Vertex), vertices, GL_STATIC_DRAW);
-		ZC_LOG("Upoloading " << m_VertCount << " vertecies");
-		delete[] vertices;
+		//glBindBuffer(GL_ARRAY_BUFFER, m_GPUBuffer);
+		//Vertex::SetVertexFormat();
+		//glBufferData(GL_ARRAY_BUFFER, mesh.GetVertexCount() * sizeof(Vertex), mesh.GetVertexStream(), GL_STATIC_DRAW);
+		//ZC_LOG("Upoloading " << m_VertCount << " vertecies");
+
+		Renderer::BatchSubmitMesh(mesh, GetWorldPosition());
 	}
 
 	void Chunk::Render() {
-		glBindBuffer(GL_ARRAY_BUFFER, m_GPUBuffer);
-		glDrawArrays(GL_TRIANGLES, 0, m_VertCount);
+	//	glBindBuffer(GL_ARRAY_BUFFER, m_GPUBuffer);
+	//	glDrawArrays(GL_TRIANGLES, 0, m_VertCount);
 	}
 }

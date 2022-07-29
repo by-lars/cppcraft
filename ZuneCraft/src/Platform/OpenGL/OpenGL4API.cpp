@@ -4,13 +4,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace ZuneCraft {
+	#pragma region Constructor
 	OpenGL4API::OpenGL4API() {
 		const GLubyte* oglVersion = glGetString(GL_VERSION);
 		const GLubyte* oglRenderer = glGetString(GL_RENDERER);
 		const GLubyte* oglVendor = glGetString(GL_VENDOR);
 		ZC_LOG("Running " << oglVersion << " on " << oglRenderer << " - " << oglVendor);
 
-		//glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_BACK);
 	}
@@ -30,6 +31,43 @@ namespace ZuneCraft {
 		}
 	}
 
+	RenderAPI::Capabilities OpenGL4API::GetCapabilities() {
+		Capabilities capabilities;
+		capabilities.ShaderLocationAttributes = true;
+
+		return capabilities;
+	}
+
+	#pragma endregion
+
+	#pragma region Type Conversion
+	/*
+	* Type Conversion
+	*/
+	static GLenum DrawModeToGLEnum(DrawMode mode) {
+		switch (mode) {
+		case DrawMode::TRIANGLES: return GL_TRIANGLES; break;
+		case DrawMode::TRIANGLE_STRIP: return GL_TRIANGLE_STRIP; break;
+		case DrawMode::LINES: return GL_LINES; break;
+		default: ZC_FATAL_ERROR("Unknown DrawMode"); break;
+		}
+
+		return GL_INVALID_ENUM;
+	}
+
+	static GLenum DataTypeToGLEnum(DataType dataType) {
+		switch (dataType) {
+		case DataType::FLOAT: return GL_FLOAT; break;
+		case DataType::INT: return GL_INT; break;
+		case DataType::UNSIGNED_BYTE: return GL_UNSIGNED_BYTE; break;
+		default: ZC_FATAL_ERROR("Unknown Buffer Element Type"); break;
+		}
+
+		return GL_INVALID_ENUM;
+	}
+	#pragma endregion
+	
+	#pragma region Shader
 	/*
 	 * SHADER
 	 */
@@ -104,19 +142,22 @@ namespace ZuneCraft {
 		int location = glGetUniformLocation(shader.Id, name.c_str());
 		glUniform1i(location, value);
 	}
+	#pragma endregion
 
+	#pragma region Buffer
 	/*
 	 * BUFFER
 	 */
 	HBuffer OpenGL4API::CreateBuffer(uint32_t size, BufferType type, BufferUsage usage) {
-		ZC_DEBUG("Creating buffer of size: " << size);
-
 		GLuint buffer = 0;
 		glGenBuffers(1, &buffer);
+
+		ZC_DEBUG("Created ID=" << buffer << " of size=" << size);
 
 		GLenum bufferType;
 		switch (type) {
 		case BufferType::ARRAY: bufferType = GL_ARRAY_BUFFER; break;
+		case BufferType::DRAW_INDIRECT_BUFFER: bufferType = GL_DRAW_INDIRECT_BUFFER; break;
 		default: ZC_FATAL_ERROR("Unknown buffer type enum"); break;
 		}
 
@@ -144,25 +185,14 @@ namespace ZuneCraft {
 	}
 
 	void OpenGL4API::BindBuffer(HBuffer hBuffer) {
-		static HBuffer currentBinding = HBuffer::Invalid();
 
-		//if (currentBinding != hBuffer) {
-			GLBuffer buffer = m_Buffers[(int)hBuffer];
+		GLBuffer buffer = m_Buffers[(int)hBuffer];
+		if (buffer.VertexArray != 0) {
 			glBindVertexArray(buffer.VertexArray);
-			glBindBuffer(buffer.Type, buffer.Id);
-			currentBinding = hBuffer;
-		//}
-	}
-
-	static GLenum DataTypeToGLEnum(DataType dataType) {
-		switch (dataType) {
-		case DataType::FLOAT: return GL_FLOAT; break;
-		case DataType::INT: return GL_INT; break;
-		case DataType::UNSIGNED_BYTE: return GL_UNSIGNED_BYTE; break;
-		default: ZC_FATAL_ERROR("Unknown Buffer Element Type"); break;
 		}
-
-		return GL_INVALID_ENUM;
+		else {
+			glBindBuffer(buffer.Type, buffer.Id);
+		}
 	}
 
 	void OpenGL4API::SetBufferLayout(HBuffer hBuffer, std::initializer_list<BufferElement> elements, HBuffer hParentBuffer) {
@@ -202,11 +232,9 @@ namespace ZuneCraft {
 
 			if (element.IsIntegerType()) {
 				glVertexAttribIPointer(attrib, element.Count, attribType, stride, (const void*)offset);
-				ZC_DEBUG("VertexAttribPointerI #" << attrib << " element.Count=" << element.Count << " stride=" << stride);
 			}
 			else {
 				glVertexAttribPointer(attrib, element.Count, attribType, GL_FALSE, stride, (const void*)offset);
-				ZC_DEBUG("VertexAttribPointer #" << attrib << " element.Count=" << element.Count << " stride=" << stride);
 			}
 
 			glEnableVertexAttribArray(attrib);
@@ -224,10 +252,13 @@ namespace ZuneCraft {
 
 	void OpenGL4API::BufferData(HBuffer hBuffer, uint32_t size, uint32_t offset, void* data) {
 		GLBuffer buffer = m_Buffers[(int)hBuffer];
-		BindBuffer(hBuffer);
+		glBindBuffer(buffer.Type, buffer.Id);
 		glBufferSubData(buffer.Type, offset, size, data);
+		ZC_DEBUG("Uploading " << size << " bytes at offset " << offset << " to buffer #" << buffer.Id);
 	}
+	#pragma endregion
 
+	#pragma region Textures
 	/*
 	* Textures
 	*/
@@ -304,7 +335,9 @@ namespace ZuneCraft {
 			currentBinding = hTexture;
 		//}
 	}
+	#pragma endregion
 
+	#pragma region State
 	/*
 	* State
 	*/
@@ -316,20 +349,15 @@ namespace ZuneCraft {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	void OpenGL4API::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+		glViewport(x, y, width, height);
+	}
+	#pragma endregion
+
+	#pragma region Draw Commands
 	/*
 	* Draw Commands
 	*/
-	static GLenum DrawModeToGLEnum(DrawMode mode) {
-		switch (mode) {
-		case DrawMode::TRIANGLES: return GL_TRIANGLES; break;
-		case DrawMode::TRIANGLE_STRIP: return GL_TRIANGLE_STRIP; break;
-		case DrawMode::LINES: return GL_LINES; break;
-		default: ZC_FATAL_ERROR("Unknown DrawMode"); break;
-		}
-
-		return GL_INVALID_ENUM;
-	}
-
 	void OpenGL4API::DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) {
 		GLenum glMode = DrawModeToGLEnum(mode);
 		glDrawArrays(glMode, offset, count);
@@ -339,4 +367,11 @@ namespace ZuneCraft {
 		GLenum glMode = DrawModeToGLEnum(mode);
 		glDrawArraysInstanced(glMode, offset, count, instanceCount);
 	}
+
+	void OpenGL4API::MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) {
+		GLenum glMode = DrawModeToGLEnum(mode);
+		glMultiDrawArraysIndirect(glMode, 0, nRenderCommands, 0);
+	}
+
+	#pragma endregion
 }

@@ -16,7 +16,8 @@ namespace ZuneCraft {
 	};
 
 	enum class BufferType {
-		ARRAY = 0
+		ARRAY = 0,
+		DRAW_INDIRECT_BUFFER
 	};
 
 	enum class BufferUsage {
@@ -61,5 +62,12 @@ namespace ZuneCraft {
 	enum class TextureFormat {
 		RGB,
 		RGBA
+	};
+
+	struct RenderCommand {
+		uint32_t Count;
+		uint32_t InstanceCount;
+		uint32_t First;
+		uint32_t BaseInstance;
 	};
 }

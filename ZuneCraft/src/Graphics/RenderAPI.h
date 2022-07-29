@@ -14,10 +14,16 @@ namespace ZuneCraft {
 			OPENGL_4
 		};
 
+		struct Capabilities {
+			bool ShaderLocationAttributes;
+		};
+
 		virtual ~RenderAPI() = default;
 
 		static RenderAPI* Create();
 		static API GetAPI();
+
+		virtual Capabilities GetCapabilities() = 0;
 
 		virtual HShader CreateShader(const std::string& vertexCode, const std::string& fragmentCode, const std::vector<std::string>& attributes) = 0;
 		virtual void BindShader(HShader hShader) = 0;
@@ -41,9 +47,12 @@ namespace ZuneCraft {
 
 		virtual void Clear() = 0;
 		virtual void SetClearColor(float r, float g, float b, float a) = 0;
+		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
 		virtual void DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) = 0;
 		virtual void DrawArraysInstanced(DrawMode mode, uint32_t offset, uint32_t count, uint32_t instanceCount) = 0;
+		virtual void MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) = 0;
+
 	private:
 		static API s_API;
 	};

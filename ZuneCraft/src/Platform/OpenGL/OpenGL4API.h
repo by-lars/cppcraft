@@ -32,6 +32,8 @@ namespace ZuneCraft {
 		OpenGL4API();
 		~OpenGL4API();
 
+		Capabilities GetCapabilities() override;
+
 		HShader CreateShader(const std::string& vertex, const std::string& fragment, const std::vector<std::string>& attributes) override;
 		void BindShader(HShader hShader) override;
 		void SetShaderUniform(HShader hShader, const std::string& name, const glm::vec3& value) override;
@@ -49,9 +51,11 @@ namespace ZuneCraft {
 
 		void Clear() override;
 		void SetClearColor(float r, float g, float b, float a) override;
+		void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
 
 		void DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) override;
 		void DrawArraysInstanced(DrawMode mode, uint32_t offset, uint32_t count, uint32_t instanceCount) override;
+		void MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) override;
 
 	private:
 		std::vector<GLBuffer> m_Buffers;

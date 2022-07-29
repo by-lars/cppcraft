@@ -26,7 +26,7 @@ namespace ZuneCraft {
 	void World::Render() {
 		for (int x = 0; x < m_Chunks.size(); x++) {
 				Chunk* chunk = m_Chunks[x];
-				Renderer::DrawMesh(chunk->GetBuffer(), chunk->GetVertCount(), chunk->GetWorldPosition());		
+				//Renderer::DrawMesh(chunk->GetBuffer(), chunk->GetVertCount(), chunk->GetWorldPosition());		
 		}
 	}
 

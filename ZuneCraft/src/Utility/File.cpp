@@ -30,6 +30,18 @@ namespace ZuneCraft {
 		return contents;
 	}
 
+	Image::Image(Image&& other) {
+		m_Data = other.m_Data;
+		m_Width = other.m_Width;
+		m_Height = other.m_Height;
+		m_NrChannels = other.m_NrChannels;
+		
+		other.m_Data = nullptr;
+		other.m_Width = 0;
+		other.m_Height = 0;
+		other.m_NrChannels = 0;
+	}
+
 	Image File::LoadImage(const std::string& path) {
 		std::string localPath = s_WorkingDirectory + path;
 		return Image(localPath);

@@ -1,4 +1,9 @@
-﻿  WindowsWindow.cpp
-  World.cpp
-  Generating Code...
+﻿  Renderer.cpp
+S:\Dev\C++\ZuneCraft\ZuneCraft\src\Graphics\Renderer.cpp(158,86): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+S:\Dev\C++\ZuneCraft\ZuneCraft\src\Graphics\Renderer.cpp(167,40): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+S:\Dev\C++\ZuneCraft\ZuneCraft\src\Graphics\Renderer.cpp(169,63): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+S:\Dev\C++\ZuneCraft\ZuneCraft\src\Graphics\Renderer.cpp(170,49): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+S:\Dev\C++\ZuneCraft\ZuneCraft\src\Graphics\Renderer.cpp(173,137): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+S:\Dev\C++\ZuneCraft\ZuneCraft\src\Graphics\Renderer.cpp(179,119): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+S:\Dev\C++\ZuneCraft\ZuneCraft\src\Graphics\Renderer.cpp(181,120): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
   ZuneCraftVS2022.vcxproj -> S:\Dev\C++\ZuneCraft\ZuneCraft\bin\x64\Debug\ZuneCraftVS2022.exe

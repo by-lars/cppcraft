@@ -28,6 +28,19 @@ namespace ZuneCraft {
 		//_World = new World();
 		//m_World->Initialize();
 
+
+		Chunk chunk(glm::ivec2(0,0));
+		chunk.Update();
+
+		Chunk chunk1(glm::ivec2(1, 0));
+		chunk1.Update();
+
+		Chunk chunk2(glm::ivec2(0, 1));
+		chunk2.Update();
+
+		Chunk chunk3(glm::ivec2(1, 1));
+		chunk3.Update();
+
 		ZC_LOG("The cake is a lie");
 	}
 
@@ -88,7 +101,7 @@ namespace ZuneCraft {
 		//m_World->SetPlayerPos(m_Camera.GetPosition(), m_Camera.GetForwardVector());
 		//m_World->LoadPendingChunks();
 
-		//Renderer::SetView(m_Camera.GetViewMatrix());
+		Renderer::SetView(m_Camera.GetViewMatrix());
 		Renderer::BeginFrame();
 		//	m_World->Render();
 		Renderer::EndFrame();

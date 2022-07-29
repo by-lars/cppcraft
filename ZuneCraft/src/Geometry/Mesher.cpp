@@ -3,8 +3,9 @@
 #include "Geometry/Vertex.h"
 
 namespace ZuneCraft {
-	void Mesher::VoxelToGreedy(const VoxelStorage& voxels, Vertex* _out_VertexData, size_t* _out_VertCount) {
+	PolyMesh Mesher::VoxelToGreedy(const VoxelStorage& voxels) {
 		int index = 0;
+		PolyMesh mesh(CHUNK_SIZE_QUBED);
 
 		for (int d = 0; d < 3; d++) {
 			int w, h, k;
@@ -13,7 +14,7 @@ namespace ZuneCraft {
 			int u = (d + 1) % 3;
 			int v = (d + 2) % 3;
 			q[d] = 1;
-			Face mask[CHUNK_WIDTH * CHUNK_HEIGHT];
+			Face* mask = new Face[CHUNK_WIDTH * CHUNK_HEIGHT];
 
 			//Go through each slice of the chunk
 			for (x[d] = -1; x[d] < CHUNK_DIMENSIONS[d];) {
@@ -70,27 +71,20 @@ namespace ZuneCraft {
 
 
 							if (mask[n].IsBackFace) {
-								_out_VertexData[index++] = Vertex(x[0] + du[0],			x[1] + du[1],			x[2] + du[2],			w, h, mask[n].Type,	mask[n].Direction); //Top Right
-								_out_VertexData[index++] = Vertex(x[0],					x[1],					x[2],					0, h, mask[n].Type,	mask[n].Direction); //Top Left Cornor
-								_out_VertexData[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, mask[n].Type,	mask[n].Direction); //Lower right cornor
-								_out_VertexData[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, mask[n].Type,	mask[n].Direction); //Lower right cornor
-								_out_VertexData[index++] = Vertex(x[0],					x[1],					x[2],					0, h, mask[n].Type,	mask[n].Direction); //Top Left Cornor
-								_out_VertexData[index++] = Vertex(x[0] + dv[0],			x[1] + dv[1],			x[2] + dv[2],			0, 0, mask[n].Type,	mask[n].Direction); //Lower left cornor
+								mesh[index++] = Vertex(x[0] + du[0],			x[1] + du[1],			x[2] + du[2],			w, h, mask[n].Type,	mask[n].Direction); //Top Right
+								mesh[index++] = Vertex(x[0],					x[1],					x[2],					0, h, mask[n].Type,	mask[n].Direction); //Top Left Cornor
+								mesh[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, mask[n].Type,	mask[n].Direction); //Lower right cornor
+								mesh[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, mask[n].Type,	mask[n].Direction); //Lower right cornor
+								mesh[index++] = Vertex(x[0],					x[1],					x[2],					0, h, mask[n].Type,	mask[n].Direction); //Top Left Cornor
+								mesh[index++] = Vertex(x[0] + dv[0],			x[1] + dv[1],			x[2] + dv[2],			0, 0, mask[n].Type,	mask[n].Direction); //Lower left cornor
 							}
 							else {
-								_out_VertexData[index++] = Vertex(x[0] + du[0], x[1] + du[1], x[2] + du[2], w, h, mask[n].Type, mask[n].Direction); //Top Right
-								_out_VertexData[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, mask[n].Type, mask[n].Direction); //Lower right cornor
-								_out_VertexData[index++] = Vertex(x[0], x[1], x[2], 0, h, mask[n].Type, mask[n].Direction); //Top Left Cornor
-								_out_VertexData[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, mask[n].Type, mask[n].Direction); //Lower right cornor
-								_out_VertexData[index++] = Vertex(x[0] + dv[0], x[1] + dv[1], x[2] + dv[2], 0, 0, mask[n].Type, mask[n].Direction); //Lower left cornor
-								_out_VertexData[index++] = Vertex(x[0], x[1], x[2], 0, h, mask[n].Type, mask[n].Direction); //Top Left Cornor
-
-								//_out_VertexData[index++] = Vertex(x[0] + du[0], x[1] + du[1], x[2] + du[2], 1 * w, 1 * h, mask[n].Direction, mask[n].Type); //Top Right
-								//_out_VertexData[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], 1 * w, 0, mask[n].Direction, mask[n].Type); //Lower right cornor
-								//_out_VertexData[index++] = Vertex(x[0], x[1], x[2], 0, 1 * h, mask[n].Direction, mask[n].Type); //Top Left Cornor
-								//_out_VertexData[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], 1 * w, 0, mask[n].Direction, mask[n].Type); //Lower right cornor
-								//_out_VertexData[index++] = Vertex(x[0] + dv[0], x[1] + dv[1], x[2] + dv[2], 0, 0, mask[n].Direction, mask[n].Type); //Lower left cornor
-								//_out_VertexData[index++] = Vertex(x[0], x[1], x[2], 0, 1 * h, mask[n].Direction, mask[n].Type); //Top Left Cornor
+								mesh[index++] = Vertex(x[0] + du[0], x[1] + du[1], x[2] + du[2], w, h, mask[n].Type, mask[n].Direction); //Top Right
+								mesh[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, mask[n].Type, mask[n].Direction); //Lower right cornor
+								mesh[index++] = Vertex(x[0], x[1], x[2], 0, h, mask[n].Type, mask[n].Direction); //Top Left Cornor
+								mesh[index++] = Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, mask[n].Type, mask[n].Direction); //Lower right cornor
+								mesh[index++] = Vertex(x[0] + dv[0], x[1] + dv[1], x[2] + dv[2], 0, 0, mask[n].Type, mask[n].Direction); //Lower left cornor
+								mesh[index++] = Vertex(x[0], x[1], x[2], 0, h, mask[n].Type, mask[n].Direction); //Top Left Cornor
 							}
 
 							for (int l = 0; l < h; l++)
@@ -112,6 +106,47 @@ namespace ZuneCraft {
 			}
 		}
 
-		(*_out_VertCount) = index;
+		mesh.SetVertexCount(index);
+
+		return mesh;
+	}
+
+	PolyMesh::PolyMesh(size_t vertexCount) {
+		ZC_DEBUG("PolyMesh(size_t vertexCount)");
+		m_VertexCount = vertexCount;
+		m_VertexStream = new Vertex[vertexCount];
+	}
+
+	PolyMesh::PolyMesh(PolyMesh&& other) {
+		m_VertexCount = other.m_VertexCount;
+		m_VertexStream = other.m_VertexStream;
+
+		other.m_VertexCount = 0;
+		other.m_VertexStream = nullptr;
+	}
+
+	PolyMesh::~PolyMesh() {
+		ZC_DEBUG("~PolyMesh()");
+		delete m_VertexStream;
+	}
+
+	Vertex& PolyMesh::operator[] (int index) {
+		return m_VertexStream[index];
+	}
+
+	Vertex* PolyMesh::GetVertexStream() {
+		return m_VertexStream;
+	}
+
+	size_t PolyMesh::GetVertexCount() {
+		return m_VertexCount;
+	}
+
+	void PolyMesh::SetVertexCount(size_t count) {
+		m_VertexCount = count;
+	}
+
+	size_t PolyMesh::GetSizeInBytes() {
+		return m_VertexCount * sizeof(Vertex);
 	}
 }
