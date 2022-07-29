@@ -8,8 +8,8 @@ namespace ZuneCraft {
 
 		static Handle Invalid() { return Handle(); }
 
-		explicit Handle(T value) : m_Value(value) {}
-		explicit operator T() const { return m_Value; }
+		Handle(T value) : m_Value(value) {}
+		operator T() const { return m_Value; }
 
 		friend bool operator==(Handle a, Handle b) { return a.m_Value == b.m_Value; }
 		friend bool operator!=(Handle a, Handle b) { return a.m_Value != b.m_Value; }

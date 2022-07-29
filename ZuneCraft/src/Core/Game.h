@@ -4,10 +4,15 @@
 #include "World/World.h"
 #include "Graphics/Camera.h"
 #include "Core/GLWindow.h"
+#include "Graphics/RenderAPI.h"
 
 #include <vector>
 
 namespace ZuneCraft {
+	struct GameConfig {
+		RenderAPI::API GraphicsAPI;
+	};
+
 	class Game {
 	public:
 		Game();
@@ -18,16 +23,17 @@ namespace ZuneCraft {
 		Window& GetWindow()  { return *m_Window; }
 		static Game& Get() { return *s_Instance; }
 
+		GameConfig& GetConfig();
+
 	private:
-		//ZDK_INPUT_STATE m_Input;
 		Camera m_Camera;
 		Window* m_Window;
-
-		//World* m_World;
 
 		bool m_IsFlipped;
 		int m_Frame;
 
 		static Game* s_Instance;
+
+		GameConfig m_GameConfig;
 	};
 }

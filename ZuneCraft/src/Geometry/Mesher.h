@@ -4,28 +4,11 @@
 #include "Geometry/VoxelStorage.h"
 #include "Geometry/Vertex.h"
 
+#include <vector>
+
 namespace ZuneCraft {
-    class PolyMesh {
-    public:
-        PolyMesh(PolyMesh&& other);
-        PolyMesh(size_t vertexCount);
-        ~PolyMesh();
-
-        Vertex& operator[] (int index);
-
-        Vertex* GetVertexStream();
-        size_t GetVertexCount();
-        size_t GetSizeInBytes();
-
-        void SetVertexCount(size_t count);
-
-    private:
-        Vertex* m_VertexStream;
-        size_t m_VertexCount;
-    };
-    
     namespace Mesher {
-		PolyMesh VoxelToGreedy(const VoxelStorage& voxels);
+		void VoxelToGreedy(const VoxelStorage& voxels, std::vector<Vertex>* _out_Mesh);
 
         const float LineCubeVertices[] = {
             -0.5f, -0.5f, -0.5f,

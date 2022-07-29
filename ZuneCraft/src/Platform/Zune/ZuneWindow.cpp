@@ -3,7 +3,7 @@
 #include <zdk.h>
 
 namespace ZuneCraft {
-	void SuppressReboot()
+	static void SuppressReboot()
 	{
 		HKEY key = NULL;
 		HRESULT hr = S_OK;
@@ -51,8 +51,7 @@ namespace ZuneCraft {
 	}
 
 	void ZuneWindow::Update() {
-	//	ZDKGL_EndDraw();
-	//	ZDKGL_BeginDraw();
+
 	}
 
 	ZuneWindow::~ZuneWindow() {

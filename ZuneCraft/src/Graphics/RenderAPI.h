@@ -1,5 +1,6 @@
 #pragma once
 #include "Graphics/DeviceResources.h"
+#include "Utility/File.h"
 
 #include <string>
 #include <glm/glm.hpp>
@@ -8,31 +9,33 @@
 namespace ZuneCraft {
 	class RenderAPI {
 	public:
-		enum class API {
+		ZC_ENUM API {
 			NONE = 0,
 			OPENGL_ES_2,
 			OPENGL_4
 		};
 
 		struct Capabilities {
-			bool ShaderLocationAttributes;
+			bool ShaderCompiler;
+			bool MultiDrawIndirect;
 		};
-
-		virtual ~RenderAPI() = default;
 
 		static RenderAPI* Create();
 		static API GetAPI();
 
 		virtual Capabilities GetCapabilities() = 0;
 
-		virtual HShader CreateShader(const std::string& vertexCode, const std::string& fragmentCode, const std::vector<std::string>& attributes) = 0;
+		virtual HShader CreateShader(const std::string& vertexCode, const std::string& fragmentCode) = 0;
+		virtual HShader CreateShaderFromBinary(Binary& vertexBinary, Binary& fragmentBinary, const std::vector<std::string>& attributes) = 0;
+
 		virtual void BindShader(HShader hShader) = 0;
 		virtual void SetShaderUniform(HShader hShader, const std::string& name, const glm::vec3& value) = 0;
 		virtual void SetShaderUniform(HShader hShader, const std::string& name, const glm::mat4& value) = 0;
 		virtual void SetShaderUniform(HShader hShader, const std::string& name, int value) = 0;
 
 		virtual HBuffer CreateBuffer(uint32_t size, BufferType type, BufferUsage usage) = 0;
-		virtual void SetBufferLayout(HBuffer hBuffer, std::initializer_list<BufferElement> elements, HBuffer hParrentBuffer = HBuffer::Invalid()) = 0;
+		//std::initializer_list is not supported by c++03 :(
+		virtual void SetBufferLayout(HBuffer hBuffer, HBuffer hParentBuffer, const std::vector<BufferElement>& elements) = 0;
 		virtual void BindBuffer(HBuffer hBuffer) = 0;
 		virtual void BufferData(HBuffer hBuffer, uint32_t size, uint32_t offset, void* data) = 0;
 
@@ -52,8 +55,5 @@ namespace ZuneCraft {
 		virtual void DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) = 0;
 		virtual void DrawArraysInstanced(DrawMode mode, uint32_t offset, uint32_t count, uint32_t instanceCount) = 0;
 		virtual void MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) = 0;
-
-	private:
-		static API s_API;
 	};
 }

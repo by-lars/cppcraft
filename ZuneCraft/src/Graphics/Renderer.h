@@ -25,7 +25,7 @@ namespace ZuneCraft {
 		static void SetView(const glm::mat4& viewMat);
 		static void SetFlip(bool flipped);
 
-		static HMesh BatchSubmitMesh(PolyMesh& mesh, const glm::vec3& translation);
+		static HMesh BatchSubmitMesh(const std::vector<Vertex>& mesh, const glm::vec3& translation);
 		static void BatchDrawMesh(HMesh hMesh);
 		static void BatchFreeMesh(HMesh hMesh);
 

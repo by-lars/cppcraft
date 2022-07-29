@@ -6,7 +6,7 @@
 #include <vector>
 #include <deque>
 #include <glm/glm.hpp>
-#include <boost/unordered/unordered_map.hpp>
+//#include <boost/unordered/unordered_map.hpp>
 
 namespace ZuneCraft {
 	class World {
@@ -34,7 +34,7 @@ namespace ZuneCraft {
 		glm::ivec2 m_MapOffset;
 		glm::ivec2 m_LastMapOffset;
 
-		boost::unordered_map<glm::ivec2, Chunk*> m_ChunkMap;
+		//boost::unordered_map<glm::ivec2, Chunk*> m_ChunkMap;
 	
 		glm::ivec2 delta;
 		glm::ivec2 rowToLoad;

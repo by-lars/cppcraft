@@ -8,9 +8,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#ifdef ZC_PLATFORM_WIN32
-#include <GLFW/glfw3.h>
-#endif
 
 namespace ZuneCraft {
 	Game* Game::s_Instance = NULL;
@@ -18,6 +15,8 @@ namespace ZuneCraft {
 	Game::Game() {
 		s_Instance = this;
 		
+		m_GameConfig.GraphicsAPI = RenderAPI::API::OPENGL_4;
+
 		m_Window = Window::Create();
 		Renderer::Init();
 		Input::Init();
@@ -107,5 +106,9 @@ namespace ZuneCraft {
 		Renderer::EndFrame();
 
 		m_Window->Update();
+	}
+
+	GameConfig& Game::GetConfig() {
+		return m_GameConfig;
 	}
 }

@@ -10,10 +10,6 @@
 namespace ZuneCraft {
 	Chunk::Chunk(const glm::ivec2& index) {
 		SetIndex(index);
-
-	//	glGenBuffers(1, &m_GPUBuffer);
-	//	glBindBuffer(GL_ARRAY_BUFFER, m_GPUBuffer);
-
 		GenTerrain();
 	}
 
@@ -22,13 +18,11 @@ namespace ZuneCraft {
 		m_WorldPostion = glm::vec3(index.x * CHUNK_WIDTH, 0, index.y * CHUNK_WIDTH);
 	}
 
-	const glm::ivec2& Chunk::GetIndex() {
+	const glm::ivec2& Chunk::GetIndex() const{
 		return m_Index;
 	}
 
 	void Chunk::GenTerrain() {
-		m_VertCount = 0;
-
 		memset(&m_Voxels.Data[0], 0, CHUNK_SIZE_QUBED);
 		FastNoiseLite noise;
 		noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
@@ -57,22 +51,15 @@ namespace ZuneCraft {
 	}
 
 	Chunk::~Chunk() {
+
 	}
 
-	const glm::vec3& Chunk::GetWorldPosition() {
+	const glm::vec3& Chunk::GetWorldPosition() const {
 		return m_WorldPostion;
 	}
 
-	const glm::vec3 Chunk::GetWorldPositionCentered() {
+	const glm::vec3 Chunk::GetWorldPositionCentered() const {
 		return m_WorldPostion + glm::vec3(CHUNK_WIDTH / 2, 0, CHUNK_WIDTH / 2);
-	}
-
-	GLuint Chunk::GetVertCount() {
-		return m_VertCount;
-	}
-
-	GLuint Chunk::GetBuffer() {
-		return m_GPUBuffer;
 	}
 
 	uint8_t Chunk::TryGet(int x, int y, int z) {
@@ -97,20 +84,8 @@ namespace ZuneCraft {
 	}
 
 	void Chunk::Update() {
-
-		PolyMesh mesh = Mesher::VoxelToGreedy(m_Voxels);
-		m_VertCount = mesh.GetVertexCount();
-
-		//glBindBuffer(GL_ARRAY_BUFFER, m_GPUBuffer);
-		//Vertex::SetVertexFormat();
-		//glBufferData(GL_ARRAY_BUFFER, mesh.GetVertexCount() * sizeof(Vertex), mesh.GetVertexStream(), GL_STATIC_DRAW);
-		//ZC_LOG("Upoloading " << m_VertCount << " vertecies");
-
+		std::vector<Vertex> mesh;
+		Mesher::VoxelToGreedy(m_Voxels, &mesh);
 		Renderer::BatchSubmitMesh(mesh, GetWorldPosition());
-	}
-
-	void Chunk::Render() {
-	//	glBindBuffer(GL_ARRAY_BUFFER, m_GPUBuffer);
-	//	glDrawArrays(GL_TRIANGLES, 0, m_VertCount);
 	}
 }

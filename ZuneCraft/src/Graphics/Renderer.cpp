@@ -12,7 +12,6 @@
 
 #include "Graphics/RenderAPI.h"
 #include "Utility/File.h"
-#include "Utility/SparseArray.h"
 
 #ifdef ZC_PLATFORM_ZUNE
 #include <zdk.h> 
@@ -37,7 +36,6 @@ namespace ZuneCraft {
 		HBuffer PPQuadBuffer;
 
 		//Mesh Rendering
-		//SparseArray<PolyMesh, MAX_BATCH_MESHES> BatchedMeshes;
 		HBuffer BatchMeshBuffer;
 		HBuffer BatchDataBuffer;
 		std::vector<BatchData> BatchData;
@@ -67,8 +65,7 @@ namespace ZuneCraft {
 		std::vector<std::string> ppShaderAttribs; ppShaderAttribs.push_back("aPos");
 		s_Data.PPShader = s_Device->CreateShader(
 			File::LoadTextFile("shader\\GL46\\PostProcess.vs"), 
-			File::LoadTextFile("shader\\GL46\\PostProcess.fs"), 
-			ppShaderAttribs
+			File::LoadTextFile("shader\\GL46\\PostProcess.fs")
 		);
 		s_Device->BindShader(s_Data.PPShader);
 		s_Device->SetShaderUniform(s_Data.PPShader, "uTexture", 0);
@@ -77,27 +74,26 @@ namespace ZuneCraft {
 		s_Data.PPQuadBuffer = s_Device->CreateBuffer(sizeof(Mesher::FullscreenQuad), BufferType::ARRAY, BufferUsage::STATIC_DRAW);
 		s_Device->BindBuffer(s_Data.PPQuadBuffer);
 		s_Device->BufferData(s_Data.PPQuadBuffer, sizeof(Mesher::FullscreenQuad), 0, (void*)&Mesher::FullscreenQuad[0]);
-		s_Device->SetBufferLayout(s_Data.PPQuadBuffer, {
-			{DataType::UNSIGNED_BYTE, 4, 0}
-		});
+		std::vector<BufferElement> bufferElements;
+		bufferElements.push_back(BufferElement(DataType::UNSIGNED_BYTE, 4, 0));
+		s_Device->SetBufferLayout(s_Data.PPQuadBuffer, HBuffer::Invalid(), bufferElements);
 
 		//Setup Indirect Rendering
 		s_Data.RenderCommandBuffer = s_Device->CreateBuffer(sizeof(RenderCommand) * MAX_BATCH_MESHES, BufferType::DRAW_INDIRECT_BUFFER, BufferUsage::DYNAMIC_DRAW);
 		
 		s_Data.BatchMeshBuffer = s_Device->CreateBuffer(CHUNK_SIZE_QUBED * MAX_BATCH_MESHES, BufferType::ARRAY, BufferUsage::DYNAMIC_DRAW);
-		s_Device->SetBufferLayout(s_Data.BatchMeshBuffer, {
-				{DataType::UNSIGNED_BYTE, 3},
-				{DataType::UNSIGNED_BYTE, 4},
-			});
+		bufferElements.clear();
+		bufferElements.push_back(BufferElement(DataType::UNSIGNED_BYTE, 3, 0));
+		bufferElements.push_back(BufferElement(DataType::UNSIGNED_BYTE, 4, 0));
+		s_Device->SetBufferLayout(s_Data.BatchMeshBuffer, HBuffer::Invalid(), bufferElements);
 
 		s_Data.BatchDataBuffer = s_Device->CreateBuffer(sizeof(BatchData) * MAX_BATCH_MESHES, BufferType::ARRAY, BufferUsage::DYNAMIC_DRAW);
-		s_Device->SetBufferLayout(s_Data.BatchDataBuffer, {
-			{DataType::FLOAT, 4, 1},
-			{DataType::FLOAT, 4, 1},
-			{DataType::FLOAT, 4, 1},
-			{DataType::FLOAT, 4, 1},
-		}, s_Data.BatchMeshBuffer);
-		
+		bufferElements.clear();
+		bufferElements.push_back(BufferElement(DataType::FLOAT, 4, 1));
+		bufferElements.push_back(BufferElement(DataType::FLOAT, 4, 1));
+		bufferElements.push_back(BufferElement(DataType::FLOAT, 4, 1));
+		bufferElements.push_back(BufferElement(DataType::FLOAT, 4, 1));
+		s_Device->SetBufferLayout(s_Data.BatchDataBuffer, s_Data.BatchMeshBuffer, bufferElements);
 		s_Data.BatchCurrentOffset = 0;
 
 		std::vector<std::string> meshShaderAttribs;
@@ -105,8 +101,7 @@ namespace ZuneCraft {
 		meshShaderAttribs.push_back("aData");
 		s_Data.MeshShader = s_Device->CreateShader(
 			File::LoadTextFile("shader\\GL46\\main.vs"),
-			File::LoadTextFile("shader\\GL46\\main.fs"),
-			meshShaderAttribs
+			File::LoadTextFile("shader\\GL46\\main.fs")
 		);
 		glm::mat4 identity(1.0f);
 		glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)s_Data.RenderWidth / (float)s_Data.RenderHeight, 0.1f, 400.0f);
@@ -116,10 +111,10 @@ namespace ZuneCraft {
 		s_Device->SetShaderUniform(s_Data.MeshShader, "uAtlas", 1);
 
 		glActiveTexture(GL_TEXTURE1);
-		Image atlas = File::LoadImage("image\\atlas.png");
-		HTexture tex = s_Device->CreateTexture(atlas.GetWidth(), atlas.GetHeight(), atlas.GetFormat(), DataType::UNSIGNED_BYTE, ClampMode::CLAMP_TO_EDGE, FilterMode::NEAREST);
+		Image atlas; File::LoadImageFile("image\\atlas.png", &atlas);
+		HTexture tex = s_Device->CreateTexture(atlas.Width, atlas.Height, atlas.GetFormat(), DataType::UNSIGNED_BYTE, ClampMode::CLAMP_TO_EDGE, FilterMode::NEAREST);
 		s_Device->BindTexture(tex);
-		s_Device->UploadTextureData(tex, atlas.GetData());
+		s_Device->UploadTextureData(tex, atlas.Data);
 	}	
 
 	void Renderer::Shutdown() {
@@ -162,24 +157,24 @@ namespace ZuneCraft {
 		#endif
 	}
 
-	HMesh Renderer::BatchSubmitMesh(PolyMesh& mesh, const glm::vec3& translation) {
+	HMesh Renderer::BatchSubmitMesh(const std::vector<Vertex>& mesh, const glm::vec3& translation) {
 		RenderCommand command;
-		command.Count = mesh.GetVertexCount();
+		command.Count = mesh.size();
 		command.InstanceCount = 1;
 		command.First = (s_Data.BatchCurrentOffset / sizeof(Vertex));
 		command.BaseInstance = s_Data.BatchData.size();
 		
 		s_Data.RenderCommands.push_back(command);
-		s_Device->BufferData(s_Data.RenderCommandBuffer, s_Data.RenderCommands.size() * sizeof(RenderCommand), 0, s_Data.RenderCommands.data());
+		s_Device->BufferData(s_Data.RenderCommandBuffer, s_Data.RenderCommands.size() * sizeof(RenderCommand), 0, &s_Data.RenderCommands[0]);
 
 		BatchData data;
 		data.Translation = glm::mat4(1.0f);
 		data.Translation = glm::translate(data.Translation, translation);
 		s_Data.BatchData.push_back(data);
-		s_Device->BufferData(s_Data.BatchDataBuffer, s_Data.BatchData.size() * sizeof(BatchData), 0, s_Data.BatchData.data());
+		s_Device->BufferData(s_Data.BatchDataBuffer, s_Data.BatchData.size() * sizeof(BatchData), 0, &s_Data.BatchData[0]);
 
-		s_Device->BufferData(s_Data.BatchMeshBuffer, mesh.GetSizeInBytes(), s_Data.BatchCurrentOffset, mesh.GetVertexStream());
-		s_Data.BatchCurrentOffset += mesh.GetSizeInBytes();
+		s_Device->BufferData(s_Data.BatchMeshBuffer, mesh.size() * sizeof(Vertex), s_Data.BatchCurrentOffset, (void*)&mesh[0]);
+		s_Data.BatchCurrentOffset += mesh.size() * sizeof(Vertex);
 
 		return HMesh(0);
 	}

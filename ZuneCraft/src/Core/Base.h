@@ -3,9 +3,11 @@
 #include <cstdlib>
 
 #ifdef ZC_PLATFORM_WIN32 
-#define ZC_ASSET_PATH(x) "assets/" ## x
+#define ZC_ENUM enum class
 #elif ZC_PLATFORM_ZUNE
-	#define ZC_ASSET_PATH(x) "\\gametitle\\584E07D1\\Content\\" ## x
+#define ZC_ENUM enum
+#define nullptr NULL
+#pragma warning (disable : 4482)
 #endif
 
 #define ZUNE_CRAFT_VERSION "0.1.0"
@@ -36,9 +38,11 @@ typedef unsigned __int64  uint64_t;
 typedef unsigned int     GLuint;
 typedef			 int     GLint;
 typedef unsigned int	 GLenum;
+typedef			 char	 GLchar;
+
 
 namespace ZuneCraft {
-	enum Result {
+	ZC_ENUM Result {
 		FAILURE = 0,
 		SUCCESS = 1
 	};

@@ -33,4 +33,10 @@ namespace ZuneCraft {
 
 		ZC_FATAL_ERROR("Unknown Buffer Element Type");
 	}
+
+	BufferElement::BufferElement(DataType type, uint32_t count, uint32_t divisor) {
+		Type = type; 
+		Count = count;
+		Divisor = divisor;
+	}
 }

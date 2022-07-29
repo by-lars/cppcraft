@@ -121,6 +121,7 @@
     <ClCompile Include="src\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Build\stb_image.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGL4API.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLES2API.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsLogger.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
@@ -153,6 +154,8 @@
     <ClInclude Include="src\Graphics\RenderAPI.h" />
     <ClInclude Include="src\Graphics\Renderer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL4API.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLCommon.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLES2API.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Utility\File.h" />
     <ClInclude Include="src\Utility\Hash.h" />
@@ -204,6 +207,48 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GL46</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GLES2\DebugShader.fs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GLES2\DebugShader.vs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GLES2\main.fs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GLES2\main.vs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GLES2\PostProcess.fs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GLES2\PostProcess.vs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

@@ -11,11 +11,11 @@ namespace ZuneCraft {
 		Chunk(const glm::ivec2& offset);
 		~Chunk();
 
-		const glm::ivec2& GetIndex();
+		const glm::ivec2& GetIndex() const;
 		void SetIndex(const glm::ivec2& index);
 
-		const glm::vec3& GetWorldPosition();
-		const glm::vec3 GetWorldPositionCentered();
+		const glm::vec3& GetWorldPosition() const;
+		const glm::vec3 GetWorldPositionCentered() const;
 
 		void GenTerrain();
 		
@@ -25,15 +25,8 @@ namespace ZuneCraft {
 		bool IsVoidAt(int x, int y, int z);
 
 		void Update();
-		void Render();
-
-		GLuint GetBuffer();
-		GLuint GetVertCount();
-
 	private:
 		VoxelStorage m_Voxels;
-		GLuint m_GPUBuffer;
-		size_t m_VertCount;
 
 		glm::ivec2 m_Index;
 		glm::vec3 m_WorldPostion;

@@ -244,6 +244,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Graphics\DeviceResources.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Utility\File.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Core\Game.h"
 				>
 			</File>
@@ -276,11 +284,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Platform\OpenGL\OpenGLCommon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\OpenGLES2API.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Graphics\RenderAPI.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Graphics\Renderer.h"
 				>
 			</File>
 			<File
 				RelativePath=".\src\Graphics\Shader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Utility\StrongHandle.h"
 				>
 			</File>
 			<File
@@ -324,7 +348,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Graphics\DeviceResources.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Core\EntryPoint.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Utility\File.cpp"
 				>
 			</File>
 			<File
@@ -340,15 +372,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Platform\OpenGL\OpenGLES2API.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Graphics\RenderAPI.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Graphics\Renderer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\Graphics\stb_image.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\Graphics\Texture.cpp"
+				RelativePath=".\src\Build\stb_image.cpp"
 				>
 			</File>
 			<File
@@ -368,36 +404,32 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Platform\Zune\ZuneShader.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\Platform\Zune\ZuneWindow.cpp"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\src\Assets\Shader\DebugShader.fs"
+			RelativePath=".\src\Assets\Shader\GLES2\DebugShader.fs"
 			>
 		</File>
 		<File
-			RelativePath=".\src\Assets\Shader\DebugShader.vs"
+			RelativePath=".\src\Assets\Shader\GLES2\DebugShader.vs"
 			>
 		</File>
 		<File
-			RelativePath=".\src\Assets\Shader\main.fs"
+			RelativePath=".\src\Assets\Shader\GLES2\main.fs"
 			>
 		</File>
 		<File
-			RelativePath=".\src\Assets\Shader\main.vs"
+			RelativePath=".\src\Assets\Shader\GLES2\main.vs"
 			>
 		</File>
 		<File
-			RelativePath=".\src\Assets\Shader\PostProcess.fs"
+			RelativePath=".\src\Assets\Shader\GLES2\PostProcess.fs"
 			>
 		</File>
 		<File
-			RelativePath=".\src\Assets\Shader\PostProcess.vs"
+			RelativePath=".\src\Assets\Shader\GLES2\PostProcess.vs"
 			>
 		</File>
 	</Files>

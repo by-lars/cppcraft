@@ -5,27 +5,34 @@
 #include <string>
 
 namespace ZuneCraft {
-	class Image {
-	public:
-		Image(Image&& other);
-		Image(const std::string& path);
+	struct Image {
+		//Image(Image&& other); Not supported by Zune (c++03) :(
+		Image();
 		~Image();
 
-		int GetWidth();
-		int GetHeight();
-		TextureFormat GetFormat();
-		uint8_t* GetData();
-	private:
-		int m_Width;
-		int m_Height;
-		int m_NrChannels;
-		uint8_t* m_Data;
+		TextureFormat GetFormat() const;
+
+		int Width;
+		int Height;
+		int NrChannels;
+		uint8_t* Data;
 	};
 	
+	struct Binary {
+		//Binary(Binary&& other); Not supported by Zune (c++03) :(
+		Binary();
+		~Binary();
+
+		char* Data;
+		size_t Size;
+	};
+
 	class File {
 	public:
 		static std::string LoadTextFile(const std::string& path);
-		static Image LoadImage(const std::string& path);
+		static Result LoadImageFile(const std::string& path, Image* _out_Image);
+		static Result LoadBinaryFile(const std::string& path, Binary* _out_Binary);
+
 	private:
 		static std::string s_WorkingDirectory;
 	};

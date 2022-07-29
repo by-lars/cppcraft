@@ -6,11 +6,11 @@
 #include <stb/stb_image.h>
 
 namespace ZuneCraft {
-#ifdef ZC_PLATFORM_WIN32 
-	std::string File::s_WorkingDirectory = "assets\\";
-#elif ZC_PLATFORM_ZUNE
-	std::string File::s_WorkingDirectory = "\\gametitle\\584E07D1\\Content\\";
-#endif
+	#ifdef ZC_PLATFORM_WIN32 
+		std::string File::s_WorkingDirectory = "assets\\";
+	#elif ZC_PLATFORM_ZUNE
+		std::string File::s_WorkingDirectory = "\\gametitle\\584E07D1\\Content\\";
+	#endif
 
 	std::string File::LoadTextFile(const std::string& path) {
 		std::string localPath = s_WorkingDirectory + path;
@@ -30,41 +30,44 @@ namespace ZuneCraft {
 		return contents;
 	}
 
-	Image::Image(Image&& other) {
-		m_Data = other.m_Data;
-		m_Width = other.m_Width;
-		m_Height = other.m_Height;
-		m_NrChannels = other.m_NrChannels;
-		
-		other.m_Data = nullptr;
-		other.m_Width = 0;
-		other.m_Height = 0;
-		other.m_NrChannels = 0;
-	}
-
-	Image File::LoadImage(const std::string& path) {
+	Result File::LoadImageFile(const std::string& path, Image* _out_Image) {
 		std::string localPath = s_WorkingDirectory + path;
-		return Image(localPath);
-	}
-
-	Image::Image(const std::string& path) {
 		stbi_set_flip_vertically_on_load(true);
-		m_Data = stbi_load(path.c_str(), &m_Width, &m_Height, &m_NrChannels, 0);
+
+		_out_Image->Data = stbi_load(localPath.c_str(), &_out_Image->Width, &_out_Image->Height, &_out_Image->NrChannels, 0);
+
+		if (_out_Image->Data == nullptr) {
+			ZC_FATAL_ERROR("Could not load image: " << path);
+			return Result::FAILURE;
+		}
+
+		return Result::SUCCESS;
 	}
 
-	int Image::GetWidth() {
-		return m_Width;
+	Result File::LoadBinaryFile(const std::string& path, Binary* _out_Binary) {
+		std::string localPath = s_WorkingDirectory + path;
+		std::ifstream file(localPath.c_str(), std::ios::ate | std::ios::binary);
+
+		if (file.is_open() == false) {
+			ZC_FATAL_ERROR("Could not open file: " << path);
+			return Result::FAILURE;
+		}
+
+		_out_Binary->Size = file.tellg();
+		file.seekg(0);
+
+		_out_Binary->Data = new char[_out_Binary->Size];
+		file.read(_out_Binary->Data, _out_Binary->Size);
+		file.close();
+
+		return Result::SUCCESS;
 	}
 
-	int Image::GetHeight() {
-		return m_Height;
-	}
-
-	TextureFormat Image::GetFormat() {
-		if (m_NrChannels == 3) {
+	TextureFormat Image::GetFormat() const {
+		if (NrChannels == 3) {
 			return TextureFormat::RGB;
 		}
-		else if (m_NrChannels == 4) {
+		else if (NrChannels == 4) {
 			return TextureFormat::RGBA;
 		}
 		else {
@@ -72,11 +75,23 @@ namespace ZuneCraft {
 		}
 	}
 
-	uint8_t* Image::GetData() {
-		return m_Data;
+	Image::Image() {
+		Data = nullptr;
+		Width = 0;
+		Height = 0;
+		NrChannels = 0;
 	}
 
 	Image::~Image() {
-		stbi_image_free(m_Data);
+		stbi_image_free(Data);
+	}
+
+	Binary::Binary() {
+		Data = nullptr;
+		Size = 0;
+	}
+
+	Binary::~Binary() {
+		delete[] Data;
 	}
 }

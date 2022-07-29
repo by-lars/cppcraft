@@ -5,5 +5,7 @@ ZuneCraft.ncb
 *.nvbv
 ZuneCraft/bin
 ZuneCraft/obj
-ZuneCraft/ZuneCraft.vcproj.DESKTOP-43S0V0K.Lars.user
-ZuneCraft/obj/x64/Debug/vc143.pdb
+ZuneCraft/ZuneCraft.vcproj.*
+Launcher/obj/
+Launcher/bin/
+*.cachefile

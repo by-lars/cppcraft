@@ -1,6 +1,7 @@
-#include "Core/Base.h"
 #include "Platform/OpenGL/OpenGL4API.h"
-#include <glad/gl.h>
+#include "Core/Base.h"
+#include "Graphics/GL.h"
+
 #include <glm/gtc/type_ptr.hpp>
 
 namespace ZuneCraft {
@@ -33,7 +34,8 @@ namespace ZuneCraft {
 
 	RenderAPI::Capabilities OpenGL4API::GetCapabilities() {
 		Capabilities capabilities;
-		capabilities.ShaderLocationAttributes = true;
+		capabilities.ShaderCompiler = true;
+		capabilities.MultiDrawIndirect = true;
 
 		return capabilities;
 	}
@@ -85,7 +87,7 @@ namespace ZuneCraft {
 		}
 	}
 
-	HShader OpenGL4API::CreateShader(const std::string& vertexCode, const std::string& fragmentCode, const std::vector<std::string>& attributes) {
+	HShader OpenGL4API::CreateShader(const std::string& vertexCode, const std::string& fragmentCode) {
 		GLuint program = glCreateProgram();
 		GLuint vertex = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -110,6 +112,11 @@ namespace ZuneCraft {
 		m_Shaders.push_back(GLShader{ program });
 
 		return HShader(m_Shaders.size() - 1);
+	}
+
+	HShader OpenGL4API::CreateShaderFromBinary(Binary& vertexBinary, Binary& fragmentBinary, const std::vector<std::string>& attributes) {
+		ZC_ASSERT(false, "CreateShaderFromBinary is not supported by OpenGL4API, use CreateShader instead");
+		return HShader::Invalid();
 	}
 
 	void OpenGL4API::BindShader(HShader hShader) {
@@ -195,7 +202,7 @@ namespace ZuneCraft {
 		}
 	}
 
-	void OpenGL4API::SetBufferLayout(HBuffer hBuffer, std::initializer_list<BufferElement> elements, HBuffer hParentBuffer) {
+	void OpenGL4API::SetBufferLayout(HBuffer hBuffer, HBuffer hParentBuffer, const std::vector<BufferElement>& elements) {
 		GLBuffer& buffer = m_Buffers[(int)hBuffer];
 		int attrib = 0;
 		int offset = 0;

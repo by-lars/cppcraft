@@ -1,8 +1,10 @@
 #include "Platform/Windows/WindowsWindow.h"
 #include "Core/Base.h"
 #include "Graphics/Renderer.h"
+#include "Core/Game.h"
 
 #include <glad/gl.h>
+
 #include <iostream>
 
 
@@ -56,26 +58,26 @@ namespace ZuneCraft {
     }
 
 	WindowsWindow::WindowsWindow() {
-		int succ = glfwInit();
-        if (succ != 1) { ZC_FATAL_ERROR("Could not initialize GLFW"); }
+        if (glfwInit() != 1) { ZC_FATAL_ERROR("Could not initialize GLFW"); }
+
+		m_Height = 272 * 4;
+		m_Width = 480 * 4;
 		
+        RenderAPI::API api = Game::Get().GetConfig().GraphicsAPI;
+        
+
         //glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
 		#ifdef DEBUG
 		glfwWindowHint(GLFW_CONTEXT_DEBUG, GLFW_TRUE);
         #endif
 
-		m_Height = 272 * 4;
-		m_Width = 480 * 4;
-
 		m_Window = glfwCreateWindow(m_Width, m_Height, "ZuneCraft", NULL, NULL);
 		glfwMakeContextCurrent(m_Window);
-
-        glfwSwapInterval(1);
 
         int version = gladLoadGL(glfwGetProcAddress);
         if (version == 0) {
@@ -91,6 +93,7 @@ namespace ZuneCraft {
         #endif
 
         glfwSetFramebufferSizeCallback(m_Window, WindowsWindow::OnWindowResized);
+        glfwSwapInterval(1);
         
     }
 
