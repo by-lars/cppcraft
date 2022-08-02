@@ -7,11 +7,14 @@
 namespace ZuneCraft {
 	#pragma region Constructor
 	OpenGL4API::OpenGL4API() {
+		m_Capabilities.ShaderCompiler = true;
+		m_Capabilities.IndirectDrawing = true;
+
 		const GLubyte* oglVersion = glGetString(GL_VERSION);
 		const GLubyte* oglRenderer = glGetString(GL_RENDERER);
 		const GLubyte* oglVendor = glGetString(GL_VENDOR);
-		ZC_LOG("Running " << oglVersion << " on " << oglRenderer << " - " << oglVendor);
-
+		ZC_LOG("Running ", oglVersion, " on ", oglRenderer, " - ", oglVendor);
+		
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_BACK);
@@ -19,25 +22,26 @@ namespace ZuneCraft {
 
 	OpenGL4API::~OpenGL4API() {
 		for (const GLShader& shader : m_Shaders) {
-			ZC_DEBUG("Deleting Shader Id=" << shader.Id);
+			ZC_DEBUG_ALLOC("Deleting Shader Id=", shader.Id);
 			glDeleteProgram(shader.Id);
 		}
 
 		for (const GLBuffer& buffer : m_Buffers) {
-			ZC_DEBUG("Deleting Buffer Id=" << buffer.Id);
-			ZC_DEBUG("Deleting Vertex Array Id=" << buffer.VertexArray);
-
+			ZC_DEBUG_ALLOC("Deleting Buffer Id=", buffer.Id);
 			glDeleteBuffers(1, &buffer.Id);
+			ZC_DEBUG_ALLOC("Deleting Vertex Array Id=", buffer.VertexArray);
 			glDeleteVertexArrays(1, &buffer.VertexArray);
+		}
+
+
+		for (const GLTexture& texture : m_Textures) {
+			ZC_DEBUG_ALLOC("Deleting Texture Id=", texture.Id);
+			glDeleteTextures(1, &texture.Id);
 		}
 	}
 
-	RenderAPI::Capabilities OpenGL4API::GetCapabilities() {
-		Capabilities capabilities;
-		capabilities.ShaderCompiler = true;
-		capabilities.MultiDrawIndirect = true;
-
-		return capabilities;
+	const RenderAPI::Capabilities &OpenGL4API::GetCapabilities() {
+		return m_Capabilities;
 	}
 
 	#pragma endregion
@@ -83,15 +87,15 @@ namespace ZuneCraft {
 		if (success == false) {
 			char log[1024];
 			glGetShaderInfoLog(shader, 2048, 0, log);
-			ZC_FATAL_ERROR("Failed to compile shader: " << shader << "\n" << log);
+			ZC_FATAL_ERROR("Failed to compile shader: ", shader, "\n", log);
 		}
 	}
 
-	HShader OpenGL4API::CreateShader(const std::string& vertexCode, const std::string& fragmentCode) {
+	HShader OpenGL4API::CreateShader(const std::string& vertexCode, const std::string& fragmentCode, const std::vector<std::string>& attributes) {
 		GLuint program = glCreateProgram();
 		GLuint vertex = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fragment = glCreateShader(GL_FRAGMENT_SHADER);
-		ZC_DEBUG("Compiling Shader: " << " Id= " << program);
+		ZC_DEBUG("Compiling Shader: ", " Id= ", program);
 
 		CompileShader(vertex, vertexCode.c_str());
 		CompileShader(fragment, fragmentCode.c_str());
@@ -106,7 +110,7 @@ namespace ZuneCraft {
 		if (didLink == false) {
 			char log[1024];
 			glGetProgramInfoLog(program, 1024, 0, log);
-			ZC_FATAL_ERROR("Failed to link shader: " << program << "\n" << log);
+			ZC_FATAL_ERROR("Failed to link shader: ", program, "\n", log);
 		}
 
 		m_Shaders.push_back(GLShader{ program });
@@ -159,7 +163,7 @@ namespace ZuneCraft {
 		GLuint buffer = 0;
 		glGenBuffers(1, &buffer);
 
-		ZC_DEBUG("Created ID=" << buffer << " of size=" << size);
+		ZC_DEBUG_ALLOC("Created ID=", buffer, " of size=", size);
 
 		GLenum bufferType;
 		switch (type) {
@@ -211,22 +215,22 @@ namespace ZuneCraft {
 		//Create VAO
 		if (hParentBuffer == HBuffer::Invalid()) {
 			glGenVertexArrays(1, &buffer.VertexArray);
-			ZC_DEBUG("Created VAO ID=" << buffer.VertexArray);
+			ZC_DEBUG_ALLOC("Created VAO ID=", buffer.VertexArray);
 		}
 		else {
 			//Use VAO of another buffer, if one is provided
 			GLBuffer parrentBuffer = m_Buffers[(int)hParentBuffer];
 			buffer.VertexArray = parrentBuffer.VertexArray;
 			attrib = parrentBuffer.AttributeCount;
-			ZC_ASSERT(parrentBuffer.AttributeCount > 0,"Parrent Buffer has to be setup first.");
-			ZC_DEBUG("Attatching to VAO ID=" << buffer.VertexArray << " from provided buffer");
+			ZC_ASSERT(parrentBuffer.AttributeCount > 0, "Parrent Buffer has to be setup first.");
+			ZC_DEBUG("Attatching to VAO ID=", buffer.VertexArray, " from provided buffer");
 		}
 
 		//Bind VAO and Buffer
 		glBindVertexArray(buffer.VertexArray);
 		glBindBuffer(buffer.Type, buffer.Id);
 
-		ZC_DEBUG("Setting Buffer Layout for buffer: " << buffer.Id);
+		ZC_DEBUG("Setting Buffer Layout for buffer: ", buffer.Id);
 
 		//Calculate the stride over all elements
 		for (const BufferElement& element : elements) {
@@ -261,7 +265,7 @@ namespace ZuneCraft {
 		GLBuffer buffer = m_Buffers[(int)hBuffer];
 		glBindBuffer(buffer.Type, buffer.Id);
 		glBufferSubData(buffer.Type, offset, size, data);
-		ZC_DEBUG("Uploading " << size << " bytes at offset " << offset << " to buffer #" << buffer.Id);
+		ZC_DEBUG("Uploading ", size, " bytes at offset ", offset, " to buffer #", buffer.Id);
 	}
 	#pragma endregion
 
@@ -368,11 +372,6 @@ namespace ZuneCraft {
 	void OpenGL4API::DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) {
 		GLenum glMode = DrawModeToGLEnum(mode);
 		glDrawArrays(glMode, offset, count);
-	}
-
-	void OpenGL4API::DrawArraysInstanced(DrawMode mode, uint32_t offset, uint32_t count, uint32_t instanceCount) {
-		GLenum glMode = DrawModeToGLEnum(mode);
-		glDrawArraysInstanced(glMode, offset, count, instanceCount);
 	}
 
 	void OpenGL4API::MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) {

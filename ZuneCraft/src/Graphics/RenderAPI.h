@@ -1,7 +1,6 @@
 #pragma once
 #include "Graphics/DeviceResources.h"
-#include "Utility/File.h"
-
+#include "Utility/Asset.h"
 #include <string>
 #include <glm/glm.hpp>
 #include <vector>
@@ -17,15 +16,16 @@ namespace ZuneCraft {
 
 		struct Capabilities {
 			bool ShaderCompiler;
-			bool MultiDrawIndirect;
+			bool IndirectDrawing;
 		};
 
 		static RenderAPI* Create();
 		static API GetAPI();
+		static std::string GetAPIName(); 
 
-		virtual Capabilities GetCapabilities() = 0;
+		virtual const Capabilities& GetCapabilities() = 0;
 
-		virtual HShader CreateShader(const std::string& vertexCode, const std::string& fragmentCode) = 0;
+		virtual HShader CreateShader(const std::string& vertexCode, const std::string& fragmentCode, const std::vector<std::string>& attributes) = 0;
 		virtual HShader CreateShaderFromBinary(Binary& vertexBinary, Binary& fragmentBinary, const std::vector<std::string>& attributes) = 0;
 
 		virtual void BindShader(HShader hShader) = 0;
@@ -53,7 +53,12 @@ namespace ZuneCraft {
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
 		virtual void DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) = 0;
-		virtual void DrawArraysInstanced(DrawMode mode, uint32_t offset, uint32_t count, uint32_t instanceCount) = 0;
+		//virtual void MultiDrawArrays() = 0;
+		//virtual void DrawArraysInstanced(DrawMode mode, uint32_t offset, uint32_t count, uint32_t instanceCount) = 0;
+
+
+
 		virtual void MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) = 0;
+		//virtual void MultiDrawArrays();
 	};
 }

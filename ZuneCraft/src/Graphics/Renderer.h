@@ -14,7 +14,6 @@ namespace ZuneCraft {
 
 	class Renderer {
 	public:
-		
 		static void Init();
 		static void Shutdown();
 
@@ -30,5 +29,10 @@ namespace ZuneCraft {
 		static void BatchFreeMesh(HMesh hMesh);
 
 		static void DrawDebugCube(const glm::vec3& translation, const glm::vec3& size, const glm::vec3& color);
+	
+	private:
+		static void SetupIndirectRenderPath();
+		static void SetupDirectRenderPath();
+		static HShader LoadShader(const std::string& name, const std::vector<std::string>& attributes);
 	};
 }

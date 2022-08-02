@@ -28,4 +28,13 @@ namespace ZuneCraft {
 	RenderAPI::API RenderAPI::GetAPI() {
 		return Game::Get().GetConfig().GraphicsAPI;
 	}
+
+	std::string RenderAPI::GetAPIName() {
+		switch (GetAPI()){
+			case RenderAPI::API::NONE: return "No API"; break;
+			case RenderAPI::API::OPENGL_4: return "GL4"; break;
+			case RenderAPI::API::OPENGL_ES_2: return "GLES2"; break;
+			default: return "Unknown API"; break;
+		}
+	}
 }

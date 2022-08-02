@@ -22,7 +22,7 @@ namespace ZuneCraft {
         if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
         ZC_ERROR("---------------");
-        ZC_ERROR("Debug message (" << id << "): " << message);
+        ZC_ERROR("Debug message (", id, "): ", message);
 
         switch (source)
         {

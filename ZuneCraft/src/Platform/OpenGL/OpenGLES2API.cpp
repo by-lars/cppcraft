@@ -7,10 +7,18 @@
 namespace ZuneCraft {
 #pragma region Constructor
 	OpenGLES2API::OpenGLES2API() {
+		m_Capabilities.IndirectDrawing = false;
+
+		#ifdef ZC_PLATFORM_ZUNE
+			m_Capabilities.ShaderCompiler = false;	
+		#else
+			m_Capabilities.ShaderCompiler = true;
+		#endif
+		
 		const GLubyte* oglVersion = glGetString(GL_VERSION);
 		const GLubyte* oglRenderer = glGetString(GL_RENDERER);
 		const GLubyte* oglVendor = glGetString(GL_VENDOR);
-		ZC_LOG("Running " << oglVersion << " on " << oglRenderer << " - " << oglVendor);
+		ZC_LOG("Running ", oglVersion, " on ", oglRenderer, " - ", oglVendor);
 
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
@@ -20,25 +28,23 @@ namespace ZuneCraft {
 	OpenGLES2API::~OpenGLES2API() {
 		
 		for(int i = 0; i < m_Shaders.size(); i++) {
-			ZC_DEBUG("Deleting Shader Id=" << m_Shaders[i].Id);
+			ZC_DEBUG_ALLOC("Deleting Shader Id=", m_Shaders[i].Id);
 			glDeleteProgram(m_Shaders[i].Id);
 		}
 
 		for (int i = 0; i < m_Buffers.size(); i++) {
-			ZC_DEBUG("Deleting Buffer Id=" << m_Buffers[i].Id);
-			ZC_DEBUG("Deleting Vertex Array Id=" << m_Buffers[i].VertexArray);
-
+			ZC_DEBUG_ALLOC("Deleting Buffer Id=", m_Buffers[i].Id);
 			glDeleteBuffers(1, &m_Buffers[i].Id);
-			//glDeleteVertexArrays(1, &m_Buffers[i].VertexArray);
+		}
+
+		for (int i = 0; i < m_Textures.size(); i++) {
+			ZC_DEBUG_ALLOC("Deleting Texture Id=", m_Textures[i].Id);
+			glDeleteTextures(1, &m_Textures[i].Id);
 		}
 	}
 
-	RenderAPI::Capabilities OpenGLES2API::GetCapabilities() {
-		Capabilities capabilities;
-		capabilities.ShaderCompiler = false;
-		capabilities.MultiDrawIndirect = false;
-
-		return capabilities;
+	const RenderAPI::Capabilities& OpenGLES2API::GetCapabilities() {
+		return m_Capabilities;
 	}
 
 #pragma endregion
@@ -85,22 +91,28 @@ namespace ZuneCraft {
 		if (success == false) {
 			char log[1024];
 			glGetShaderInfoLog(shader, 2048, 0, log);
-			ZC_FATAL_ERROR("Failed to compile shader: " << shader << "\n" << log);
+			ZC_FATAL_ERROR("Failed to compile shader: ", shader, "\n", log);
 		}
 	#endif 
 	}
 
-	HShader OpenGLES2API::CreateShader(const std::string& vertexCode, const std::string& fragmentCode) {
+	HShader OpenGLES2API::CreateShader(const std::string& vertexCode, const std::string& fragmentCode, const std::vector<std::string>& attributes) {
 		GLuint program = glCreateProgram();
 		GLuint vertex = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fragment = glCreateShader(GL_FRAGMENT_SHADER);
-		ZC_DEBUG("Compiling Shader: " << " Id= " << program);
+		ZC_DEBUG("Compiling Shader: ", " Id= ", program);
 
 		CompileShader(vertex, vertexCode.c_str());
 		CompileShader(fragment, fragmentCode.c_str());
 
 		glAttachShader(program, vertex);
 		glAttachShader(program, fragment);
+
+
+		for (int i = 0; i < attributes.size(); i++) {
+			glBindAttribLocation(program, i, attributes[i].c_str());
+		}
+
 		glLinkProgram(program);
 
 		GLint didLink = false;
@@ -109,7 +121,7 @@ namespace ZuneCraft {
 		if (didLink == false) {
 			char log[1024];
 			glGetProgramInfoLog(program, 1024, 0, log);
-			ZC_FATAL_ERROR("Failed to link shader: " << program << "\n" << log);
+			ZC_FATAL_ERROR("Failed to link shader: ", program, "\n", log);
 		}
 
 		GLShader shader; shader.Id = program; 
@@ -130,7 +142,7 @@ namespace ZuneCraft {
 		glAttachShader(program, fragmentShader);
 
 		for (int i = 0; i < attributes.size(); i++) {
-			ZC_DEBUG("Bound " << attributes[i] << " to location " << i);
+			ZC_DEBUG("Bound ", attributes[i], " to location ", i);
 			glBindAttribLocation(program, i, attributes[i].c_str());
 		}
 
@@ -142,7 +154,7 @@ namespace ZuneCraft {
 			char info[1024];
 			GLsizei len = 0;
 			glGetProgramInfoLog(program, 1024, &len, info);
-			ZC_FATAL_ERROR("Could not link shaders:" << info);
+			ZC_FATAL_ERROR("Could not link shaders:", info);
 		}
 
 		return HShader(m_Shaders.size() - 1);
@@ -188,26 +200,19 @@ namespace ZuneCraft {
 		GLuint buffer = 0;
 		glGenBuffers(1, &buffer);
 
-		ZC_DEBUG("Created ID=" << buffer << " of size=" << size);
+		ZC_DEBUG("Created ID=", buffer, " of size=", size);
 
 		GLenum bufferType;
 		switch (type) {
 		case BufferType::ARRAY: bufferType = GL_ARRAY_BUFFER; break;
-		//case BufferType::DRAW_INDIRECT_BUFFER: bufferType = GL_DRAW_INDIRECT_BUFFER; break;
 		default: ZC_FATAL_ERROR("Unknown buffer type enum"); break;
 		}
 
 		GLenum glUsage;
 		switch (usage) {
 		case ZuneCraft::BufferUsage::STATIC_DRAW:	glUsage = GL_STATIC_DRAW;	break;
-	//	case ZuneCraft::BufferUsage::STATIC_READ:	glUsage = GL_STATIC_READ;	break;
-	//	case ZuneCraft::BufferUsage::STATIC_COPY:	glUsage = GL_STATIC_COPY;	break;
 		case ZuneCraft::BufferUsage::DYNAMIC_DRAW:	glUsage = GL_DYNAMIC_DRAW;	break;
-	//	case ZuneCraft::BufferUsage::DYNAMIC_READ:	glUsage = GL_DYNAMIC_READ;	break;
-	//	case ZuneCraft::BufferUsage::DYNAMIC_COPY:	glUsage = GL_DYNAMIC_COPY;	break;
 		case ZuneCraft::BufferUsage::STREAM_DRAW:	glUsage = GL_STREAM_DRAW;	break;
-	//	case ZuneCraft::BufferUsage::STREAM_READ:	glUsage = GL_STREAM_READ;	break;
-	//	case ZuneCraft::BufferUsage::STREAM_COPY:	glUsage = GL_STREAM_COPY;	break;
 		default: ZC_FATAL_ERROR("Unknown buffer usage enum"); break;
 		}
 
@@ -215,56 +220,52 @@ namespace ZuneCraft {
 		glBindBuffer(bufferType, buffer);
 		glBufferData(bufferType, size, 0, glUsage);
 
-		GLBuffer glBuffer;
+		GLES2Buffer glBuffer;
 		glBuffer.Id = buffer;
-		glBuffer.AttributeCount = 0;
 		glBuffer.Type = bufferType;
-		glBuffer.VertexArray = 0;
 		m_Buffers.push_back(glBuffer);
 
 		return HBuffer(m_Buffers.size() - 1);
 	}
 
 	void OpenGLES2API::BindBuffer(HBuffer hBuffer) {
-		GLBuffer buffer = m_Buffers[(int)hBuffer];
+		GLES2Buffer buffer = m_Buffers[(int)hBuffer];
 		glBindBuffer(buffer.Type, buffer.Id);
+
+		for (int i = 0; i < buffer.VertexLayout.size(); i++) {
+			glVertexAttribPointer(i, buffer.VertexLayout[i].Count, buffer.VertexLayout[i].DataType, false, buffer.Stride, (const void*)buffer.VertexLayout[i].Offset);
+			glEnableVertexAttribArray(i);
+		}
+
 	}
 
 	void OpenGLES2API::SetBufferLayout(HBuffer hBuffer, HBuffer hParentBuffer, const std::vector<BufferElement>& elements) {
-		GLBuffer& buffer = m_Buffers[(int)hBuffer];
-		int attrib = 0;
-		int offset = 0;
-		int stride = 0;
+		ZC_ASSERT(hParentBuffer == HBuffer::Invalid(), "VAOs are not supported by GLES2.0");
+		uint32_t offset = 0;
 
-		//Create VAO
-		if (hParentBuffer == HBuffer::Invalid()) {
-			//glGenVertexArrays(1, &buffer.VertexArray);
-			ZC_ERROR("VAOs are not available");
+		GLES2Buffer& buffer = m_Buffers[(int)hBuffer];
+		ZC_DEBUG("Setting Buffer Layout for buffer: ", buffer.Id);
+
+
+		for (int i = 0; i < elements.size(); i++) {
+			GLES2BufferElement e;
+			e.Count = elements[i].Count;
+			e.DataType = DataTypeToGLEnum(elements[i].Type);
+			e.Offset = offset;
+
+			buffer.VertexLayout.push_back(e);
+
+			offset += elements[i].GetSizeInBytes();
 		}
-		else {
-			//Use VAO of another buffer, if one is provided
-			GLBuffer parrentBuffer = m_Buffers[(int)hParentBuffer];
-			buffer.VertexArray = parrentBuffer.VertexArray;
-			attrib = parrentBuffer.AttributeCount;
-			ZC_ASSERT(parrentBuffer.AttributeCount > 0, "Parrent Buffer has to be setup first.");
-			ZC_DEBUG("Attatching to VAO ID=" << buffer.VertexArray << " from provided buffer");
-		}
 
-		//Bind Buffer
-		glBindBuffer(buffer.Type, buffer.Id);
-
-		ZC_DEBUG("Setting Buffer Layout for buffer: " << buffer.Id);
-
-		//Calculate the stride over all elements
-
-		buffer.AttributeCount = attrib;
+		buffer.Stride = offset;
 	}
 
 	void OpenGLES2API::BufferData(HBuffer hBuffer, uint32_t size, uint32_t offset, void* data) {
-		GLBuffer buffer = m_Buffers[(int)hBuffer];
+		GLES2Buffer buffer = m_Buffers[(int)hBuffer];
 		glBindBuffer(buffer.Type, buffer.Id);
 		glBufferSubData(buffer.Type, offset, size, data);
-		ZC_DEBUG("Uploading " << size << " bytes at offset " << offset << " to buffer #" << buffer.Id);
+		ZC_DEBUG("Uploading ", size, " bytes at offset ", offset, " to buffer #", buffer.Id);
 	}
 #pragma endregion
 
@@ -378,10 +379,6 @@ namespace ZuneCraft {
 	void OpenGLES2API::DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) {
 		GLenum glMode = DrawModeToGLEnum(mode);
 		glDrawArrays(glMode, offset, count);
-	}
-
-	void OpenGLES2API::DrawArraysInstanced(DrawMode mode, uint32_t offset, uint32_t count, uint32_t instanceCount) {
-	
 	}
 
 	void OpenGLES2API::MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) {

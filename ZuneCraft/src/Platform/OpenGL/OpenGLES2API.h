@@ -6,12 +6,25 @@
 namespace ZuneCraft {
 	class OpenGLES2API : public RenderAPI {
 	public:
+		struct GLES2BufferElement {
+			GLenum DataType;
+			GLuint Offset;
+			GLuint Count;
+		};
+
+		struct GLES2Buffer {
+			uint32_t Id;
+			uint32_t Type;
+			uint32_t Stride;
+			std::vector<GLES2BufferElement> VertexLayout;
+		};		
+
 		OpenGLES2API();
 		~OpenGLES2API();
 
-		Capabilities GetCapabilities() override;
+		const Capabilities& GetCapabilities() override;
 
-		HShader CreateShader(const std::string& vertex, const std::string& fragment) override;
+		HShader CreateShader(const std::string& vertex, const std::string& fragment, const std::vector<std::string>& attributes) override;
 		HShader CreateShaderFromBinary(Binary& vertexBinary, Binary& fragmentBinary, const std::vector<std::string>& attributes) override;
 		void BindShader(HShader hShader) override;
 		void SetShaderUniform(HShader hShader, const std::string& name, const glm::vec3& value) override;
@@ -32,11 +45,11 @@ namespace ZuneCraft {
 		void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
 
 		void DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) override;
-		void DrawArraysInstanced(DrawMode mode, uint32_t offset, uint32_t count, uint32_t instanceCount) override;
 		void MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) override;
 
 	private:
-		std::vector<GLBuffer> m_Buffers;
+		Capabilities m_Capabilities;
+		std::vector<GLES2Buffer> m_Buffers;
 		std::vector<GLShader> m_Shaders;
 		std::vector<GLTexture> m_Textures;
 	};

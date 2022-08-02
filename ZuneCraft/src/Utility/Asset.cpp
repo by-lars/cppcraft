@@ -1,5 +1,6 @@
-#include "Utility/File.h"
+#include "Utility/Asset.h"
 #include "Core/Base.h"
+#include "Graphics/RenderAPI.h"
 #include <fstream>
 
 #define STBI_NO_THREAD_LOCALS
@@ -7,17 +8,17 @@
 
 namespace ZuneCraft {
 	#ifdef ZC_PLATFORM_WIN32 
-		std::string File::s_WorkingDirectory = "assets\\";
+		std::string Asset::s_WorkingDirectory = "assets\\";
 	#elif ZC_PLATFORM_ZUNE
-		std::string File::s_WorkingDirectory = "\\gametitle\\584E07D1\\Content\\";
+		std::string Asset::s_WorkingDirectory = "\\gametitle\\584E07D1\\Content\\";
 	#endif
 
-	std::string File::LoadTextFile(const std::string& path) {
-		std::string localPath = s_WorkingDirectory + path;
+	std::string Asset::GetShaderSource(const std::string& name) {
+		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
 		std::ifstream file(localPath.c_str(), std::ios::ate);
 
 		if (file.is_open() == false) {
-			ZC_FATAL_ERROR("Could not open file: " << path);
+			ZC_FATAL_ERROR("Could not open file: ", localPath);
 		}
 
 		size_t size = file.tellg();
@@ -30,26 +31,26 @@ namespace ZuneCraft {
 		return contents;
 	}
 
-	Result File::LoadImageFile(const std::string& path, Image* _out_Image) {
-		std::string localPath = s_WorkingDirectory + path;
+	Result Asset::GetImage(const std::string& name, Image* _out_Image) {
+		std::string localPath = s_WorkingDirectory + "image" + "\\" + name;
 		stbi_set_flip_vertically_on_load(true);
 
 		_out_Image->Data = stbi_load(localPath.c_str(), &_out_Image->Width, &_out_Image->Height, &_out_Image->NrChannels, 0);
 
 		if (_out_Image->Data == nullptr) {
-			ZC_FATAL_ERROR("Could not load image: " << path);
+			ZC_FATAL_ERROR("Could not load image: ", localPath);
 			return Result::FAILURE;
 		}
 
 		return Result::SUCCESS;
 	}
 
-	Result File::LoadBinaryFile(const std::string& path, Binary* _out_Binary) {
-		std::string localPath = s_WorkingDirectory + path;
+	Result Asset::GetShaderBinary(const std::string& name, Binary* _out_Binary) {
+		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
 		std::ifstream file(localPath.c_str(), std::ios::ate | std::ios::binary);
 
 		if (file.is_open() == false) {
-			ZC_FATAL_ERROR("Could not open file: " << path);
+			ZC_FATAL_ERROR("Could not open file: ", localPath);
 			return Result::FAILURE;
 		}
 

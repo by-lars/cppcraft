@@ -27,11 +27,11 @@ namespace ZuneCraft {
 		size_t Size;
 	};
 
-	class File {
+	class Asset {
 	public:
-		static std::string LoadTextFile(const std::string& path);
-		static Result LoadImageFile(const std::string& path, Image* _out_Image);
-		static Result LoadBinaryFile(const std::string& path, Binary* _out_Binary);
+		static std::string GetShaderSource(const std::string& name);
+		static Result GetShaderBinary(const std::string& name, Binary* _out_Binary);
+		static Result GetImage(const std::string& name, Image* _out_Image);
 
 	private:
 		static std::string s_WorkingDirectory;

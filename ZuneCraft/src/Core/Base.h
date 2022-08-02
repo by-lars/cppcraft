@@ -2,27 +2,20 @@
 #include "Core/Logger.h"
 #include <cstdlib>
 
-#ifdef ZC_PLATFORM_WIN32 
-#define ZC_ENUM enum class
-#elif ZC_PLATFORM_ZUNE
-#define ZC_ENUM enum
-#define nullptr NULL
-#pragma warning (disable : 4482)
-#endif
-
 #define ZUNE_CRAFT_VERSION "0.1.0"
 
-#define ZC_LOG(x) { std::stringstream s; s << "[INFO] " << x; ZuneCraft::Logger::Log(s); }
-#define ZC_ERROR(x) { std::stringstream s; s << "[ERROR] " << x; ZuneCraft::Logger::Error(s); }
-#define ZC_FATAL_ERROR(x) { std::stringstream s; s << "FATAL ERROR: " << x; ZuneCraft::Logger::Error(s); exit(-1); }
+#define ZC_DEBUG_ALLOC(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::ALLOC, __VA_ARGS__)
+#define ZC_LOG(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::LOG, __VA_ARGS__)
+#define ZC_WARN(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::WARNING, __VA_ARGS__)
+#define ZC_ERROR(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::ERROR, __VA_ARGS__)
+
+#define ZC_FATAL_ERROR(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::FATAL, __VA_ARGS__); abort();
 
 #ifndef NDEBUG
-#define ZC_DEBUG(x) { std::stringstream s; s << "[DEBUG] " << x; ZuneCraft::Logger::Log(s); }
-#define ZC_DEBUG_OPENGL(x) ZuneCraft::Logger::LogOpenGLError(x)
-#define ZC_ASSERT(test, msg) if((test) == false) { ZC_DEBUG("Debug test failed: " << msg); exit(-1); } 
+#define ZC_DEBUG(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::DEBUGLOG, __VA_ARGS__)
+#define ZC_ASSERT(test, msg) if((test) == false) { ZC_DEBUG("Debug test failed: ", msg); exit(-1); } 
 #else
 #define ZC_DEBUG(x)
-#define ZC_DEBUG_OPENGL(x)
 #define ZC_ASSERT(x)
 #endif
 
