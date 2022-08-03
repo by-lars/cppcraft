@@ -19,11 +19,10 @@ namespace ZuneCraft {
 		uint8_t X;
 		uint8_t Y;
 		uint8_t Z;
+		uint8_t Type;
 		uint8_t U;
 		uint8_t V;
-		uint8_t Type;
 		uint8_t Direction;
-
-		static void SetVertexFormat();
+		uint8_t BatchIndex;
 	};
 }

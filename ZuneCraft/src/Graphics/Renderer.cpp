@@ -23,7 +23,7 @@ namespace ZuneCraft {
 	static const size_t MAX_BATCH_MESHES = 500;
 
 	struct BatchData {
-		glm::mat4 Translation;
+		glm::vec3 Translation;
 	};
 
 	struct RenderData {
@@ -41,10 +41,6 @@ namespace ZuneCraft {
 		HShader MeshShader;
 		size_t BatchCurrentOffset;
 		std::vector<BatchData> BatchData;
-
-		//Indirect Drawing
-		HBuffer RenderCommandBuffer;
-		std::vector<RenderCommand> RenderCommands;
 	};
 
 	static RenderData s_Data;
@@ -60,7 +56,7 @@ namespace ZuneCraft {
 		//Mesh Buffer
 		std::vector<BufferElement> bufferElements;
 		s_Data.BatchMeshBuffer = s_Device->CreateBuffer(CHUNK_SIZE_QUBED * MAX_BATCH_MESHES, BufferType::ARRAY, BufferUsage::DYNAMIC_DRAW);
-		bufferElements.push_back(BufferElement(DataType::UNSIGNED_BYTE, 3, 0));
+		bufferElements.push_back(BufferElement(DataType::UNSIGNED_BYTE, 4, 0));
 		bufferElements.push_back(BufferElement(DataType::UNSIGNED_BYTE, 4, 0));
 		s_Device->SetBufferLayout(s_Data.BatchMeshBuffer, HBuffer::Invalid(), bufferElements);
 
@@ -107,14 +103,9 @@ namespace ZuneCraft {
 
 	void Renderer::SetupIndirectRenderPath() {
 		//Setup Indirect Rendering
-		s_Data.RenderCommandBuffer = s_Device->CreateBuffer(sizeof(RenderCommand) * MAX_BATCH_MESHES, BufferType::DRAW_INDIRECT_BUFFER, BufferUsage::DYNAMIC_DRAW);
-
 		s_Data.BatchDataBuffer = s_Device->CreateBuffer(sizeof(BatchData) * MAX_BATCH_MESHES, BufferType::ARRAY, BufferUsage::DYNAMIC_DRAW);
 		std::vector<BufferElement> bufferElements;
-		bufferElements.push_back(BufferElement(DataType::FLOAT, 4, 1));
-		bufferElements.push_back(BufferElement(DataType::FLOAT, 4, 1));
-		bufferElements.push_back(BufferElement(DataType::FLOAT, 4, 1));
-		bufferElements.push_back(BufferElement(DataType::FLOAT, 4, 1));
+		bufferElements.push_back(BufferElement(DataType::FLOAT, 3, 1));
 		s_Device->SetBufferLayout(s_Data.BatchDataBuffer, s_Data.BatchMeshBuffer, bufferElements);
 		s_Data.BatchCurrentOffset = 0;
 	}
@@ -164,48 +155,51 @@ namespace ZuneCraft {
 	}
 
 	void Renderer::EndFrame() {
+		s_Device->Flush();
 	/*	s_Device->BindShader(s_Data.PPShader);
 		s_Device->BindBuffer(s_Data.PPQuadBuffer);
 		s_Device->DrawArrays(DrawMode::TRIANGLE_STRIP, 0, 4);*/
 
-		if (s_Device->GetCapabilities().IndirectDrawing) {
-			s_Device->BindShader(s_Data.MeshShader);
-			s_Device->BindBuffer(s_Data.BatchMeshBuffer);
-			s_Device->BindBuffer(s_Data.RenderCommandBuffer);
-			s_Device->MultiDrawArraysIndirect(DrawMode::TRIANGLES, s_Data.RenderCommands.size());
-		}
-		else {
-
-		}
+		s_Device->BindShader(s_Data.MeshShader);
+		s_Device->BindBuffer(s_Data.BatchMeshBuffer);
+		s_Device->MultiDrawArrays(DrawMode::TRIANGLES);
 
 		#ifdef ZC_PLATFORM_ZUNE
 		ZDKGL_EndDraw();
 		#endif
 	}
 
-	HMesh Renderer::BatchSubmitMesh(const std::vector<Vertex>& mesh, const glm::vec3& translation) {
+	HMesh Renderer::BatchSubmitMesh(std::vector<Vertex>& mesh, const glm::vec3& translation) {
+		BatchData data;
+		data.Translation = translation;
+		s_Data.BatchData.push_back(data);
+
+		RenderCommand command;
+		command.Count = mesh.size();
+		command.InstanceCount = 1;
+		command.First = (s_Data.BatchCurrentOffset / sizeof(Vertex));
+		command.BaseInstance = s_Data.BatchData.size() - 1;
+
+		s_Device->PushRenderCommand(command);
+
 		if (s_Device->GetCapabilities().IndirectDrawing) {
-			RenderCommand command;
-			command.Count = mesh.size();
-			command.InstanceCount = 1;
-			command.First = (s_Data.BatchCurrentOffset / sizeof(Vertex));
-			command.BaseInstance = s_Data.BatchData.size();
-
-			s_Data.RenderCommands.push_back(command);
-			s_Device->BufferData(s_Data.RenderCommandBuffer, s_Data.RenderCommands.size() * sizeof(RenderCommand), 0, &s_Data.RenderCommands[0]);
-
-			BatchData data;
-			data.Translation = glm::mat4(1.0f);
-			data.Translation = glm::translate(data.Translation, translation);
-			s_Data.BatchData.push_back(data);
 			s_Device->BufferData(s_Data.BatchDataBuffer, s_Data.BatchData.size() * sizeof(BatchData), 0, &s_Data.BatchData[0]);
-
-			s_Device->BufferData(s_Data.BatchMeshBuffer, mesh.size() * sizeof(Vertex), s_Data.BatchCurrentOffset, (void*)&mesh[0]);
-			s_Data.BatchCurrentOffset += mesh.size() * sizeof(Vertex);
 		}
 		else {
-		
+			for (int i = 0; i < mesh.size(); i++) {
+				mesh[i].BatchIndex = s_Data.BatchData.size() - 1;
+			}
+			std::string name;
+			name += "uTranslation[";
+			name += std::to_string(s_Data.BatchData.size() - 1);
+			name += "]";
+
+			ZC_DEBUG(name);
+			s_Device->SetShaderUniform(s_Data.MeshShader, name, translation);
 		}
+
+		s_Device->BufferData(s_Data.BatchMeshBuffer, mesh.size() * sizeof(Vertex), s_Data.BatchCurrentOffset, (void*)&mesh[0]);
+		s_Data.BatchCurrentOffset += mesh.size() * sizeof(Vertex);
 
 		return HMesh(0);
 	}

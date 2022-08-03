@@ -376,13 +376,23 @@ namespace ZuneCraft {
 	/*
 	* Draw Commands
 	*/
+	void OpenGLES2API::PushRenderCommand(const RenderCommand& command) {
+		m_BatchedDrawing.First.push_back(command.First);
+		m_BatchedDrawing.Count.push_back(command.Count);
+	}
+
+	void OpenGLES2API::Flush() {
+
+	}
+
 	void OpenGLES2API::DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) {
 		GLenum glMode = DrawModeToGLEnum(mode);
 		glDrawArrays(glMode, offset, count);
 	}
 
-	void OpenGLES2API::MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) {
-		
+	void OpenGLES2API::MultiDrawArrays(DrawMode mode) {
+		GLenum glMode = DrawModeToGLEnum(mode);
+		glMultiDrawArrays(glMode, &m_BatchedDrawing.First[0], &m_BatchedDrawing.Count[0], m_BatchedDrawing.First.size());
 	}
 
 #pragma endregion

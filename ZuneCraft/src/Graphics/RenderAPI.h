@@ -1,13 +1,18 @@
 #pragma once
 #include "Graphics/DeviceResources.h"
 #include "Utility/Asset.h"
+#include "Utility/StrongHandle.h"
+
 #include <string>
 #include <glm/glm.hpp>
 #include <vector>
 
 namespace ZuneCraft {
+	ZC_MAKE_STRONG_HANDLE(HBatch, int, -1);
+	
 	class RenderAPI {
 	public:
+
 		ZC_ENUM API {
 			NONE = 0,
 			OPENGL_ES_2,
@@ -48,17 +53,15 @@ namespace ZuneCraft {
 		//virtual void RenderTargetAddBufferAttachment() = 0;
 		//virtual void ResizeRenderTarget() = 0;
 
+		virtual void Flush() = 0;
+		virtual void PushRenderCommand(const RenderCommand& command) = 0;
+
 		virtual void Clear() = 0;
 		virtual void SetClearColor(float r, float g, float b, float a) = 0;
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
 		virtual void DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) = 0;
-		//virtual void MultiDrawArrays() = 0;
-		//virtual void DrawArraysInstanced(DrawMode mode, uint32_t offset, uint32_t count, uint32_t instanceCount) = 0;
+		virtual void MultiDrawArrays(DrawMode mode) = 0;
 
-
-
-		virtual void MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) = 0;
-		//virtual void MultiDrawArrays();
 	};
 }

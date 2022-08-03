@@ -11,6 +11,7 @@ namespace ZuneCraft {
 		uint32_t VertexArray;
 		uint32_t Type;
 		uint32_t AttributeCount;
+		uint32_t Size;
 	};
 
 	struct GLRenderTarget {

@@ -232,6 +232,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\src\Utility\Asset.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Core\Base.h"
 				>
 			</File>
@@ -292,6 +296,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Build\PlatformDefines.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Graphics\RenderAPI.h"
 				>
 			</File>
@@ -340,6 +348,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\src\Utility\Asset.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Graphics\Camera.cpp"
 				>
 			</File>
@@ -365,6 +377,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Core\GLWindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Core\Logger.cpp"
 				>
 			</File>
 			<File

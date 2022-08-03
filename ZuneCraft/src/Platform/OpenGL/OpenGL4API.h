@@ -27,17 +27,28 @@ namespace ZuneCraft {
 		void BindTexture(HTexture hTexture) override;
 		void UploadTextureData(HTexture hTexture, void* data) override;
 
+		void PushRenderCommand(const RenderCommand& command) override;
+		void Flush() override;
+
 		void Clear() override;
 		void SetClearColor(float r, float g, float b, float a) override;
 		void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
 
 		void DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) override;
-		void MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) override;
+		void MultiDrawArrays(DrawMode mode) override;
 
 	private:
 		Capabilities m_Capabilities;
+
 		std::vector<GLBuffer> m_Buffers;
 		std::vector<GLShader> m_Shaders;
 		std::vector<GLTexture> m_Textures;
+
+		struct {
+			std::vector<RenderCommand> Commands;
+			HBuffer CommandBuffer;
+			bool Invalidated;
+		} m_BatchedDrawing;
+
 	};
 }

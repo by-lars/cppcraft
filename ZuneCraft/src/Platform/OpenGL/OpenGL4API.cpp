@@ -15,6 +15,9 @@ namespace ZuneCraft {
 		const GLubyte* oglVendor = glGetString(GL_VENDOR);
 		ZC_LOG("Running ", oglVersion, " on ", oglRenderer, " - ", oglVendor);
 		
+		m_BatchedDrawing.Invalidated = false;
+		m_BatchedDrawing.CommandBuffer = CreateBuffer(32 * sizeof(RenderCommand), BufferType::DRAW_INDIRECT_BUFFER, BufferUsage::DYNAMIC_DRAW);
+
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_BACK);
@@ -113,7 +116,7 @@ namespace ZuneCraft {
 			ZC_FATAL_ERROR("Failed to link shader: ", program, "\n", log);
 		}
 
-		m_Shaders.push_back(GLShader{ program });
+		m_Shaders.push_back(GLShader{ .Id = program });
 
 		return HShader(m_Shaders.size() - 1);
 	}
@@ -190,7 +193,13 @@ namespace ZuneCraft {
 		glBindBuffer(bufferType, buffer);
 		glBufferData(bufferType, size, 0, glUsage);
 
-		m_Buffers.push_back(GLBuffer{ buffer, 0, bufferType, 0 });
+		m_Buffers.push_back(GLBuffer { 
+			.Id = buffer, 
+			.VertexArray = 0, 
+			.Type = bufferType, 
+			.AttributeCount = 0, 
+			.Size = size 
+		});
 
 		return HBuffer(m_Buffers.size() - 1);
 	}
@@ -315,7 +324,14 @@ namespace ZuneCraft {
 		default: ZC_FATAL_ERROR("Unkown Texture Format"); break;
 		}
 
-		m_Textures.push_back(GLTexture{ id, width, height, glTextureFormat, glDataType});
+		m_Textures.push_back(GLTexture { 
+			.Id = id, 
+			.Width = width, 
+			.Height = height, 
+			.Format = glTextureFormat, 
+			.DataType = glDataType
+		});
+
 		HTexture textureHandle(m_Textures.size() - 1);
 		BindTexture(textureHandle);
 
@@ -369,14 +385,27 @@ namespace ZuneCraft {
 	/*
 	* Draw Commands
 	*/
+	void OpenGL4API::PushRenderCommand(const RenderCommand& command) {
+		m_BatchedDrawing.Commands.push_back(command);
+		m_BatchedDrawing.Invalidated = true;
+	}
+
+	void OpenGL4API::Flush() {
+		// 1. Update Render Commands
+		if (m_BatchedDrawing.Invalidated) {
+			BufferData(m_BatchedDrawing.CommandBuffer, m_BatchedDrawing.Commands.size() * sizeof(RenderCommand), 0, m_BatchedDrawing.Commands.data());
+			m_BatchedDrawing.Invalidated = false;
+		}
+	}
+
 	void OpenGL4API::DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) {
 		GLenum glMode = DrawModeToGLEnum(mode);
 		glDrawArrays(glMode, offset, count);
 	}
 
-	void OpenGL4API::MultiDrawArraysIndirect(DrawMode mode, uint32_t nRenderCommands) {
+	void OpenGL4API::MultiDrawArrays(DrawMode mode) {
 		GLenum glMode = DrawModeToGLEnum(mode);
-		glMultiDrawArraysIndirect(glMode, 0, nRenderCommands, 0);
+		glMultiDrawArraysIndirect(glMode, 0, m_BatchedDrawing.Commands.size(), 0);
 	}
 
 	#pragma endregion

@@ -32,6 +32,7 @@ typedef unsigned int     GLuint;
 typedef			 int     GLint;
 typedef unsigned int	 GLenum;
 typedef			 char	 GLchar;
+typedef			 int	 GLsizei;
 
 
 namespace ZuneCraft {
