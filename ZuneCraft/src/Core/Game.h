@@ -29,6 +29,8 @@ namespace ZuneCraft {
 		Camera m_Camera;
 		Window* m_Window;
 
+		World* m_World;
+
 		bool m_IsFlipped;
 		int m_Frame;
 

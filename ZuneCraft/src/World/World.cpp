@@ -9,25 +9,21 @@ namespace ZuneCraft {
 		delta = glm::ivec2(0);
 		rowToLoad = glm::ivec2(0);
 		rowToUnload = glm::ivec2(0);
-	}
 
-	void World::Initialize() {
-		/*for (int x = m_MapOffset.x - VIEW_DISTANCE_CHUNKS + 1; x < m_MapOffset.x + VIEW_DISTANCE_CHUNKS; x++) {
+		for (int x = m_MapOffset.x - VIEW_DISTANCE_CHUNKS + 1; x < m_MapOffset.x + VIEW_DISTANCE_CHUNKS; x++) {
 			for (int y = m_MapOffset.y - VIEW_DISTANCE_CHUNKS + 1; y < m_MapOffset.y + VIEW_DISTANCE_CHUNKS; y++) {
 				glm::ivec2 index(x, y);
 				Chunk* newChunk = new Chunk(index);
 				newChunk->Update();
 				m_Chunks.push_back(newChunk);
-				m_ChunkMap[index] = newChunk;
 			}
-		}*/
+		}
+
+
 	}
 
 	void World::Render() {
-		for (int x = 0; x < m_Chunks.size(); x++) {
-				Chunk* chunk = m_Chunks[x];
-				//Renderer::DrawMesh(chunk->GetBuffer(), chunk->GetVertCount(), chunk->GetWorldPosition());		
-		}
+
 	}
 
 	void World::LoadPendingChunks() {

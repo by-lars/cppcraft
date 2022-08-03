@@ -23,6 +23,14 @@ namespace ZuneBoards.DevelopmentFront.NativeAppLauncher.HD
             var container = storage.OpenContainer("ZuneCraft");
             Debug.WriteLine("Container Path: " + container.Path);
 
+            Debug.WriteLine("Previous Logfile Dump:");
+            if (File.Exists(_logFile))
+            {
+                StreamReader reader = new StreamReader(_logFile);
+                Debug.WriteLine(reader.ReadToEnd());
+                reader.Close();
+            }
+
             PayloadRunner.Launch(_payload);
 
             Debug.WriteLine("Logfile Dump:");

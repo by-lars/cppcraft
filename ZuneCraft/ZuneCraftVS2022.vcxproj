@@ -113,7 +113,6 @@
     <ClCompile Include="src\Core\EntryPoint.cpp" />
     <ClCompile Include="src\Core\Game.cpp" />
     <ClCompile Include="src\Core\GLWindow.cpp" />
-    <ClCompile Include="src\Core\Logger.cpp" />
     <ClCompile Include="src\Geometry\Mesher.cpp" />
     <ClCompile Include="src\Geometry\Vertex.cpp" />
     <ClCompile Include="src\Graphics\Camera.cpp" />
@@ -124,6 +123,7 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGL4API.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLES2API.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsLogger.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Utility\Asset.cpp" />
     <ClCompile Include="src\World\Chunk.cpp" />
@@ -159,6 +159,7 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLES2API.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Utility\Asset.h" />
+    <ClInclude Include="src\Utility\Convert.h" />
     <ClInclude Include="src\Utility\Hash.h" />
     <ClInclude Include="src\Utility\SparseArray.h" />
     <ClInclude Include="src\Utility\StrongHandle.h" />

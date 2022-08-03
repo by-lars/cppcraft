@@ -3,6 +3,7 @@
 #include "Graphics/GL.h"
 #include "Geometry/Mesher.h"
 #include "Graphics/Renderer.h"
+#include "Build/PlatformDefines.h"
 
 #include <time.h>
 #include <fastnoise/FastNoiseLite.h>
@@ -38,14 +39,14 @@ namespace ZuneCraft {
 				int height = (w1 + w2 + w3 * w4) * CHUNK_HEIGHT;
 				for (int y = 0; y < height && y < CHUNK_HEIGHT; y++) {
 					if (y == height - 1) {
-						m_Voxels.Data[x][y][z] = GRASS;
+						m_Voxels.Data[x][y][z] = (uint8_t)BlockType::GRASS;
 					}
 					else {
-						m_Voxels.Data[x][y][z] = DIRT;
+						m_Voxels.Data[x][y][z] = (uint8_t)BlockType::DIRT;
 					}
 				}
 
-				m_Voxels.Data[x][0][z] = GRASS;
+				m_Voxels.Data[x][0][z] = (uint8_t)BlockType::GRASS;
 			}
 		}
 	}
@@ -64,15 +65,15 @@ namespace ZuneCraft {
 
 	uint8_t Chunk::TryGet(int x, int y, int z) {
 		if (x >= CHUNK_WIDTH || x < 0) {
-			return AIR;
+			return (uint8_t)BlockType::AIR;
 		}
 
 		if (y >= CHUNK_HEIGHT || y < 0) {
-			return AIR;
+			return (uint8_t)BlockType::AIR;
 		}
 
 		if (z >= CHUNK_WIDTH || z < 0) {
-			return AIR;
+			return (uint8_t)BlockType::AIR;
 		}
 
 		return m_Voxels.Data[x][y][z];
@@ -80,7 +81,7 @@ namespace ZuneCraft {
 	}
 
 	bool Chunk::IsVoidAt(int x, int y, int z) {
-		return m_Voxels.Data[x][y][z] == AIR;
+		return m_Voxels.Data[x][y][z] == (uint8_t)BlockType::AIR;
 	}
 
 	void Chunk::Update() {

@@ -22,7 +22,7 @@ namespace ZuneCraft {
         if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
         ZC_ERROR("---------------");
-        ZC_ERROR("Debug message (", id, "): ", message);
+        ZC_ERROR("Debug message (" << id << "): " << message);
 
         switch (source)
         {
@@ -62,7 +62,7 @@ namespace ZuneCraft {
 
 		m_Height = 272 * 4;
 		m_Width = 480 * 4;
-		
+
         RenderAPI::API api = Game::Get().GetConfig().GraphicsAPI;
         
 

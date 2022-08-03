@@ -14,11 +14,16 @@ namespace ZuneCraft {
 	#endif
 
 	std::string Asset::GetShaderSource(const std::string& name) {
+#ifdef ZC_PLATFORM_ZUNE
+		std::string localPath = s_WorkingDirectory + "\\" + name;
+#else
 		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
+#endif
+
 		std::ifstream file(localPath.c_str(), std::ios::ate);
 
 		if (file.is_open() == false) {
-			ZC_FATAL_ERROR("Could not open file: ", localPath);
+			ZC_FATAL_ERROR("Could not open file: " << localPath);
 		}
 
 		size_t size = file.tellg();
@@ -32,13 +37,18 @@ namespace ZuneCraft {
 	}
 
 	Result Asset::GetImage(const std::string& name, Image* _out_Image) {
+#ifdef ZC_PLATFORM_ZUNE
+		std::string localPath = s_WorkingDirectory + "\\" + name;
+#else
 		std::string localPath = s_WorkingDirectory + "image" + "\\" + name;
+#endif
+
 		stbi_set_flip_vertically_on_load(true);
 
 		_out_Image->Data = stbi_load(localPath.c_str(), &_out_Image->Width, &_out_Image->Height, &_out_Image->NrChannels, 0);
 
 		if (_out_Image->Data == nullptr) {
-			ZC_FATAL_ERROR("Could not load image: ", localPath);
+			ZC_FATAL_ERROR("Could not load image: " << localPath);
 			return Result::FAILURE;
 		}
 
@@ -46,11 +56,16 @@ namespace ZuneCraft {
 	}
 
 	Result Asset::GetShaderBinary(const std::string& name, Binary* _out_Binary) {
+#ifdef ZC_PLATFORM_ZUNE
+		std::string localPath = s_WorkingDirectory + "\\" + name;
+#else
 		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
+#endif
+
 		std::ifstream file(localPath.c_str(), std::ios::ate | std::ios::binary);
 
 		if (file.is_open() == false) {
-			ZC_FATAL_ERROR("Could not open file: ", localPath);
+			ZC_FATAL_ERROR("Could not open file: " << localPath);
 			return Result::FAILURE;
 		}
 

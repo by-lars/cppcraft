@@ -5,7 +5,7 @@ varying vec2 vTexCoords;
 varying vec2 vTilePos;
 varying float vNormal;
 
-uniform vec3 uTranslation[32];
+uniform vec3 uTranslation[128];
 uniform mat4 uView;
 uniform mat4 uProj;
 

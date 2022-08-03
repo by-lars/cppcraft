@@ -15,7 +15,7 @@ namespace ZuneCraft {
 	Game::Game() {
 		s_Instance = this;
 		
-		m_GameConfig.GraphicsAPI = RenderAPI::API::OPENGL_4;
+		m_GameConfig.GraphicsAPI = RenderAPI::API::OPENGL_ES_2;
 
 		m_Window = Window::Create();
 		Renderer::Init();
@@ -24,21 +24,10 @@ namespace ZuneCraft {
 		m_IsFlipped = 0;
 		m_Frame = 0;
 
-		//_World = new World();
-		//m_World->Initialize();
 
 
-		Chunk chunk(glm::ivec2(0,0));
-		chunk.Update();
 
-		Chunk chunk1(glm::ivec2(1, 0));
-		chunk1.Update();
-
-		Chunk chunk2(glm::ivec2(0, 1));
-		chunk2.Update();
-
-		Chunk chunk3(glm::ivec2(1, 1));
-		chunk3.Update();
+		m_World = new World();
 
 		ZC_LOG("The cake is a lie");
 	}
@@ -46,7 +35,7 @@ namespace ZuneCraft {
 	Game::~Game() {
 		Renderer::Shutdown();
 		delete m_Window;
-		//delete m_World;
+		delete m_World;
 		Input::Shutdown();
 	}
 

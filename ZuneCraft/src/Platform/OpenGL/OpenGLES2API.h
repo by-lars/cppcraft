@@ -5,21 +5,21 @@
 #include <vector>
 
 namespace ZuneCraft {
+	struct GLES2BufferElement {
+		GLenum DataType;
+		GLuint Offset;
+		GLuint Count;
+	};
+
+	struct GLES2Buffer {
+		uint32_t Id;
+		uint32_t Type;
+		uint32_t Stride;
+		std::vector<GLES2BufferElement> VertexLayout;
+	};
+
 	class OpenGLES2API : public RenderAPI {
 	public:
-		struct GLES2BufferElement {
-			GLenum DataType;
-			GLuint Offset;
-			GLuint Count;
-		};
-
-		struct GLES2Buffer {
-			uint32_t Id;
-			uint32_t Type;
-			uint32_t Stride;
-			std::vector<GLES2BufferElement> VertexLayout;
-		};		
-
 		OpenGLES2API();
 		~OpenGLES2API();
 
@@ -61,6 +61,8 @@ namespace ZuneCraft {
 		struct {
 			std::vector<GLint> First;
 			std::vector<GLsizei> Count;
+			GLsizei VertCount;
 		} m_BatchedDrawing;
+
 	};
 }

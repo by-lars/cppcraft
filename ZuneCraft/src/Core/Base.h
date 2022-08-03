@@ -1,19 +1,21 @@
 #pragma once
 #include "Core/Logger.h"
 #include <cstdlib>
+#include <stdlib.h>
+#include <sstream>
 
 #define ZUNE_CRAFT_VERSION "0.1.0"
 
-#define ZC_DEBUG_ALLOC(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::ALLOC, __VA_ARGS__)
-#define ZC_LOG(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::LOG, __VA_ARGS__)
-#define ZC_WARN(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::WARNING, __VA_ARGS__)
-#define ZC_ERROR(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::ERROR, __VA_ARGS__)
+#define ZC_DEBUG_ALLOC(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::ALLOC, s); }
+#define ZC_LOG(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LOG, s); }
+#define ZC_WARN(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::WARNING, s); }
+#define ZC_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::ERROR, s); }
 
-#define ZC_FATAL_ERROR(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::FATAL, __VA_ARGS__); abort();
+#define ZC_FATAL_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::FATAL, s); exit(-1); }
 
 #ifndef NDEBUG
-#define ZC_DEBUG(...) ZuneCraft::Logger::Log(ZuneCraft::LogLevel::DEBUGLOG, __VA_ARGS__)
-#define ZC_ASSERT(test, msg) if((test) == false) { ZC_DEBUG("Debug test failed: ", msg); exit(-1); } 
+#define ZC_DEBUG(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::DEBUGLOG, s); }
+#define ZC_ASSERT(test, msg) if((test) == false) { ZC_DEBUG("Debug test failed: " << msg); exit(-1); } 
 #else
 #define ZC_DEBUG(x)
 #define ZC_ASSERT(x)

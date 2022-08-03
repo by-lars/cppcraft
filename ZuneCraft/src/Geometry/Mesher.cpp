@@ -23,11 +23,11 @@ namespace ZuneCraft {
 				int n = 0;
 				for (x[v] = 0; x[v] < CHUNK_DIMENSIONS[v]; x[v]++) {
 					for (x[u] = 0; x[u] < CHUNK_DIMENSIONS[u]; x[u]++) {
-						BlockType voxel = (x[d] >= 0) ? (BlockType)voxels.Data[x[0]][x[1]][x[2]] : AIR;
-						BlockType nextVoxel = (x[d] < CHUNK_DIMENSIONS[d] - 1) ? (BlockType)voxels.Data[x[0] + q[0]][x[1] + q[1]][x[2] + q[2]] : AIR;
+						BlockType voxel = (x[d] >= 0) ? (BlockType)voxels.Data[x[0]][x[1]][x[2]] : BlockType::AIR;
+						BlockType nextVoxel = (x[d] < CHUNK_DIMENSIONS[d] - 1) ? (BlockType)voxels.Data[x[0] + q[0]][x[1] + q[1]][x[2] + q[2]] : BlockType::AIR;
 
-						bool isVoxelSolid = (voxel == AIR);
-						bool isNextVoxelSolid = (nextVoxel == AIR);
+						bool isVoxelSolid = (voxel == BlockType::AIR);
+						bool isNextVoxelSolid = (nextVoxel == BlockType::AIR);
 						bool isBackFace = (isNextVoxelSolid == false);
 						BlockType type = isNextVoxelSolid ? voxel : nextVoxel;
 						uint8_t direction = d + 3 * isBackFace;
@@ -71,20 +71,20 @@ namespace ZuneCraft {
 
 
 							if (mask[n].IsBackFace) {
-								_out_Mesh->push_back(Vertex(x[0] + du[0],			x[1] + du[1],			x[2] + du[2],			w, h, mask[n].Type,	mask[n].Direction)); //Top Right
-								_out_Mesh->push_back( Vertex(x[0],					x[1],					x[2],					0, h, mask[n].Type,	mask[n].Direction)); //Top Left Cornor
-								_out_Mesh->push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, mask[n].Type,	mask[n].Direction)); //Lower right cornor
-								_out_Mesh->push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, mask[n].Type,	mask[n].Direction)); //Lower right cornor
-								_out_Mesh->push_back( Vertex(x[0],					x[1],					x[2],					0, h, mask[n].Type,	mask[n].Direction)); //Top Left Cornor
-								_out_Mesh->push_back( Vertex(x[0] + dv[0],			x[1] + dv[1],			x[2] + dv[2],			0, 0, mask[n].Type,	mask[n].Direction)); //Lower left cornor
+								_out_Mesh->push_back(Vertex(x[0] + du[0],			x[1] + du[1],			x[2] + du[2],			w, h, (uint8_t)mask[n].Type,	mask[n].Direction)); //Top Right
+								_out_Mesh->push_back( Vertex(x[0],					x[1],					x[2],					0, h, (uint8_t)mask[n].Type,	mask[n].Direction)); //Top Left Cornor
+								_out_Mesh->push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, (uint8_t)mask[n].Type,	mask[n].Direction)); //Lower right cornor
+								_out_Mesh->push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, (uint8_t)mask[n].Type,	mask[n].Direction)); //Lower right cornor
+								_out_Mesh->push_back( Vertex(x[0],					x[1],					x[2],					0, h, (uint8_t)mask[n].Type,	mask[n].Direction)); //Top Left Cornor
+								_out_Mesh->push_back( Vertex(x[0] + dv[0],			x[1] + dv[1],			x[2] + dv[2],			0, 0, (uint8_t)mask[n].Type,	mask[n].Direction)); //Lower left cornor
 							}
 							else {
-								_out_Mesh->push_back( Vertex(x[0] + du[0], x[1] + du[1], x[2] + du[2], w, h, mask[n].Type, mask[n].Direction)); //Top Right
-								_out_Mesh->push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, mask[n].Type, mask[n].Direction)); //Lower right cornor
-								_out_Mesh->push_back( Vertex(x[0], x[1], x[2], 0, h, mask[n].Type, mask[n].Direction)); //Top Left Cornor
-								_out_Mesh->push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, mask[n].Type, mask[n].Direction)); //Lower right cornor
-								_out_Mesh->push_back( Vertex(x[0] + dv[0], x[1] + dv[1], x[2] + dv[2], 0, 0, mask[n].Type, mask[n].Direction)); //Lower left cornor
-								_out_Mesh->push_back( Vertex(x[0], x[1], x[2], 0, h, mask[n].Type, mask[n].Direction)); //Top Left Cornor
+								_out_Mesh->push_back( Vertex(x[0] + du[0], x[1] + du[1], x[2] + du[2], w, h, (uint8_t)mask[n].Type, mask[n].Direction)); //Top Right
+								_out_Mesh->push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, (uint8_t)mask[n].Type, mask[n].Direction)); //Lower right cornor
+								_out_Mesh->push_back( Vertex(x[0], x[1], x[2], 0, h, (uint8_t)mask[n].Type, mask[n].Direction)); //Top Left Cornor
+								_out_Mesh->push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, (uint8_t)mask[n].Type, mask[n].Direction)); //Lower right cornor
+								_out_Mesh->push_back( Vertex(x[0] + dv[0], x[1] + dv[1], x[2] + dv[2], 0, 0, (uint8_t)mask[n].Type, mask[n].Direction)); //Lower left cornor
+								_out_Mesh->push_back( Vertex(x[0], x[1], x[2], 0, h, (uint8_t)mask[n].Type, mask[n].Direction)); //Top Left Cornor
 							}
 
 							for (int l = 0; l < h; l++)

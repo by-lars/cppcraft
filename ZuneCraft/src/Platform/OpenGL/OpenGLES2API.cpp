@@ -2,11 +2,13 @@
 #include "Platform/OpenGL/OpenGLES2API.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "Graphics/GL.h"
-
+#include <Windows.h>
 
 namespace ZuneCraft {
 #pragma region Constructor
 	OpenGLES2API::OpenGLES2API() {
+		ZC_LOG("Initializing OpenGLES 2.0 API");
+
 		m_Capabilities.IndirectDrawing = false;
 
 		#ifdef ZC_PLATFORM_ZUNE
@@ -14,31 +16,35 @@ namespace ZuneCraft {
 		#else
 			m_Capabilities.ShaderCompiler = true;
 		#endif
+
+		std::string oglVersion((const char*)glGetString(GL_VERSION));
+		std::string oglRenderer((const char*)glGetString(GL_RENDERER));
+		std::string oglVendor((const char*)glGetString(GL_VENDOR));
+
+		ZC_LOG("Running " << oglVersion << " on " << oglRenderer << " - " << oglVendor);
 		
-		const GLubyte* oglVersion = glGetString(GL_VERSION);
-		const GLubyte* oglRenderer = glGetString(GL_RENDERER);
-		const GLubyte* oglVendor = glGetString(GL_VENDOR);
-		ZC_LOG("Running ", oglVersion, " on ", oglRenderer, " - ", oglVendor);
+		m_BatchedDrawing.VertCount = 0;
 
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_BACK);
+
 	}
 
 	OpenGLES2API::~OpenGLES2API() {
 		
 		for(int i = 0; i < m_Shaders.size(); i++) {
-			ZC_DEBUG_ALLOC("Deleting Shader Id=", m_Shaders[i].Id);
+			ZC_DEBUG_ALLOC("Deleting Shader Id=" << m_Shaders[i].Id);
 			glDeleteProgram(m_Shaders[i].Id);
 		}
 
 		for (int i = 0; i < m_Buffers.size(); i++) {
-			ZC_DEBUG_ALLOC("Deleting Buffer Id=", m_Buffers[i].Id);
+			ZC_DEBUG_ALLOC("Deleting Buffer Id=" << m_Buffers[i].Id);
 			glDeleteBuffers(1, &m_Buffers[i].Id);
 		}
 
 		for (int i = 0; i < m_Textures.size(); i++) {
-			ZC_DEBUG_ALLOC("Deleting Texture Id=", m_Textures[i].Id);
+			ZC_DEBUG_ALLOC("Deleting Texture Id=" << m_Textures[i].Id);
 			glDeleteTextures(1, &m_Textures[i].Id);
 		}
 	}
@@ -91,7 +97,7 @@ namespace ZuneCraft {
 		if (success == false) {
 			char log[1024];
 			glGetShaderInfoLog(shader, 2048, 0, log);
-			ZC_FATAL_ERROR("Failed to compile shader: ", shader, "\n", log);
+			ZC_FATAL_ERROR("Failed to compile shader: " << shader << "\n" << log);
 		}
 	#endif 
 	}
@@ -100,7 +106,7 @@ namespace ZuneCraft {
 		GLuint program = glCreateProgram();
 		GLuint vertex = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fragment = glCreateShader(GL_FRAGMENT_SHADER);
-		ZC_DEBUG("Compiling Shader: ", " Id= ", program);
+		ZC_DEBUG("Compiling Shader: " << " Id= " << program);
 
 		CompileShader(vertex, vertexCode.c_str());
 		CompileShader(fragment, fragmentCode.c_str());
@@ -121,7 +127,7 @@ namespace ZuneCraft {
 		if (didLink == false) {
 			char log[1024];
 			glGetProgramInfoLog(program, 1024, 0, log);
-			ZC_FATAL_ERROR("Failed to link shader: ", program, "\n", log);
+			ZC_FATAL_ERROR("Failed to link shader: " << program << "\n" << log);
 		}
 
 		GLShader shader; shader.Id = program; 
@@ -136,13 +142,13 @@ namespace ZuneCraft {
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
 		glShaderBinary(1, &vertexShader, GL_NVIDIA_PLATFORM_BINARY_NV, vertexBinary.Data, vertexBinary.Size);
-		glShaderBinary(1, &fragmentShader, GL_NVIDIA_PLATFORM_BINARY_NV, vertexBinary.Data, vertexBinary.Size);
+		glShaderBinary(1, &fragmentShader, GL_NVIDIA_PLATFORM_BINARY_NV, fragmentBinary.Data, fragmentBinary.Size);
 
 		glAttachShader(program, vertexShader);
 		glAttachShader(program, fragmentShader);
 
 		for (int i = 0; i < attributes.size(); i++) {
-			ZC_DEBUG("Bound ", attributes[i], " to location ", i);
+			ZC_DEBUG("Bound " << attributes[i] << " to location " << i);
 			glBindAttribLocation(program, i, attributes[i].c_str());
 		}
 
@@ -154,8 +160,12 @@ namespace ZuneCraft {
 			char info[1024];
 			GLsizei len = 0;
 			glGetProgramInfoLog(program, 1024, &len, info);
-			ZC_FATAL_ERROR("Could not link shaders:", info);
+			ZC_FATAL_ERROR("Could not link shaders:" << info);
 		}
+
+
+		GLShader shader; shader.Id = program;
+		m_Shaders.push_back(shader);
 
 		return HShader(m_Shaders.size() - 1);
 	}
@@ -200,7 +210,7 @@ namespace ZuneCraft {
 		GLuint buffer = 0;
 		glGenBuffers(1, &buffer);
 
-		ZC_DEBUG("Created ID=", buffer, " of size=", size);
+		ZC_DEBUG("Created ID=" << buffer << " of size=" << size);
 
 		GLenum bufferType;
 		switch (type) {
@@ -244,7 +254,7 @@ namespace ZuneCraft {
 		uint32_t offset = 0;
 
 		GLES2Buffer& buffer = m_Buffers[(int)hBuffer];
-		ZC_DEBUG("Setting Buffer Layout for buffer: ", buffer.Id);
+		ZC_DEBUG("Setting Buffer Layout for buffer: " << buffer.Id);
 
 
 		for (int i = 0; i < elements.size(); i++) {
@@ -265,7 +275,7 @@ namespace ZuneCraft {
 		GLES2Buffer buffer = m_Buffers[(int)hBuffer];
 		glBindBuffer(buffer.Type, buffer.Id);
 		glBufferSubData(buffer.Type, offset, size, data);
-		ZC_DEBUG("Uploading ", size, " bytes at offset ", offset, " to buffer #", buffer.Id);
+		ZC_DEBUG("Uploading " << size << " bytes at offset " << offset << " to buffer #" << buffer.Id);
 	}
 #pragma endregion
 
@@ -379,6 +389,7 @@ namespace ZuneCraft {
 	void OpenGLES2API::PushRenderCommand(const RenderCommand& command) {
 		m_BatchedDrawing.First.push_back(command.First);
 		m_BatchedDrawing.Count.push_back(command.Count);
+		m_BatchedDrawing.VertCount += command.Count;
 	}
 
 	void OpenGLES2API::Flush() {
@@ -392,7 +403,9 @@ namespace ZuneCraft {
 
 	void OpenGLES2API::MultiDrawArrays(DrawMode mode) {
 		GLenum glMode = DrawModeToGLEnum(mode);
-		glMultiDrawArrays(glMode, &m_BatchedDrawing.First[0], &m_BatchedDrawing.Count[0], m_BatchedDrawing.First.size());
+
+		glDrawArrays(glMode, 0, m_BatchedDrawing.VertCount);
+		//glMultiDrawArrays(glMode, &m_BatchedDrawing.First[0], &m_BatchedDrawing.Count[0], m_BatchedDrawing.First.size());
 	}
 
 #pragma endregion

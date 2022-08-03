@@ -2,16 +2,16 @@
 #include "Core/Base.h"
 #include "Graphics/GL.h"
 #include "Core/Game.h"
-
 #include "Geometry/Vertex.h"
 #include "Geometry/Mesher.h"
+#include "Graphics/RenderAPI.h"
+#include "Utility/Asset.h"
+#include "Utility/Convert.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
-#include "Graphics/RenderAPI.h"
-#include "Utility/Asset.h"
 
 #ifdef ZC_PLATFORM_ZUNE
 #include <zdk.h> 
@@ -20,7 +20,7 @@
 namespace ZuneCraft {
 	static RenderAPI* s_Device = nullptr;
 
-	static const size_t MAX_BATCH_MESHES = 500;
+	static const size_t MAX_BATCH_MESHES = 128;
 
 	struct BatchData {
 		glm::vec3 Translation;
@@ -41,6 +41,8 @@ namespace ZuneCraft {
 		HShader MeshShader;
 		size_t BatchCurrentOffset;
 		std::vector<BatchData> BatchData;
+
+		size_t TriangleCount;
 	};
 
 	static RenderData s_Data;
@@ -51,7 +53,6 @@ namespace ZuneCraft {
 		s_Data.RenderHeight = Game::Get().GetWindow().GetHeight();
 
 		s_Device = RenderAPI::Create();
-		
 
 		//Mesh Buffer
 		std::vector<BufferElement> bufferElements;
@@ -189,17 +190,16 @@ namespace ZuneCraft {
 			for (int i = 0; i < mesh.size(); i++) {
 				mesh[i].BatchIndex = s_Data.BatchData.size() - 1;
 			}
-			std::string name;
-			name += "uTranslation[";
-			name += std::to_string(s_Data.BatchData.size() - 1);
-			name += "]";
-
-			ZC_DEBUG(name);
-			s_Device->SetShaderUniform(s_Data.MeshShader, name, translation);
+			std::ostringstream name;
+			name << "uTranslation[" << (s_Data.BatchData.size() - 1) << "]";
+			s_Device->SetShaderUniform(s_Data.MeshShader, name.str(), translation);
 		}
 
 		s_Device->BufferData(s_Data.BatchMeshBuffer, mesh.size() * sizeof(Vertex), s_Data.BatchCurrentOffset, (void*)&mesh[0]);
 		s_Data.BatchCurrentOffset += mesh.size() * sizeof(Vertex);
+		s_Data.TriangleCount += mesh.size();
+
+		ZC_DEBUG("Triangle Count=" << s_Data.TriangleCount);
 
 		return HMesh(0);
 	}

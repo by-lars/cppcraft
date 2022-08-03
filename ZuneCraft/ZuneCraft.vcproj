@@ -54,7 +54,7 @@
 				ExecutionBucket="7"
 				AdditionalOptions="/QRfpe- /QRarch6"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)src&quot;;&quot;$(ProjectDir)ext\glm&quot;;&quot;$(ProjectDir)ext\nothings&quot;;&quot;$(ProjectDir)ext\fastnoise&quot;;&quot;$(ProjectDir)ext\boost&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)src&quot;;&quot;$(ProjectDir)ext\glm&quot;;&quot;$(ProjectDir)ext\nothings&quot;;&quot;$(ProjectDir)ext\fastnoise&quot;;&quot;$(ProjectDir)ext\Platform\Zune\boost&quot;"
 				PreprocessorDefinitions="_DEBUG;_WIN32_WCE=$(CEVER);UNDER_CE;$(PLATFORMDEFINES);WINCE;DEBUG;_WINDOWS;$(ARCHFAM);$(_ARCHFAM_);_UNICODE;UNICODE;_CRT_SECURE_NO_WARNINGS;ZC_PLATFORM_ZUNE"
 				MinimalRebuild="true"
 				RuntimeLibrary="1"
@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="move &quot;$(ProjectDir)src\Assets\Shader\*.nvbf&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;move &quot;$(ProjectDir)src\Assets\Shader\*.nvbv&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)src\Assets\Image\*&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\Launcher\Content\*&quot;&#x0D;&#x0A;&#x0D;&#x0A;"
+				CommandLine="move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbf&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbv&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)src\Assets\Image\*&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\Launcher\Content\*&quot;&#x0D;&#x0A;&#x0D;&#x0A;&#x0D;&#x0A;"
 			/>
 			<DeploymentTool
 				ForceDirty="-1"
@@ -207,7 +207,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\Launcher\Content\&quot;"
+				CommandLine="move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbf&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbv&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)src\Assets\Image\*&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\Launcher\Content\*&quot;&#x0D;&#x0A;&#x0D;&#x0A;&#x0D;&#x0A;"
 			/>
 			<DeploymentTool
 				ForceDirty="-1"
@@ -245,6 +245,10 @@
 			</File>
 			<File
 				RelativePath=".\src\World\Chunk.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Utility\Convert.h"
 				>
 			</File>
 			<File
@@ -368,19 +372,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Utility\File.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\Core\Game.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\src\Core\GLWindow.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\Core\Logger.cpp"
 				>
 			</File>
 			<File

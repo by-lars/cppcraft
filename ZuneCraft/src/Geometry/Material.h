@@ -1,7 +1,8 @@
 #pragma once
+#include "Core/Base.h"
 
 namespace ZuneCraft {
-	enum BlockType {
+	ZC_ENUM BlockType {
 		AIR = 0,
 		GRASS = 1,
 		STONE = 2,
