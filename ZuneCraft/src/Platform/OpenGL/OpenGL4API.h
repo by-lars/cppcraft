@@ -27,6 +27,12 @@ namespace ZuneCraft {
 		void BindTexture(HTexture hTexture) override;
 		void UploadTextureData(HTexture hTexture, void* data) override;
 
+		HRenderTarget CreateRenderTarget(uint32_t width, uint32_t height) override;
+		void BindRenderTarget(HRenderTarget hRenderTarget) override;
+		void RenderTargetAddTextureAttachment(HRenderTarget hRenderTarget, TextureFormat format, TextureFormat internalFormat, AttachementType attachementType) override;
+		void RenderTargetAddBufferAttachment(HRenderTarget hRenderTarget, TextureFormat format, AttachementType attachementType) override;
+		void FinalizeRenderTarget(HRenderTarget hRenderTarget) override;
+
 		void PushRenderCommand(const RenderCommand& command) override;
 		void Flush() override;
 
@@ -43,6 +49,7 @@ namespace ZuneCraft {
 		std::vector<GLBuffer> m_Buffers;
 		std::vector<GLShader> m_Shaders;
 		std::vector<GLTexture> m_Textures;
+		std::vector<GLRenderTarget> m_RenderTargets;
 
 		struct {
 			std::vector<RenderCommand> Commands;

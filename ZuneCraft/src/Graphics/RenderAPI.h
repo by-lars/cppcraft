@@ -44,10 +44,11 @@ namespace ZuneCraft {
 		virtual void BindTexture(HTexture hTexture) = 0;
 		virtual void UploadTextureData(HTexture hTexture, void* data) = 0;
 
-		/*virtual HRenderTarget CreateRenderTarget(uint32_t width, uint32_t height) = 0;
-		virtual HTexture RenderTargetAddTextureAttachment() = 0;
-		virtual void RenderTargetAddBufferAttachment() = 0;
-		virtual void ResizeRenderTarget() = 0;*/
+		virtual HRenderTarget CreateRenderTarget(uint32_t width, uint32_t height) = 0;
+		virtual void BindRenderTarget(HRenderTarget hRenderTarget) = 0;
+		virtual void RenderTargetAddTextureAttachment(HRenderTarget hRenderTarget, TextureFormat format, TextureFormat internalFormat, AttachementType attachementType) = 0;
+		virtual void RenderTargetAddBufferAttachment(HRenderTarget hRenderTarget, TextureFormat format, AttachementType attachementType) = 0;
+		virtual void FinalizeRenderTarget(HRenderTarget hRenderTarget) = 0;
 
 		virtual void Flush() = 0;
 		virtual void PushRenderCommand(const RenderCommand& command) = 0;

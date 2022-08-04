@@ -78,7 +78,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/subsystem:windowsce,6.00"
-				AdditionalDependencies="coredll.lib corelibc.lib zdksystem.lib compclient.lib $(NOINHERIT)"
+				AdditionalDependencies="coredll.lib corelibc.lib zdksystem.lib compclient.lib libEGL.lib $(NOINHERIT)"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				DelayLoadDLLs="$(NOINHERIT)"

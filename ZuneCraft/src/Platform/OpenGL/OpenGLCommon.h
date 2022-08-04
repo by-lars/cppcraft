@@ -3,25 +3,41 @@
 
 namespace ZuneCraft {
 	struct GLShader {
-		uint32_t Id;
+		GLuint Id;
 	};
 
 	struct GLBuffer {
-		uint32_t Id;
-		uint32_t VertexArray;
-		uint32_t Type;
-		uint32_t AttributeCount;
-		uint32_t Size;
+		GLuint Id;
+		GLuint VertexArray;
+		GLenum Type;
+		GLuint AttributeCount;
+		GLuint Size;
+	};
+
+	struct GLColorAttachement {
+		GLuint Id;
+		GLenum InternalFormat;
+		GLenum Format;
+		GLenum Type;
+	};
+
+	struct GLDepthAttachement {
+		GLuint Id;
+		GLenum Type;
 	};
 
 	struct GLRenderTarget {
-		uint32_t FrameBuffer;
+		GLuint Id;
+		GLuint Width;
+		GLuint Height;
+		GLDepthAttachement DepthAttachement;
+		std::vector<GLColorAttachement> ColorAttachements;
 	};
 
 	struct GLTexture {
-		uint32_t Id;
-		uint32_t Width;
-		uint32_t Height;
+		GLuint Id;
+		GLuint Width;
+		GLuint Height;
 		GLenum Format;
 		GLenum DataType;
 	};

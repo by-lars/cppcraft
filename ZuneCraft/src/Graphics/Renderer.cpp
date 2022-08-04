@@ -34,6 +34,7 @@ namespace ZuneCraft {
 		//PostProcessing
 		HShader PPShader;
 		HBuffer PPQuadBuffer;
+		HRenderTarget PPRenderTarget;
 
 		//Mesh Rendering
 		HBuffer BatchMeshBuffer;
@@ -64,9 +65,11 @@ namespace ZuneCraft {
 		//Setup Renderer paths based on api capabilities
 		RenderAPI::Capabilities apiCapabilities = s_Device->GetCapabilities();
 		if (apiCapabilities.IndirectDrawing) {
-			SetupIndirectRenderPath();
-		} else {
-			SetupDirectRenderPath();
+			s_Data.BatchDataBuffer = s_Device->CreateBuffer(sizeof(BatchData) * MAX_BATCH_MESHES, BufferType::ARRAY, BufferUsage::DYNAMIC_DRAW);
+			std::vector<BufferElement> bufferElements;
+			bufferElements.push_back(BufferElement(DataType::FLOAT, 3, 1));
+			s_Device->SetBufferLayout(s_Data.BatchDataBuffer, s_Data.BatchMeshBuffer, bufferElements);
+			s_Data.BatchCurrentOffset = 0;
 		}
 
 		//Setup default state
@@ -100,20 +103,14 @@ namespace ZuneCraft {
 		Image atlas; Asset::GetImage("atlas.png", &atlas);
 		HTexture tex = s_Device->CreateTexture(atlas.Width, atlas.Height, atlas.GetFormat(), DataType::UNSIGNED_BYTE, ClampMode::CLAMP_TO_EDGE, FilterMode::NEAREST);
 		s_Device->UploadTextureData(tex, atlas.Data);
+
+		//PP Frame Buffer
+		glActiveTexture(GL_TEXTURE0);
+		s_Data.PPRenderTarget = s_Device->CreateRenderTarget(s_Data.RenderWidth, s_Data.RenderHeight);
+		s_Device->RenderTargetAddTextureAttachment(s_Data.PPRenderTarget, TextureFormat::RGBA, TextureFormat::RGBA, AttachementType::Color);
+		s_Device->RenderTargetAddBufferAttachment(s_Data.PPRenderTarget, TextureFormat::DEPTH_COMPONENT24, AttachementType::Depth);
+		s_Device->FinalizeRenderTarget(s_Data.PPRenderTarget);
 	}	
-
-	void Renderer::SetupIndirectRenderPath() {
-		//Setup Indirect Rendering
-		s_Data.BatchDataBuffer = s_Device->CreateBuffer(sizeof(BatchData) * MAX_BATCH_MESHES, BufferType::ARRAY, BufferUsage::DYNAMIC_DRAW);
-		std::vector<BufferElement> bufferElements;
-		bufferElements.push_back(BufferElement(DataType::FLOAT, 3, 1));
-		s_Device->SetBufferLayout(s_Data.BatchDataBuffer, s_Data.BatchMeshBuffer, bufferElements);
-		s_Data.BatchCurrentOffset = 0;
-	}
-
-	void Renderer::SetupDirectRenderPath() {
-
-	}
 
 	HShader Renderer::LoadShader(const std::string& name, const std::vector<std::string>& attributes) {
 		HShader shader;
@@ -152,18 +149,30 @@ namespace ZuneCraft {
 			ZDKGL_BeginDraw();
 		#endif                  
 		 
+		s_Device->BindRenderTarget(s_Data.PPRenderTarget);
+		s_Device->SetViewport(0, 0, s_Data.RenderWidth, s_Data.RenderHeight);
 		s_Device->Clear();
 	}
 
 	void Renderer::EndFrame() {
 		s_Device->Flush();
-	/*	s_Device->BindShader(s_Data.PPShader);
-		s_Device->BindBuffer(s_Data.PPQuadBuffer);
-		s_Device->DrawArrays(DrawMode::TRIANGLE_STRIP, 0, 4);*/
 
 		s_Device->BindShader(s_Data.MeshShader);
 		s_Device->BindBuffer(s_Data.BatchMeshBuffer);
 		s_Device->MultiDrawArrays(DrawMode::TRIANGLES);
+
+		s_Device->BindRenderTarget(HRenderTarget::Invalid());
+
+#ifdef ZC_PLATFORM_ZUNE
+		s_Device->SetViewport(0, 0, s_Data.RenderHeight, s_Data.RenderWidth);
+#else
+		s_Device->SetViewport(0, 0, s_Data.RenderWidth, s_Data.RenderHeight);
+#endif
+		s_Device->Clear();
+
+		s_Device->BindShader(s_Data.PPShader);
+		s_Device->BindBuffer(s_Data.PPQuadBuffer);
+		s_Device->DrawArrays(DrawMode::TRIANGLE_STRIP, 0, 4);
 
 		#ifdef ZC_PLATFORM_ZUNE
 		ZDKGL_EndDraw();

@@ -56,13 +56,22 @@ namespace ZuneCraft {
 	};
 
 	ZC_ENUM FilterMode {
-		NEAREST,
+		NEAREST = 0,
 		LINEAR
 	};
 
 	ZC_ENUM TextureFormat {
-		RGB,
-		RGBA
+		RGB = 0,
+		RGBA,
+
+		DEPTH_COMPONENT16, 
+		DEPTH_COMPONENT24, 
+		DEPTH_COMPONENT32
+	};
+
+	ZC_ENUM AttachementType {
+		Color = 0,
+		Depth
 	};
 
 	struct RenderCommand {

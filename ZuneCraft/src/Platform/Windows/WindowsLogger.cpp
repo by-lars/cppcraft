@@ -21,12 +21,12 @@ namespace ZuneCraft {
 
 	void Logger::Log(LogLevel level, std::stringstream& stream) {
 		switch (level) {
-		case LogLevel::ALLOC: std::cout << "\x1B[36m[ALLOC] "; break;
-		case LogLevel::DEBUGLOG: std::cout << "\x1B[96m[DEBUG] "; break;
-		case LogLevel::LOG: std::cout << "\x1B[94m[LOG] "; break;
-		case LogLevel::WARNING: std::cout << "\x1B[93m[WARN] "; break;
-		case LogLevel::ERROR: std::cout << "\x1B[91m[ERROR] "; break;
-		case LogLevel::FATAL: std::cout << "\x1B[41m[FATAL] "; break;
+		case LogLevel::LALLOC: std::cout << "\x1B[36m[ALLOC] "; break;
+		case LogLevel::LDEBUG: std::cout << "\x1B[96m[DEBUG] "; break;
+		case LogLevel::LLOG: std::cout << "\x1B[94m[LOG] "; break;
+		case LogLevel::LWARNING: std::cout << "\x1B[93m[WARN] "; break;
+		case LogLevel::LERROR: std::cout << "\x1B[91m[ERROR] "; break;
+		case LogLevel::LFATAL: std::cout << "\x1B[41m[FATAL] "; break;
 		}
 
 		std::cout << stream.str() << "\x1B[0m" << std::endl;

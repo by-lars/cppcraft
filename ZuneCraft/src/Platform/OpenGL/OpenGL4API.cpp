@@ -76,6 +76,17 @@ namespace ZuneCraft {
 
 		return GL_INVALID_ENUM;
 	}
+
+	static GLenum TextureFormatToGLEnum(TextureFormat format) {
+		switch (format) {
+		case TextureFormat::RGB: return GL_RGB; break;
+		case TextureFormat::RGBA: return GL_RGBA; break;
+		case TextureFormat::DEPTH_COMPONENT16: return GL_DEPTH_COMPONENT16; break;
+		case TextureFormat::DEPTH_COMPONENT24: return GL_DEPTH_COMPONENT24; break;
+		case TextureFormat::DEPTH_COMPONENT32: return GL_DEPTH_COMPONENT32; break;
+		default: ZC_FATAL_ERROR("Unkown Texture Format"); break;
+		}
+	}
 	#pragma endregion
 	
 	#pragma region Shader
@@ -289,10 +300,10 @@ namespace ZuneCraft {
 		glGenTextures(1, &id);
 
 		GLenum glDataType = DataTypeToGLEnum(dataType);
+		GLenum glTextureFormat = TextureFormatToGLEnum(format);
 		GLenum glClampMode = GL_INVALID_ENUM;
 		GLenum glMinFilterMode = GL_INVALID_ENUM;
 		GLenum glMagFilterMode = GL_INVALID_ENUM;
-		GLenum glTextureFormat = GL_INVALID_ENUM;
 
 		switch (clampMode) {
 		case ClampMode::REPEAT: glClampMode = GL_REPEAT; break;
@@ -312,18 +323,6 @@ namespace ZuneCraft {
 			break;
 
 		default: ZC_FATAL_ERROR("Unkown Filter Mode"); break;
-		}
-
-		switch (format) {
-		case TextureFormat::RGB: 
-			glTextureFormat = GL_RGB; 
-			break;
-
-		case TextureFormat::RGBA: 
-			glTextureFormat = GL_RGBA; 
-			break;
-
-		default: ZC_FATAL_ERROR("Unkown Texture Format"); break;
 		}
 
 		m_Textures.push_back(GLTexture { 
@@ -363,6 +362,120 @@ namespace ZuneCraft {
 			glBindTexture(GL_TEXTURE_2D, texture.Id);
 			currentBinding = hTexture;
 		//}
+	}
+	#pragma endregion
+
+	#pragma region FrameBuffer
+	/*
+	* FrameBuffer
+	*/
+
+	HRenderTarget OpenGL4API::CreateRenderTarget(uint32_t width, uint32_t height) {
+		GLuint fbo;
+		glGenFramebuffers(1, &fbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+		m_RenderTargets.push_back(GLRenderTarget{ .Id = fbo, .Width = width, .Height = height, .DepthAttachement = 0 });
+		return HRenderTarget(m_RenderTargets.size() - 1);
+	}
+
+	void OpenGL4API::BindRenderTarget(HRenderTarget hRenderTarget) {
+		if (hRenderTarget == HRenderTarget::Invalid()) {
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
+		else {
+			GLRenderTarget renderTarget = m_RenderTargets[(int)hRenderTarget];
+			glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
+		}
+	}
+
+	void OpenGL4API::RenderTargetAddTextureAttachment(HRenderTarget hRenderTarget, TextureFormat format, TextureFormat internalFormat, AttachementType attachementType) {
+		GLRenderTarget& renderTarget = m_RenderTargets[(int)hRenderTarget];
+		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
+
+		GLuint tex;
+		GLenum texFormat = GL_INVALID_ENUM;
+		GLenum texInternalFormat = GL_INVALID_ENUM;
+
+		if (attachementType == AttachementType::Color) {
+			texInternalFormat = TextureFormatToGLEnum(internalFormat);
+			texFormat = TextureFormatToGLEnum(format);
+		}
+		else {
+			texFormat = GL_DEPTH_COMPONENT;
+			texInternalFormat = GL_DEPTH_COMPONENT;
+		}
+
+		glGenTextures(1, &tex);
+		glBindTexture(GL_TEXTURE_2D, tex);
+		glTexImage2D(GL_TEXTURE_2D, 0, texInternalFormat, renderTarget.Width, renderTarget.Height, 0, texFormat, GL_UNSIGNED_BYTE, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		if (attachementType == AttachementType::Color) {
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + renderTarget.ColorAttachements.size(), GL_TEXTURE_2D, tex, 0);
+			renderTarget.ColorAttachements.push_back(GLColorAttachement { .Id = tex, .InternalFormat = texInternalFormat, .Format = texFormat, .Type = GL_TEXTURE_2D});
+		}
+		else {
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex, 0);
+			renderTarget.DepthAttachement = GLDepthAttachement{ .Id = tex, .Type = GL_TEXTURE_2D };
+		}
+
+	}
+
+	void OpenGL4API::RenderTargetAddBufferAttachment(HRenderTarget hRenderTarget, TextureFormat format, AttachementType attachementType) {
+		GLRenderTarget& renderTarget = m_RenderTargets[(int)hRenderTarget];
+		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
+
+		GLenum bufferFormat = TextureFormatToGLEnum(format);
+
+		GLuint buffer;
+		glGenRenderbuffers(1, &buffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, buffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, bufferFormat, renderTarget.Width, renderTarget.Height);
+
+		if (attachementType == AttachementType::Color) {
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + renderTarget.ColorAttachements.size(), GL_RENDERBUFFER, buffer);
+			renderTarget.ColorAttachements.push_back(GLColorAttachement{ .Id = buffer, .InternalFormat = bufferFormat, .Format = bufferFormat, .Type = GL_RENDERBUFFER });
+		}
+		else {
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, buffer);
+			renderTarget.DepthAttachement = GLDepthAttachement{ .Id = buffer, .Type = GL_RENDERBUFFER };
+		}
+	}
+
+	void OpenGL4API::FinalizeRenderTarget(HRenderTarget hRenderTarget) {
+		GLRenderTarget renderTarget = m_RenderTargets[hRenderTarget];
+		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
+
+		GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+		if (renderTarget.ColorAttachements.size() > 0) {
+			glDrawBuffers(renderTarget.ColorAttachements.size(), attachments);
+		}
+		else {
+			glDrawBuffer(GL_NONE);
+			glReadBuffer(GL_NONE);
+		}
+
+		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		if (status == GL_FRAMEBUFFER_COMPLETE) {
+			return;
+		}
+
+		ZC_ERROR("Could not create framebuffer: ");
+		switch (status) {
+		case GL_FRAMEBUFFER_UNDEFINED: ZC_FATAL_ERROR("GL_FRAMEBUFFER_UNDEFINED"); break;
+		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: ZC_FATAL_ERROR("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"); break;
+		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: ZC_FATAL_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"); break;
+		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER: ZC_FATAL_ERROR("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER"); break;
+		case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER: ZC_FATAL_ERROR("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER"); break;
+		case GL_FRAMEBUFFER_UNSUPPORTED: ZC_FATAL_ERROR("GL_FRAMEBUFFER_UNSUPPORTED"); break;
+		case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: ZC_FATAL_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE"); break;
+		case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS: ZC_FATAL_ERROR("GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS"); break;
+		}
 	}
 	#pragma endregion
 

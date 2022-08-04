@@ -24,9 +24,6 @@ namespace ZuneCraft {
 		m_IsFlipped = 0;
 		m_Frame = 0;
 
-
-
-
 		m_World = new World();
 
 		ZC_LOG("The cake is a lie");

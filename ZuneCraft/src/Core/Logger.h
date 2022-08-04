@@ -7,12 +7,12 @@
 
 namespace ZuneCraft {
 	ZC_ENUM LogLevel {
-		ALLOC = 0,
-		DEBUGLOG,
-		LOG,
-		WARNING,
-		ERROR,
-		FATAL
+		LALLOC = 0,
+		LDEBUG,
+		LLOG,
+		LWARNING,
+		LERROR,
+		LFATAL
 	};
 
 	class Logger {
