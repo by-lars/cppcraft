@@ -97,6 +97,7 @@ namespace ZuneCraft {
 		s_Data.MeshShader = LoadShader("main", shaderAttribs);
 		s_Device->SetShaderUniform(s_Data.MeshShader, "uProj", proj);
 		s_Device->SetShaderUniform(s_Data.MeshShader, "uAtlas", 1);
+		s_Device->SetShaderUniform(s_Data.MeshShader, "uSkyColor", glm::vec3(0.51f, 0.64f, 1.0f));
 
 		//Load Texture Atlas
 		glActiveTexture(GL_TEXTURE1);

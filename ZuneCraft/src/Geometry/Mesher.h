@@ -8,7 +8,7 @@
 
 namespace ZuneCraft {
     namespace Mesher {
-		void VoxelToGreedy(const VoxelStorage& voxels, std::vector<Vertex>* _out_Mesh);
+		void VoxelToGreedy(const VoxelStorage& voxels, uint32_t lod, std::vector<Vertex>* _out_Mesh);
 
         const float LineCubeVertices[] = {
             -0.5f, -0.5f, -0.5f,

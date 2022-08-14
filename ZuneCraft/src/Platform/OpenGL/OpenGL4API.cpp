@@ -448,7 +448,7 @@ namespace ZuneCraft {
 	}
 
 	void OpenGL4API::FinalizeRenderTarget(HRenderTarget hRenderTarget) {
-		GLRenderTarget renderTarget = m_RenderTargets[hRenderTarget];
+		GLRenderTarget renderTarget = m_RenderTargets[(int)hRenderTarget];
 		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
 
 		GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };

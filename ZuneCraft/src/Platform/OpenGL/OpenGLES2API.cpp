@@ -3,6 +3,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Graphics/GL.h"
 
+#include <windows.h>
+
 namespace ZuneCraft {
 
 #ifdef ZC_PLATFORM_ZUNE
@@ -35,12 +37,15 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 
 		//Load Extensions
 #ifdef ZC_PLATFORM_ZUNE
+		HINSTANCE dll = LoadLibraryW(L"opengl32.dll");
+
 		glDrawBuffers = NULL;
 		glDrawBuffers = (PFNGLDRAWBUFFERSARBPROC)eglGetProcAddress("glDrawBuffersARB");
 		if(glDrawBuffers == NULL) {
 			ZC_FATAL_ERROR("Could not load glDrawBuffers extension");
 		} else {
-			ZC_LOG("Loaded Extension!!!!")
+			ZC_LOG("address=" << glDrawBuffers);
+			ZC_LOG("Loaded Extension!!!!");
 		}
 #endif
 	}
@@ -490,12 +495,12 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 		ZC_DEBUG("FinalizeRenderTarget");
 
 		
-		GLRenderTarget renderTarget = m_RenderTargets[hRenderTarget];
+		GLRenderTarget renderTarget = m_RenderTargets[(int)hRenderTarget];
 		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
 
 		GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 		if (renderTarget.ColorAttachements.size() > 0) {
-			//glDrawBuffers(renderTarget.ColorAttachements.size(), attachments);
+			//glDrawBuffers(renderTarget.ColorAttachements.size(), &attachments[0]);
 		}
 
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -509,6 +514,8 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: ZC_FATAL_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"); break;
 		case GL_FRAMEBUFFER_UNSUPPORTED: ZC_FATAL_ERROR("GL_FRAMEBUFFER_UNSUPPORTED"); break;
 		}
+
+		ZC_DEBUG("Finalized Render Target!");
 	}
 #pragma endregion
 

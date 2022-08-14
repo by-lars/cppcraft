@@ -7,10 +7,11 @@ extern "C" DWORD SetSystemMemoryDivision (DWORD dwStorePages);
 
 int main(int argc, char* argv[]) {
 #ifdef ZC_PLATFORM_ZUNE
-	//SetSystemMemoryDivision(4500);
+	SetSystemMemoryDivision(4500);
 #endif
 
 	ZuneCraft::Logger::Init();
+	
 
 	ZuneCraft::Game* game = new ZuneCraft::Game();
 

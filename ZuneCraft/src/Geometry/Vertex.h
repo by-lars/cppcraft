@@ -11,6 +11,10 @@ namespace ZuneCraft {
 		bool IsBackFace;
 		BlockType Type;
 		uint8_t Direction;
+
+		bool operator==(const Face& other);
+		bool operator!=(const Face& other);
+
 	};
 
 	struct Vertex {

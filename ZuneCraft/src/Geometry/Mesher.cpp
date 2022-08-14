@@ -3,9 +3,11 @@
 #include "Geometry/Vertex.h"
 
 namespace ZuneCraft {
-	void Mesher::VoxelToGreedy(const VoxelStorage& voxels, std::vector<Vertex>* _out_Mesh) {
+	void Mesher::VoxelToGreedy(const VoxelStorage& voxels, uint32_t lod, std::vector<Vertex>* _out_Mesh) {
 
 		_out_Mesh->reserve(CHUNK_SIZE_QUBED);
+		Face* mask = new Face[CHUNK_WIDTH * CHUNK_HEIGHT];
+		int CHUNK_DIMENSIONS[3] = { CHUNK_WIDTH , CHUNK_HEIGHT , CHUNK_WIDTH  };
 
 		for (int d = 0; d < 3; d++) {
 			int w, h, k;
@@ -14,7 +16,8 @@ namespace ZuneCraft {
 			int u = (d + 1) % 3;
 			int v = (d + 2) % 3;
 			q[d] = 1;
-			Face* mask = new Face[CHUNK_WIDTH * CHUNK_HEIGHT];
+
+			memset(mask, 0, CHUNK_WIDTH * CHUNK_HEIGHT);
 
 			//Go through each slice of the chunk
 			for (x[d] = -1; x[d] < CHUNK_DIMENSIONS[d];) {
@@ -47,13 +50,13 @@ namespace ZuneCraft {
 						if (mask[n].IsSolid) {
 
 							//Compute the width of the quad/run
-							for (w = 1; i + w < CHUNK_DIMENSIONS[u] && mask[n + w].IsSolid && mask[n].Type == mask[n + w].Type; w++) {}
+							for (w = 1; i + w < CHUNK_DIMENSIONS[u] && mask[n + w].IsSolid && mask[n] == mask[n + w]; w++) {}
 
 							bool done = false;
 							for (h = 1; j + h < CHUNK_DIMENSIONS[v]; h++) {
 								for (k = 0; k < w; k++) {
 									Face f = mask[n + k + h * CHUNK_DIMENSIONS[u]];
-									if (f.IsSolid == false || f.Type != mask[n].Type) {
+									if (f.IsSolid == false || f != mask[n]) {
 										done = true;
 										break;
 									}
@@ -103,5 +106,7 @@ namespace ZuneCraft {
 				}
 			}
 		}
+
+		delete[] mask;
 	} 
 }

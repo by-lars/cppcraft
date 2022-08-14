@@ -14,4 +14,12 @@ namespace ZuneCraft {
 		Direction = _direction;
 		BatchIndex = 0;
 	}
+
+	bool Face::operator==(const Face& other) {
+		return Type == other.Type;
+	}
+
+	bool Face::operator!=(const Face& other) {
+		return Type != other.Type;
+	}
 }

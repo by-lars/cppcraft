@@ -22,6 +22,12 @@ namespace ZuneCraft {
 
 	}
 
+	World::~World() {
+		for (int i = 0; i < m_Chunks.size(); i++) {
+			delete m_Chunks[i];
+		}
+	}
+
 	void World::Render() {
 
 	}

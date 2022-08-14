@@ -12,6 +12,7 @@ namespace ZuneCraft {
 	class World {
 	public:
 		World();
+		~World();
 
 		void SetPlayerPos(glm::vec3 pos, const glm::vec3& lookDir);
 

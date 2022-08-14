@@ -86,7 +86,7 @@ namespace ZuneCraft {
 
 	void Chunk::Update() {
 		std::vector<Vertex> mesh;
-		Mesher::VoxelToGreedy(m_Voxels, &mesh);
+		Mesher::VoxelToGreedy(m_Voxels, 2, &mesh);
 		Renderer::BatchSubmitMesh(mesh, GetWorldPosition());
 	}
 }
