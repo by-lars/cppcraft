@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/Base.h"
 
-
 namespace ZuneCraft {
 	typedef uint64_t Id;
 

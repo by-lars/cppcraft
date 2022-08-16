@@ -58,6 +58,28 @@ namespace ZuneCraft {
 		s_Device->SetClearColor(0.51f, 0.64f, 1.0f, 1.0f);
 		s_Device->SetViewport(0, 0, s_Data.RenderWidth, s_Data.RenderHeight);
 
+		//Load Texture Atlas
+		Image atlas; Asset::GetImage("atlas.png", &atlas);
+		glActiveTexture(GL_TEXTURE1);
+		TextureSpec atlasSpec = { };
+		atlasSpec.Width = atlas.Width;
+		atlasSpec.Height = atlas.Height;
+		atlasSpec.Format = atlas.GetFormat();
+		atlasSpec.DataType = DataType::UNSIGNED_BYTE;
+		atlasSpec.ClampMode = ClampMode::CLAMP_TO_EDGE;
+		atlasSpec.FilterMode = FilterMode::NEAREST;
+		Id tex = s_Device->TextureCreate(atlasSpec);
+		s_Device->TextureUploadData(tex, atlas.Data);
+
+		//PP Frame Buffer
+		glActiveTexture(GL_TEXTURE0);
+		FramebufferSpec fboSpec = { };
+		fboSpec.Width = s_Data.RenderWidth;
+		fboSpec.Height = s_Data.RenderHeight;
+		fboSpec.Attachements.push_back(FramebufferAttachement(TextureFormat::RGBA, AttachementType::Color, false));
+		fboSpec.Attachements.push_back(FramebufferAttachement(TextureFormat::DEPTH_COMPONENT24, AttachementType::Depth, true));
+		s_Data.PPRenderTarget = s_Device->RenderTargetCreate(fboSpec);
+
 		//Setup Post Processing Shader
 		s_Data.PPShader = s_Device->ShaderCreate("PostProcess");
 		s_Device->SetShaderUniform(s_Data.PPShader, "uTexture", 0);
@@ -76,7 +98,7 @@ namespace ZuneCraft {
 		meshBufferSpec.Usage = StorageUsage::DYNAMIC;
 		meshBufferSpec.Format = StorageFormat::UBYTE_VEC4_VEC4;
 		meshBufferSpec.ParrentBuffer = Handle::INVALID;
-		meshBufferSpec.Count = CHUNK_SIZE_QUBED * MAX_BATCH_MESHES;
+		meshBufferSpec.Count = (CHUNK_SIZE_QUBED/8) * MAX_BATCH_MESHES;
 		s_Data.BatchMeshBuffer = s_Device->StorageCreate(meshBufferSpec);
 
 		//Mesh Batch Data
@@ -99,28 +121,6 @@ namespace ZuneCraft {
 		quadBufferSpec.ParrentBuffer = Handle::INVALID;
 		s_Data.PPQuadBuffer = s_Device->StorageCreate(quadBufferSpec);
 		s_Device->StorageUpload(s_Data.PPQuadBuffer, 4, 0, (void*)&Mesher::FullscreenQuad[0]);
-
-		//Load Texture Atlas
-		Image atlas; Asset::GetImage("atlas.png", &atlas);
-		glActiveTexture(GL_TEXTURE1);
-		TextureSpec atlasSpec = { };
-		atlasSpec.Width = atlas.Width;
-		atlasSpec.Height = atlas.Height;
-		atlasSpec.Format = atlas.GetFormat();
-		atlasSpec.DataType = DataType::UNSIGNED_BYTE;
-		atlasSpec.ClampMode = ClampMode::CLAMP_TO_EDGE;
-		atlasSpec.FilterMode = FilterMode::NEAREST;
-		Id tex = s_Device->TextureCreate(atlasSpec);
-		s_Device->TextureUploadData(tex, atlas.Data);
-
-		//PP Frame Buffer
-		glActiveTexture(GL_TEXTURE0);
-		FramebufferSpec fboSpec = { };
-		fboSpec.Width = s_Data.RenderWidth;
-		fboSpec.Height = s_Data.RenderHeight;
-		fboSpec.Attachements.push_back(FramebufferAttachement(TextureFormat::RGBA, AttachementType::Color, false));
-		fboSpec.Attachements.push_back(FramebufferAttachement(TextureFormat::DEPTH_COMPONENT24, AttachementType::Depth, true));
-		s_Data.PPRenderTarget = s_Device->RenderTargetCreate(fboSpec);
 	}	
 
 	void Renderer::Shutdown() {

@@ -3,6 +3,27 @@
 
 namespace ZuneCraft {
 	World::World() {
+		m_LastChunk = glm::ivec2(0, 0);
+		m_CurrentChunk = glm::ivec2(0, 0);
+
+
+
+		glm::ivec2 chLoadEnd = glm::ivec2((VIEW_DISTANCE_CHUNKS / 2));
+		glm::ivec2 chLoadStart = chLoadEnd * -1;
+
+		ZC_DEBUG("START " << chLoadStart.x << " " << chLoadStart.y);
+		ZC_DEBUG("START " << chLoadEnd.x << " " << chLoadEnd.y);
+
+
+		for (int x = chLoadStart.x; x < chLoadEnd.x; x++) {
+			for (int y = chLoadStart.y; y < chLoadEnd.y; y++) {
+				ZC_DEBUG("NEW CHUNK");
+				Chunk* chunk = new Chunk(glm::ivec2(x,y));
+				chunk->Update();
+				m_Chunks.push_back(chunk);
+
+			}
+		}
 
 	}
 
@@ -19,7 +40,6 @@ namespace ZuneCraft {
 
 	void World::SetPlayerPos(glm::vec3 pos, const glm::vec3& lookDir) {
 		pos.y = 0;
-		m_LastChunk = m_CurrentChunk;
 		m_CurrentChunk = ToChunkCoords(pos);
 
 		if (m_CurrentChunk - m_LastChunk == glm::ivec2(0, 0)) {
@@ -70,5 +90,8 @@ namespace ZuneCraft {
 			chunk->Update();
 			m_Chunks.push_back(chunk);
 		}
+
+
+		m_LastChunk = m_CurrentChunk;
 	}
 }

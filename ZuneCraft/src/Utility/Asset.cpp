@@ -95,7 +95,7 @@ namespace ZuneCraft {
 		file.seekg(0);
 
 		
-		file.read(_out_Binary->data(), _out_Binary->size());
+		file.read(&(*_out_Binary)[0], _out_Binary->size());
 		file.close();
 
 		return Result::SUCCESS;

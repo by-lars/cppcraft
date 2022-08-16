@@ -14,6 +14,7 @@ const float density = 0.005;
 const float gradient = 5.0;
 
 void main() {
+
 	vTexCoords = aData.xy;
 	vTilePos = vec2(floor(mod(aPos.w - 1.0, 16.0)), 15.0 - floor((aPos.w-1.0) / 16.0)) / vec2(16.0);
 	vNormal = aData.z;

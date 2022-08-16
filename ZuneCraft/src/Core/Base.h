@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/Logger.h"
 #include <cstdlib>
-#include <stdlib.h>
 #include <sstream>
 
 #define ZUNE_CRAFT_VERSION "0.1.0"
@@ -11,11 +10,11 @@
 #define ZC_WARN(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LWARNING, s); }
 #define ZC_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LERROR, s); }
 
-#define ZC_FATAL_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LFATAL, s); abort(); }
+#define ZC_FATAL_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LFATAL, s); exit(-1); }
 
 #ifndef NDEBUG
 #define ZC_DEBUG(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LDEBUG, s); }
-#define ZC_ASSERT(test, msg) if((test) == false) { ZC_DEBUG("Debug test failed: " << msg); abort(); } 
+#define ZC_ASSERT(test, msg) if((test) == false) { ZC_DEBUG("Debug test failed: " << msg); exit(-1); } 
 #else
 #define ZC_DEBUG(x)
 #define ZC_ASSERT(x)
@@ -36,6 +35,9 @@ typedef unsigned int	 GLenum;
 typedef			 char	 GLchar;
 typedef			 int	 GLsizei;
 
+#ifndef UINT32_MAX
+#define UINT32_MAX  (0xffffffff)
+#endif
 
 namespace ZuneCraft {
 	ZC_ENUM Result {

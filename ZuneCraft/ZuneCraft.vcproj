@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbf&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbv&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)src\Assets\Image\*&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\Launcher\Content\*&quot;&#x0D;&#x0A;&#x0D;&#x0A;&#x0D;&#x0A;"
+				CommandLine="move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbf&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbv&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.attribs&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)src\Assets\Image\*&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\Launcher\Content\*&quot;&#x0D;&#x0A;&#x0D;&#x0A;&#x0D;&#x0A;"
 			/>
 			<DeploymentTool
 				ForceDirty="-1"
@@ -207,7 +207,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbf&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbv&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)src\Assets\Image\*&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\Launcher\Content\*&quot;&#x0D;&#x0A;&#x0D;&#x0A;&#x0D;&#x0A;"
+				CommandLine="move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbf&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.nvbv&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;move &quot;$(ProjectDir)src\Assets\Shader\GLES2\*.attribs&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)src\Assets\Image\*&quot; &quot;$(TargetDir)&quot;&#x0D;&#x0A;copy &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\Launcher\Content\*&quot;&#x0D;&#x0A;&#x0D;&#x0A;&#x0D;&#x0A;"
 			/>
 			<DeploymentTool
 				ForceDirty="-1"
@@ -269,6 +269,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Core\GLWindow.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Utility\Handle.h"
 				>
 			</File>
 			<File
@@ -377,6 +381,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Core\GLWindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Utility\Handle.cpp"
 				>
 			</File>
 			<File

@@ -46,6 +46,8 @@ namespace ZuneCraft {
 
 				int blockHeight = CHUNK_HEIGHT/2 + height * CHUNK_HEIGHT/2;
 
+				//blockHeight = 5;
+
 				for (int y = 0; y < blockHeight && y < CHUNK_HEIGHT; y++) {
 
 					if (y == (int)blockHeight - 1) {

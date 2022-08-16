@@ -2,7 +2,7 @@
 #include "Platform/OpenGL/OpenGLES2API.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "Graphics/GL.h"
-
+#include <vector>
 #include <windows.h>
 
 namespace ZuneCraft {
@@ -160,12 +160,11 @@ namespace ZuneCraft {
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-		glShaderBinary(1, &vertexShader, GL_NVIDIA_PLATFORM_BINARY_NV, vertexBinary.data(), vertexBinary.size());
-		glShaderBinary(1, &fragmentShader, GL_NVIDIA_PLATFORM_BINARY_NV, fragmentBinary.data(), fragmentBinary.size());
+		glShaderBinary(1, &vertexShader, GL_NVIDIA_PLATFORM_BINARY_NV, &vertexBinary[0], vertexBinary.size());
+		glShaderBinary(1, &fragmentShader, GL_NVIDIA_PLATFORM_BINARY_NV, &fragmentBinary[0], fragmentBinary.size());
 
 		glAttachShader(program, vertexShader);
 		glAttachShader(program, fragmentShader);
-
 
 		std::vector<std::string> attributes;
 		Asset::GetShaderAttribs(assetName + ".attribs", &attributes);
@@ -248,8 +247,8 @@ namespace ZuneCraft {
 	Id OpenGLES2API::CreateBuffer(const BufferSpec& spec) {
 		ZC_ASSERT(Handle::IsValid(spec.ParrentBuffer) == false, "VAOs are not supported by GLES2");
 
-		GLES2Buffer internalBuffer;
-		GLES2BufferElement e;
+		GLES2Buffer internalBuffer = { };
+		GLES2BufferElement e = { };
 		e.Offset = 0;
 
 		switch (spec.Format) {
@@ -257,7 +256,7 @@ namespace ZuneCraft {
 			e.Count = 4;
 			e.DataType = GL_UNSIGNED_BYTE;
 			internalBuffer.VertexLayout.push_back(e);
-			internalBuffer.Stride = 4;
+			internalBuffer.Stride = sizeof(GLubyte) * 4;
 			break;
 		case StorageFormat::UBYTE_VEC4_VEC4:
 			e.Count = 4;
@@ -265,7 +264,7 @@ namespace ZuneCraft {
 			internalBuffer.VertexLayout.push_back(e);
 			e.Offset = 4;
 			internalBuffer.VertexLayout.push_back(e);
-			internalBuffer.Stride = 8;
+			internalBuffer.Stride = sizeof(GLubyte) * 8;
 			break;
 
 		case StorageFormat::FLOAT_VEC3:
@@ -322,7 +321,7 @@ namespace ZuneCraft {
 			return CreateBuffer(spec);
 
 		case StorageType::BATCH:
-			return CreateShaderUniform(spec, "uBatchData");
+			return CreateShaderUniform(spec, "uBatchData[0]");
 		case StorageType::SHADER:
 			ZC_ASSERT(false, "Not Implemented"); break;
 		//	return CreateShaderUniform(spec);
@@ -344,6 +343,7 @@ namespace ZuneCraft {
 
 			glBindBuffer(GL_ARRAY_BUFFER, buffer.Id);
 			glBufferSubData(GL_ARRAY_BUFFER, offset * buffer.Stride, size * buffer.Stride, data);
+			ZC_DEBUG("Uploaded " << size * buffer.Stride << " bytes to buffer");
 		}
 		else if (Handle::IsOfType<GLUniform>(hBuffer)) {
 			GLUniform uniform = m_ShaderUniforms[Handle::GetIndex(hBuffer)];
@@ -369,6 +369,8 @@ namespace ZuneCraft {
 
 			default: ZC_FATAL_ERROR("Unknown Uniform Format");
 			}
+
+			ZC_DEBUG("Uploaded " << size << " to uniform");
 		}
 	}
 
