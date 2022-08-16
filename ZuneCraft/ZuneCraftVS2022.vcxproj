@@ -47,13 +47,13 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(ProjectDir)ext\Platform\Win\boost;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(ProjectDir)ext\Platform\Win\boost;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -126,7 +126,7 @@
     <ClCompile Include="src\Platform\Windows\WindowsLogger.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Utility\Asset.cpp" />
-    <ClCompile Include="src\Utility\Profiling.cpp" />
+    <ClCompile Include="src\Utility\Handle.cpp" />
     <ClCompile Include="src\World\Chunk.cpp" />
     <ClCompile Include="src\World\World.cpp" />
   </ItemGroup>
@@ -161,11 +161,7 @@
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Utility\Asset.h" />
     <ClInclude Include="src\Utility\Convert.h" />
-    <ClInclude Include="src\Utility\Hash.h" />
-    <ClInclude Include="src\Utility\Profiling.h" />
-    <ClInclude Include="src\Utility\SparseArray.h" />
-    <ClInclude Include="src\Utility\StrongHandle.h" />
-    <ClInclude Include="src\Utility\ThreadPool.h" />
+    <ClInclude Include="src\Utility\Handle.h" />
     <ClInclude Include="src\World\Chunk.h" />
     <ClInclude Include="src\World\World.h" />
   </ItemGroup>
@@ -249,6 +245,20 @@
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
     </CopyFileToFolders>
     <CopyFileToFolders Include="src\Assets\Shader\GLES2\PostProcess.vs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GLES2\main.attribs">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\assets\shader\GLES2</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="src\Assets\Shader\GLES2\PostProcess.attribs">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>

@@ -8,27 +8,19 @@
 namespace ZuneCraft {
 
 #ifdef ZC_PLATFORM_ZUNE
-PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
+	PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 #endif
 
 #pragma region Constructor
 	OpenGLES2API::OpenGLES2API() {
 		ZC_LOG("Initializing OpenGLES 2.0 API");
 
-		m_Capabilities.IndirectDrawing = false;
-
-		#ifdef ZC_PLATFORM_ZUNE
-			m_Capabilities.ShaderCompiler = false;	
-		#else
-			m_Capabilities.ShaderCompiler = true;
-		#endif
-
 		std::string oglVersion((const char*)glGetString(GL_VERSION));
 		std::string oglRenderer((const char*)glGetString(GL_RENDERER));
 		std::string oglVendor((const char*)glGetString(GL_VENDOR));
 
 		ZC_LOG("Running " << oglVersion << " on " << oglRenderer << " - " << oglVendor);
-		
+
 		m_BatchedDrawing.VertCount = 0;
 
 		glEnable(GL_DEPTH_TEST);
@@ -41,9 +33,10 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 
 		glDrawBuffers = NULL;
 		glDrawBuffers = (PFNGLDRAWBUFFERSARBPROC)eglGetProcAddress("glDrawBuffersARB");
-		if(glDrawBuffers == NULL) {
+		if (glDrawBuffers == NULL) {
 			ZC_FATAL_ERROR("Could not load glDrawBuffers extension");
-		} else {
+		}
+		else {
 			ZC_LOG("address=" << glDrawBuffers);
 			ZC_LOG("Loaded Extension!!!!");
 		}
@@ -51,8 +44,8 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 	}
 
 	OpenGLES2API::~OpenGLES2API() {
-		
-		for(int i = 0; i < m_Shaders.size(); i++) {
+
+		for (int i = 0; i < m_Shaders.size(); i++) {
 			ZC_DEBUG_ALLOC("Deleting Shader Id=" << m_Shaders[i].Id);
 			glDeleteProgram(m_Shaders[i].Id);
 		}
@@ -68,16 +61,6 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 		}
 	}
 
-	const RenderAPI::Capabilities& OpenGLES2API::GetCapabilities() {
-		return m_Capabilities;
-	}
-
-#pragma endregion
-
-#pragma region Type Conversion
-	/*
-	* Type Conversion
-	*/
 	static GLenum DrawModeToGLEnum(DrawMode mode) {
 		switch (mode) {
 		case DrawMode::TRIANGLES: return GL_TRIANGLES; break;
@@ -105,19 +88,14 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 		case TextureFormat::RGB: return GL_RGB; break;
 		case TextureFormat::RGBA: return GL_RGBA; break;
 		case TextureFormat::DEPTH_COMPONENT32:
-		case TextureFormat::DEPTH_COMPONENT24: 
+		case TextureFormat::DEPTH_COMPONENT24:
 		case TextureFormat::DEPTH_COMPONENT16: return GL_DEPTH_COMPONENT16; break;
 		default: ZC_FATAL_ERROR("Unkown Texture Format"); break;
 		}
 	}
-#pragma endregion
 
-#pragma region Shader
-	/*
-	 * SHADER
-	 */
 	static void CompileShader(GLint shader, const GLchar* source) {
-	#ifdef ZC_PLATFORM_WIN32
+#ifdef ZC_PLATFORM_WIN32
 		glShaderSource(shader, 1, &source, 0);
 		glCompileShader(shader);
 
@@ -125,14 +103,17 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
 		if (success == false) {
-			char log[1024];
+			char log[2048];
 			glGetShaderInfoLog(shader, 2048, 0, log);
 			ZC_FATAL_ERROR("Failed to compile shader: " << shader << "\n" << log);
 		}
-	#endif 
+#endif
 	}
 
-	HShader OpenGLES2API::CreateShader(const std::string& vertexCode, const std::string& fragmentCode, const std::vector<std::string>& attributes) {
+	Id OpenGLES2API::ShaderFromSource(const std::string& assetName) {
+		std::string vertexCode = Asset::GetShaderSource(assetName + ".vs");
+		std::string fragmentCode = Asset::GetShaderSource(assetName + ".fs");
+
 		GLuint program = glCreateProgram();
 		GLuint vertex = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -144,6 +125,8 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 		glAttachShader(program, vertex);
 		glAttachShader(program, fragment);
 
+		std::vector<std::string> attributes;
+		Asset::GetShaderAttribs(assetName + ".attribs", &attributes);
 
 		for (int i = 0; i < attributes.size(); i++) {
 			glBindAttribLocation(program, i, attributes[i].c_str());
@@ -160,22 +143,32 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 			ZC_FATAL_ERROR("Failed to link shader: " << program << "\n" << log);
 		}
 
-		GLShader shader; shader.Id = program; 
+		GLShader shader; shader.Id = program;
 		m_Shaders.push_back(shader);
 
-		return HShader(m_Shaders.size() - 1);
+		return Handle::Create<GLShader>(m_Shaders.size() - 1);
 	}
 
-	HShader OpenGLES2API::CreateShaderFromBinary(Binary& vertexBinary, Binary& fragmentBinary, const std::vector<std::string>& attributes) {
+	Id OpenGLES2API::ShaderFromBinary(const std::string& assetName) {
+		std::vector<char> vertexBinary;
+		Asset::GetShaderBinary(assetName + ".nvbv", &vertexBinary);
+
+		std::vector<char> fragmentBinary;
+		Asset::GetShaderBinary(assetName + ".nvbf", &fragmentBinary);
+
 		GLuint program = glCreateProgram();
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-		glShaderBinary(1, &vertexShader, GL_NVIDIA_PLATFORM_BINARY_NV, vertexBinary.Data, vertexBinary.Size);
-		glShaderBinary(1, &fragmentShader, GL_NVIDIA_PLATFORM_BINARY_NV, fragmentBinary.Data, fragmentBinary.Size);
+		glShaderBinary(1, &vertexShader, GL_NVIDIA_PLATFORM_BINARY_NV, vertexBinary.data(), vertexBinary.size());
+		glShaderBinary(1, &fragmentShader, GL_NVIDIA_PLATFORM_BINARY_NV, fragmentBinary.data(), fragmentBinary.size());
 
 		glAttachShader(program, vertexShader);
 		glAttachShader(program, fragmentShader);
+
+
+		std::vector<std::string> attributes;
+		Asset::GetShaderAttribs(assetName + ".attribs", &attributes);
 
 		for (int i = 0; i < attributes.size(); i++) {
 			ZC_DEBUG("Bound " << attributes[i] << " to location " << i);
@@ -193,143 +186,221 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 			ZC_FATAL_ERROR("Could not link shaders:" << info);
 		}
 
-
 		GLShader shader; shader.Id = program;
 		m_Shaders.push_back(shader);
 
-		return HShader(m_Shaders.size() - 1);
+		return Handle::Create<GLShader>(m_Shaders.size() - 1);
 	}
 
-	void OpenGLES2API::BindShader(HShader hShader) {
-		static HShader currentBinding = HShader::Invalid();
+	Id OpenGLES2API::ShaderCreate(const std::string& assetName) {
+#ifdef ZC_PLATFORM_ZUNE
+		return ShaderFromBinary(assetName);
+#else
+		return ShaderFromSource(assetName);
+#endif
+	}
 
-		//if (currentBinding != hShader) {
-		GLShader shader = m_Shaders[(int)hShader];
+	void OpenGLES2API::SetShaderUniform(Id hShader, const std::string& name, const glm::vec3& value) {
+
+		GLShader shader = m_Shaders[Handle::GetIndex(hShader)];
 		glUseProgram(shader.Id);
-		currentBinding = hShader;
-		//}
-	}
 
-	void OpenGLES2API::SetShaderUniform(HShader hShader, const std::string& name, const glm::vec3& value) {
-		BindShader(hShader);
-		GLShader shader = m_Shaders[(int)hShader];
 		int location = glGetUniformLocation(shader.Id, name.c_str());
 		glUniform3fv(location, 1, glm::value_ptr(value));
 	}
 
-	void OpenGLES2API::SetShaderUniform(HShader hShader, const std::string& name, const glm::mat4& value) {
-		BindShader(hShader);
-		GLShader shader = m_Shaders[(int)hShader];
+	void OpenGLES2API::SetShaderUniform(Id hShader, const std::string& name, const glm::mat4& value) {
+
+		GLShader shader = m_Shaders[Handle::GetIndex(hShader)];
+		glUseProgram(shader.Id);
+
 		int location = glGetUniformLocation(shader.Id, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 	}
 
-	void OpenGLES2API::SetShaderUniform(HShader hShader, const std::string& name, int value) {
-		BindShader(hShader);
-		GLShader shader = m_Shaders[(int)hShader];
+	void OpenGLES2API::SetShaderUniform(Id hShader, const std::string& name, int value) {
+
+		GLShader shader = m_Shaders[Handle::GetIndex(hShader)];
+		glUseProgram(shader.Id);
 		int location = glGetUniformLocation(shader.Id, name.c_str());
 		glUniform1i(location, value);
 	}
-#pragma endregion
 
-#pragma region Buffer
-	/*
-	 * BUFFER
-	 */
-	HBuffer OpenGLES2API::CreateBuffer(uint32_t size, BufferType type, BufferUsage usage) {
-		GLuint buffer = 0;
-		glGenBuffers(1, &buffer);
+	Id OpenGLES2API::CreateShaderUniform(const BufferSpec& spec, const std::string& name) {
+		GLShader shader = m_Shaders[Handle::GetIndex(spec.Shader)];
+		glUseProgram(shader.Id);
 
-		ZC_DEBUG("Created ID=" << buffer << " of size=" << size);
+		GLint location = glGetUniformLocation(shader.Id, name.c_str());
+		ZC_DEBUG("Creating Shader Storage location=" << location);
 
-		GLenum bufferType;
-		switch (type) {
-		case BufferType::ARRAY: bufferType = GL_ARRAY_BUFFER; break;
-		default: ZC_FATAL_ERROR("Unknown buffer type enum"); break;
+		GLUniform uniform;
+		uniform.Name = name;
+		uniform.Location = location;
+		uniform.ProgramId = shader.Id;
+		uniform.Count = spec.Count;
+		uniform.Format = spec.Format;
+
+		m_ShaderUniforms.push_back(uniform);
+
+		return Handle::Create<GLUniform>(m_ShaderUniforms.size() - 1);
+	}
+
+	Id OpenGLES2API::CreateBuffer(const BufferSpec& spec) {
+		ZC_ASSERT(Handle::IsValid(spec.ParrentBuffer) == false, "VAOs are not supported by GLES2");
+
+		GLES2Buffer internalBuffer;
+		GLES2BufferElement e;
+		e.Offset = 0;
+
+		switch (spec.Format) {
+		case StorageFormat::UBYTE_VEC4:
+			e.Count = 4;
+			e.DataType = GL_UNSIGNED_BYTE;
+			internalBuffer.VertexLayout.push_back(e);
+			internalBuffer.Stride = 4;
+			break;
+		case StorageFormat::UBYTE_VEC4_VEC4:
+			e.Count = 4;
+			e.DataType = GL_UNSIGNED_BYTE;
+			internalBuffer.VertexLayout.push_back(e);
+			e.Offset = 4;
+			internalBuffer.VertexLayout.push_back(e);
+			internalBuffer.Stride = 8;
+			break;
+
+		case StorageFormat::FLOAT_VEC3:
+			e.Count = 3;
+			e.DataType = GL_FLOAT;
+			internalBuffer.VertexLayout.push_back(e);
+			internalBuffer.Stride = sizeof(GLfloat) * 3;
+			break;
+
+		case StorageFormat::FLOAT_VEC4:
+			e.Count = 4;
+			e.DataType = GL_FLOAT;
+			internalBuffer.VertexLayout.push_back(e);
+			internalBuffer.Stride = sizeof(GLfloat) * 4;
+			break;
+
+		case StorageFormat::INT_VEC1:
+			e.Count = 1;
+			e.DataType = GL_INT;
+			internalBuffer.VertexLayout.push_back(e);
+			internalBuffer.Stride = sizeof(GLint);
+			break;
+
+		default: ZC_FATAL_ERROR("Unknown Storage Format") break;
 		}
 
+		GLuint glBufferId = 0;
+		glGenBuffers(1, &glBufferId);
+		internalBuffer.Id = glBufferId;
+		internalBuffer.Count = spec.Count;
+
+		GLsizei sizeInBytes = internalBuffer.Stride * internalBuffer.Count;
+
 		GLenum glUsage;
-		switch (usage) {
-		case ZuneCraft::BufferUsage::STATIC_DRAW:	glUsage = GL_STATIC_DRAW;	break;
-		case ZuneCraft::BufferUsage::DYNAMIC_DRAW:	glUsage = GL_DYNAMIC_DRAW;	break;
-		case ZuneCraft::BufferUsage::STREAM_DRAW:	glUsage = GL_STREAM_DRAW;	break;
+		switch (spec.Usage) {
+		case ZuneCraft::StorageUsage::STATIC:	glUsage = GL_STATIC_DRAW;	break;
+		case ZuneCraft::StorageUsage::DYNAMIC:	glUsage = GL_DYNAMIC_DRAW;	break;
+		case ZuneCraft::StorageUsage::STREAM:	glUsage = GL_STREAM_DRAW;	break;
 		default: ZC_FATAL_ERROR("Unknown buffer usage enum"); break;
 		}
 
+		glBindBuffer(GL_ARRAY_BUFFER, glBufferId);
+		glBufferData(GL_ARRAY_BUFFER, sizeInBytes, 0, glUsage);
+		
+		ZC_DEBUG("Created ID=" << glBufferId << " of size=" << sizeInBytes);
 
-		glBindBuffer(bufferType, buffer);
-		glBufferData(bufferType, size, 0, glUsage);
-
-		GLES2Buffer glBuffer;
-		glBuffer.Id = buffer;
-		glBuffer.Type = bufferType;
-		m_Buffers.push_back(glBuffer);
-
-		return HBuffer(m_Buffers.size() - 1);
+		m_Buffers.push_back(internalBuffer);
+		return Handle::Create<GLES2Buffer>(m_Buffers.size() - 1);
 	}
 
-	void OpenGLES2API::BindBuffer(HBuffer hBuffer) {
-		GLES2Buffer buffer = m_Buffers[(int)hBuffer];
-		glBindBuffer(buffer.Type, buffer.Id);
+	Id OpenGLES2API::StorageCreate(BufferSpec& spec) {
+		switch (spec.Type) {
+		case StorageType::VERTEX:
+			return CreateBuffer(spec);
+
+		case StorageType::BATCH:
+			return CreateShaderUniform(spec, "uBatchData");
+		case StorageType::SHADER:
+			ZC_ASSERT(false, "Not Implemented"); break;
+		//	return CreateShaderUniform(spec);
+
+		default: ZC_FATAL_ERROR("Unknown Buffer Type");
+		}
+	}
+
+	void OpenGLES2API::StorageUpload(Id hBuffer, uint32_t size, uint32_t offset, void* data) {
+		ZC_ASSERT(Handle::IsOfType<GLES2Buffer>(hBuffer) || Handle::IsOfType<GLUniform>(hBuffer), "Invalid Handle");
+
+		if (Handle::IsOfType<GLES2Buffer>(hBuffer)) {
+			GLES2Buffer buffer = m_Buffers[Handle::GetIndex(hBuffer)];
+			
+			if (offset + size > buffer.Count) {
+				ZC_WARN("Can't upload... buffer too small!");
+				return;
+			}
+
+			glBindBuffer(GL_ARRAY_BUFFER, buffer.Id);
+			glBufferSubData(GL_ARRAY_BUFFER, offset * buffer.Stride, size * buffer.Stride, data);
+		}
+		else if (Handle::IsOfType<GLUniform>(hBuffer)) {
+			GLUniform uniform = m_ShaderUniforms[Handle::GetIndex(hBuffer)];
+			GLint location = uniform.Location;
+			glUseProgram(uniform.ProgramId);
+
+			if (offset + size > uniform.Count) {
+				ZC_WARN("Can't upload... uniform too small!");
+				return;
+			}
+
+			if (offset != 0) {
+				std::stringstream ss;
+				ss << uniform.Name << "[" << offset << "]";
+				std::string name = ss.str();
+				location = glGetUniformLocation(uniform.ProgramId, name.c_str());
+			}
+
+			switch (uniform.Format) {
+			case StorageFormat::FLOAT_VEC3: glUniform3fv(location, size, (const GLfloat*)data); break;
+			case StorageFormat::FLOAT_VEC4: glUniform4fv(location, size, (const GLfloat*)data); break;
+			case StorageFormat::INT_VEC1: glUniform1iv(location, size, (const GLint*)data); break;
+
+			default: ZC_FATAL_ERROR("Unknown Uniform Format");
+			}
+		}
+	}
+
+	void OpenGLES2API::BindBuffer(Id hBuffer) {
+		ZC_ASSERT(Handle::IsOfType<GLES2Buffer>(hBuffer), "Invalid Handle");
+
+		GLES2Buffer buffer = m_Buffers[Handle::GetIndex(hBuffer)];
+		glBindBuffer(GL_ARRAY_BUFFER, buffer.Id);
 
 		for (int i = 0; i < buffer.VertexLayout.size(); i++) {
 			glVertexAttribPointer(i, buffer.VertexLayout[i].Count, buffer.VertexLayout[i].DataType, false, buffer.Stride, (const void*)buffer.VertexLayout[i].Offset);
 			glEnableVertexAttribArray(i);
 		}
-
 	}
 
-	void OpenGLES2API::SetBufferLayout(HBuffer hBuffer, HBuffer hParentBuffer, const std::vector<BufferElement>& elements) {
-		ZC_ASSERT(hParentBuffer == HBuffer::Invalid(), "VAOs are not supported by GLES2.0");
-		uint32_t offset = 0;
+	Id OpenGLES2API::TextureCreate(const TextureSpec& spec) {
+		GLuint textureId = 0;
+		glGenTextures(1, &textureId);
 
-		GLES2Buffer& buffer = m_Buffers[(int)hBuffer];
-		ZC_DEBUG("Setting Buffer Layout for buffer: " << buffer.Id);
-
-
-		for (int i = 0; i < elements.size(); i++) {
-			GLES2BufferElement e;
-			e.Count = elements[i].Count;
-			e.DataType = DataTypeToGLEnum(elements[i].Type);
-			e.Offset = offset;
-
-			buffer.VertexLayout.push_back(e);
-
-			offset += elements[i].GetSizeInBytes();
-		}
-
-		buffer.Stride = offset;
-	}
-
-	void OpenGLES2API::BufferData(HBuffer hBuffer, uint32_t size, uint32_t offset, void* data) {
-		GLES2Buffer buffer = m_Buffers[(int)hBuffer];
-		glBindBuffer(buffer.Type, buffer.Id);
-		glBufferSubData(buffer.Type, offset, size, data);
-		ZC_DEBUG("Uploading " << size << " bytes at offset " << offset << " to buffer #" << buffer.Id);
-	}
-#pragma endregion
-
-#pragma region Textures
-	/*
-	* Textures
-	*/
-	HTexture OpenGLES2API::CreateTexture(uint32_t width, uint32_t height, TextureFormat format, DataType dataType, ClampMode clampMode, FilterMode filterMode) {
-		GLuint id = 0;
-		glGenTextures(1, &id);
-
-		GLenum glDataType = DataTypeToGLEnum(dataType);
-		GLenum glTextureFormat = TextureFormatToGLEnum(format);
+		GLenum glDataType = DataTypeToGLEnum(spec.DataType);
+		GLenum glTextureFormat = TextureFormatToGLEnum(spec.Format);
 		GLenum glClampMode = GL_INVALID_ENUM;
 		GLenum glMinFilterMode = GL_INVALID_ENUM;
 		GLenum glMagFilterMode = GL_INVALID_ENUM;
 
-		switch (clampMode) {
+		switch (spec.ClampMode) {
 		case ClampMode::REPEAT: glClampMode = GL_REPEAT; break;
 		case ClampMode::CLAMP_TO_EDGE: glClampMode = GL_CLAMP_TO_EDGE; break;
 		default: ZC_FATAL_ERROR("Unkown Clamp Mode"); break;
 		}
 
-		switch (filterMode) {
+		switch (spec.FilterMode) {
 		case FilterMode::NEAREST:
 			glMinFilterMode = GL_NEAREST_MIPMAP_NEAREST;
 			glMagFilterMode = GL_NEAREST;
@@ -344,51 +415,42 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 		}
 
 		GLTexture texture;
-		texture.Id = id;
-		texture.Width = width;
-		texture.Height = height;
+		texture.Id = textureId;
+		texture.Width = spec.Width;
+		texture.Height = spec.Height;
 		texture.Format = glTextureFormat;
 		texture.DataType = glDataType;
 		m_Textures.push_back(texture);
 
-		HTexture textureHandle(m_Textures.size() - 1);
-		BindTexture(textureHandle);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, glTextureFormat, width, height, 0, glTextureFormat, glDataType, 0);
+		glBindTexture(GL_TEXTURE_2D, textureId);
+		glTexImage2D(GL_TEXTURE_2D, 0, glTextureFormat, spec.Width, spec.Height, 0, glTextureFormat, glDataType, 0);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glClampMode);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glClampMode);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, glMinFilterMode);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, glMagFilterMode);
 
-		return textureHandle;
+		return Handle::Create<GLTexture>(m_Textures.size() - 1);
 	}
 
-	void OpenGLES2API::UploadTextureData(HTexture hTexture, void* data) {
-		BindTexture(hTexture);
-		GLTexture texture = m_Textures[(int)hTexture];
+	void OpenGLES2API::TextureBind(Id hTexture) {
+		ZC_ASSERT(Handle::IsOfType<GLTexture>(hTexture), "Invalid Handle");
+
+		GLTexture texture = m_Textures[Handle::GetIndex(hTexture)];
+		glBindTexture(GL_TEXTURE_2D, texture.Id);
+	}
+
+	void OpenGLES2API::TextureUploadData(Id hTexture, void* data) {
+		ZC_ASSERT(Handle::IsOfType<GLTexture>(hTexture), "Invalid Handle");
+
+		GLTexture texture = m_Textures[Handle::GetIndex(hTexture)];
+		glBindTexture(GL_TEXTURE_2D, texture.Id);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, texture.Width, texture.Height, texture.Format, texture.DataType, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
-
-	void OpenGLES2API::BindTexture(HTexture hTexture) {
-		static HTexture currentBinding = HTexture::Invalid();
-
-		//if (currentBinding != hTexture) {
-		GLTexture texture = m_Textures[(int)hTexture];
-		glBindTexture(GL_TEXTURE_2D, texture.Id);
-		currentBinding = hTexture;
-		//}
-	}
-#pragma endregion
-
-#pragma region FrameBuffer
-	/*
-	* FrameBuffer
-	*/
-
-	HRenderTarget OpenGLES2API::CreateRenderTarget(uint32_t width, uint32_t height) {
+	Id OpenGLES2API::RenderTargetCreate(const FramebufferSpec& spec) {
 		ZC_DEBUG("CreateRenderTarget");
 		GLuint fbo;
 		glGenFramebuffers(1, &fbo);
@@ -396,119 +458,71 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 
 		GLRenderTarget renderTarget;
 		renderTarget.Id = fbo;
-		renderTarget.Width = width;
-		renderTarget.Height = height;
+		renderTarget.Width = spec.Width;
+		renderTarget.Height = spec.Height;
 
-		m_RenderTargets.push_back(renderTarget);
-		return HRenderTarget(m_RenderTargets.size() - 1);
-	}
+		for (int i = 0; i < spec.Attachements.size(); i++) {
+			const FramebufferAttachement& attachement = spec.Attachements[i];
+			GLenum format = TextureFormatToGLEnum(attachement.Format);
+			GLenum attachementPoint = GL_INVALID_ENUM;
+			int nrColorAttachements = 0;
 
-	void OpenGLES2API::BindRenderTarget(HRenderTarget hRenderTarget) {
-		if (hRenderTarget == HRenderTarget::Invalid()) {
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			switch (attachement.Type) {
+			case AttachementType::Color:
+				attachementPoint = GL_COLOR_ATTACHMENT0 + nrColorAttachements;
+				nrColorAttachements++;
+				break;
+			case AttachementType::Depth:
+				attachementPoint = GL_DEPTH_ATTACHMENT;
+				break;
+			default:
+				ZC_FATAL_ERROR("Unknown Attachement Type");
+				break;
+			}
+
+			if (attachement.WriteOnly) {
+				//Create RenderBuffer if WriteOnly is requested
+				GLuint renderBuffer;
+				glGenRenderbuffers(1, &renderBuffer);
+				glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+				glRenderbufferStorage(GL_RENDERBUFFER, format, renderTarget.Width, renderTarget.Height);
+				glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachementPoint, GL_RENDERBUFFER, renderBuffer);
+
+				GLAttachement a;
+				a.Format = format;
+				a.Id = renderBuffer;
+				a.Type = GL_RENDERBUFFER;
+				renderTarget.Attachements.push_back(a);
+			}
+			else {
+				//Otherwise Create a texture
+				GLuint texture;
+				glGenTextures(1, &texture);
+				glBindTexture(GL_TEXTURE_2D, texture);
+				glTexImage2D(GL_TEXTURE_2D, 0, format, renderTarget.Width, renderTarget.Height, 0, format, GL_UNSIGNED_BYTE, 0);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, attachementPoint, GL_TEXTURE_2D, texture, 0);
+
+				GLAttachement a;
+				a.Format = format;
+				a.Id = texture;
+				a.Type = GL_TEXTURE_2D;
+				renderTarget.Attachements.push_back(a);
+			}
 		}
-		else {
-			GLRenderTarget renderTarget = m_RenderTargets[(int)hRenderTarget];
-			glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
-		}
-	}
-
-	void OpenGLES2API::RenderTargetAddTextureAttachment(HRenderTarget hRenderTarget, TextureFormat format, TextureFormat internalFormat, AttachementType attachementType) {
-		ZC_DEBUG("RenderTargetAddTextureAttachment");
-
-		GLRenderTarget& renderTarget = m_RenderTargets[(int)hRenderTarget];
-		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
-
-		GLuint tex;
-		GLenum texFormat = GL_INVALID_ENUM;
-		GLenum texInternalFormat = GL_INVALID_ENUM;
-
-		if (attachementType == AttachementType::Color) {
-			texInternalFormat = TextureFormatToGLEnum(internalFormat);
-			texFormat = TextureFormatToGLEnum(format);
-		}
-		else {
-			texFormat = GL_DEPTH_COMPONENT;
-			texInternalFormat = GL_DEPTH_COMPONENT;
-		}
-
-		glGenTextures(1, &tex);
-		glBindTexture(GL_TEXTURE_2D, tex);
-		glTexImage2D(GL_TEXTURE_2D, 0, texInternalFormat, renderTarget.Width, renderTarget.Height, 0, texFormat, GL_UNSIGNED_BYTE, 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-		if (attachementType == AttachementType::Color) {
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + renderTarget.ColorAttachements.size(), GL_TEXTURE_2D, tex, 0);
-			GLColorAttachement a;
-			a.Id = tex;
-			a.InternalFormat = texInternalFormat;
-			a.Format = texFormat;
-			a.Type = GL_TEXTURE_2D;
-			renderTarget.ColorAttachements.push_back(a);
-		}
-		else {
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex, 0);
-			GLDepthAttachement a;
-			a.Id = tex;
-			a.Type = GL_TEXTURE_2D;
-			renderTarget.DepthAttachement = a;
-		}
-
-	}
-
-	void OpenGLES2API::RenderTargetAddBufferAttachment(HRenderTarget hRenderTarget, TextureFormat format, AttachementType attachementType) {
-		ZC_DEBUG("RenderTargetAddBufferAttachment");
-
-		
-		GLRenderTarget& renderTarget = m_RenderTargets[(int)hRenderTarget];
-		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
-
-		GLenum bufferFormat = TextureFormatToGLEnum(format);
-
-		GLuint buffer;
-		glGenRenderbuffers(1, &buffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, buffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, bufferFormat, renderTarget.Width, renderTarget.Height);
-
-		if (attachementType == AttachementType::Color) {
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + renderTarget.ColorAttachements.size(), GL_RENDERBUFFER, buffer);
-			GLColorAttachement a;
-			a.Id = buffer;
-			a.InternalFormat = bufferFormat;
-			a.Format = bufferFormat;
-			a.Type = GL_RENDERBUFFER;
-			renderTarget.ColorAttachements.push_back(a);
-		}
-		else {
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, buffer);
-			GLDepthAttachement a;
-			a.Id = buffer;
-			a.Type = GL_RENDERBUFFER;
-			renderTarget.DepthAttachement = a;
-		}
-	}
-
-	void OpenGLES2API::FinalizeRenderTarget(HRenderTarget hRenderTarget) {
 		ZC_DEBUG("FinalizeRenderTarget");
-
-		
-		GLRenderTarget renderTarget = m_RenderTargets[(int)hRenderTarget];
 		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
 
 		GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-		if (renderTarget.ColorAttachements.size() > 0) {
+		if (renderTarget.Attachements.size() > 0) {
 			//glDrawBuffers(renderTarget.ColorAttachements.size(), &attachments[0]);
 		}
 
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		if (status == GL_FRAMEBUFFER_COMPLETE) {
-			return;
-		}
 
-		ZC_ERROR("Could not create framebuffer: ");
 		switch (status) {
 		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: ZC_FATAL_ERROR("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT"); break;
 		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: ZC_FATAL_ERROR("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"); break;
@@ -516,51 +530,55 @@ PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
 		}
 
 		ZC_DEBUG("Finalized Render Target!");
-	}
-#pragma endregion
 
-#pragma region State
-	/*
-	* State
-	*/
-	void OpenGLES2API::SetClearColor(float r, float g, float b, float a) {
-		glClearColor(r, g, b, a);
+		m_RenderTargets.push_back(renderTarget);
+		return Handle::Create<GLRenderTarget>(m_RenderTargets.size() - 1);
 	}
 
-	void OpenGLES2API::Clear() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	void OpenGLES2API::RenderTargetBind(Id hRenderTarget) {
+		if (Handle::IsValid(hRenderTarget)) {
+			ZC_ASSERT(Handle::IsOfType<GLRenderTarget>(hRenderTarget), "Invalid Handle");
+			GLRenderTarget renderTarget = m_RenderTargets[Handle::GetIndex(hRenderTarget)];
+			glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.Id);
+		}
+		else {
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
 	}
 
-	void OpenGLES2API::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
-		glViewport(x, y, width, height);
-	}
-#pragma endregion
-
-#pragma region Draw Commands
-	/*
-	* Draw Commands
-	*/
-	void OpenGLES2API::PushRenderCommand(const RenderCommand& command) {
+	void OpenGLES2API::RenderCommandPush(const RenderCommand& command) {
 		m_BatchedDrawing.First.push_back(command.First);
 		m_BatchedDrawing.Count.push_back(command.Count);
 		m_BatchedDrawing.VertCount += command.Count;
 	}
 
 	void OpenGLES2API::Flush() {
-
+		// Nothing todo on ES2
 	}
 
-	void OpenGLES2API::DrawArrays(DrawMode mode, uint32_t offset, uint32_t count) {
-		GLenum glMode = DrawModeToGLEnum(mode);
-		glDrawArrays(glMode, offset, count);
+	void OpenGLES2API::Clear() {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLES2API::MultiDrawArrays(DrawMode mode) {
-		GLenum glMode = DrawModeToGLEnum(mode);
-
-		glDrawArrays(glMode, 0, m_BatchedDrawing.VertCount);
-		//glMultiDrawArrays(glMode, &m_BatchedDrawing.First[0], &m_BatchedDrawing.Count[0], m_BatchedDrawing.First.size());
+	void OpenGLES2API::SetClearColor(float r, float g, float b, float a) {
+		glClearColor(r, g, b, a);
 	}
 
-#pragma endregion
+	void OpenGLES2API::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+		glViewport(x, y, width, height);
+	}
+
+	void OpenGLES2API::DrawArrays(Id hShader, Id hBuffer, DrawMode mode, uint32_t offset, uint32_t count) {
+		ZC_ASSERT(Handle::IsOfType<GLShader>(hShader), "Invalid Handle");
+		ZC_ASSERT(Handle::IsOfType<GLES2Buffer>(hBuffer), "Invalid Handle");
+
+		glUseProgram(m_Shaders[Handle::GetIndex(hShader)].Id);
+		BindBuffer(hBuffer);
+		GLenum drawMode = DrawModeToGLEnum(mode);
+		glDrawArrays(drawMode, offset, count);
+	}
+
+	void OpenGLES2API::Draw(Id shader, Id buffer, DrawMode mode) {
+		DrawArrays(shader, buffer, mode, 0, m_BatchedDrawing.VertCount);
+	}
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/Base.h"
-#include "Utility/StrongHandle.h"
 #include "Geometry/Mesher.h"
 #include "Graphics/DeviceResources.h"
 
@@ -10,8 +9,6 @@
 
 
 namespace ZuneCraft {
-	ZC_MAKE_STRONG_HANDLE(HMesh, int, -1);
-
 	class Renderer {
 	public:
 		static void Init();
@@ -24,13 +21,8 @@ namespace ZuneCraft {
 		static void SetView(const glm::mat4& viewMat);
 		static void SetFlip(bool flipped);
 
-		static HMesh BatchSubmitMesh(std::vector<Vertex>& mesh, const glm::vec3& translation);
-		static void BatchDrawMesh(HMesh hMesh);
-		static void BatchFreeMesh(HMesh hMesh);
-
-		static void DrawDebugCube(const glm::vec3& translation, const glm::vec3& size, const glm::vec3& color);
-	
-	private:
-		static HShader LoadShader(const std::string& name, const std::vector<std::string>& attributes);
+		static Id BatchSubmitMesh(std::vector<Vertex>& mesh, const glm::vec3& translation);
+		static void BatchDrawMesh(Id hMesh);
+		static void BatchFreeMesh(Id hMesh);
 	};
 }

@@ -6,7 +6,7 @@ varying vec2 vTilePos;
 varying float vNormal;
 varying float vVisibility;
 
-uniform vec3 uTranslation[128];
+uniform vec3 uBatchData[128];
 uniform mat4 uView;
 uniform mat4 uProj;
 
@@ -18,7 +18,7 @@ void main() {
 	vTilePos = vec2(floor(mod(aPos.w - 1.0, 16.0)), 15.0 - floor((aPos.w-1.0) / 16.0)) / vec2(16.0);
 	vNormal = aData.z;
 
-	vec4 viewSpacePos = uView * vec4(aPos.xyz + uTranslation[aData.w], 1.0);
+	vec4 viewSpacePos = uView * vec4(aPos.xyz + uBatchData[aData.w], 1.0);
 
 	float distance = length(viewSpacePos.xyz);
 	vVisibility = exp(-pow((distance*density), gradient));

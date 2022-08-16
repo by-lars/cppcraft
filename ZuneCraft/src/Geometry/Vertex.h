@@ -5,12 +5,11 @@
 
 namespace ZuneCraft {
 	struct Face {
-		Face() : IsSolid(false), IsBackFace(false), Type(BlockType::AIR), Direction(0) {}
-		Face(bool isSolid, bool isBackFace, BlockType type, uint8_t direction) : IsSolid(isSolid), IsBackFace(isBackFace), Type(type), Direction(direction) {}
+		Face() : IsSolid(false), IsBackFace(false), Type(BlockType::AIR) {}
+		Face(bool isSolid, bool isBackFace, BlockType type) : IsSolid(isSolid), IsBackFace(isBackFace), Type(type) {}
 		bool IsSolid;
 		bool IsBackFace;
 		BlockType Type;
-		uint8_t Direction;
 
 		bool operator==(const Face& other);
 		bool operator!=(const Face& other);

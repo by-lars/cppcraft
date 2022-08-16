@@ -83,7 +83,7 @@ namespace ZuneCraft {
 			didPlayerMove = true;
 		}
 
-		//m_World->SetPlayerPos(m_Camera.GetPosition(), m_Camera.GetForwardVector());
+		m_World->SetPlayerPos(m_Camera.GetPosition(), m_Camera.GetForwardVector());
 		//m_World->LoadPendingChunks();
 
 		Renderer::SetView(m_Camera.GetViewMatrix());

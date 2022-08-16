@@ -3,22 +3,6 @@
 
 namespace ZuneCraft {
 	World::World() {
-		m_MapOffset = glm::ivec2(0);
-		m_LastMapOffset = glm::ivec2(0);
-
-		delta = glm::ivec2(0);
-		rowToLoad = glm::ivec2(0);
-		rowToUnload = glm::ivec2(0);
-
-		for (int x = m_MapOffset.x - VIEW_DISTANCE_CHUNKS + 1; x < m_MapOffset.x + VIEW_DISTANCE_CHUNKS; x++) {
-			for (int y = m_MapOffset.y - VIEW_DISTANCE_CHUNKS + 1; y < m_MapOffset.y + VIEW_DISTANCE_CHUNKS; y++) {
-				glm::ivec2 index(x, y);
-				Chunk* newChunk = new Chunk(index);
-				newChunk->Update();
-				m_Chunks.push_back(newChunk);
-			}
-		}
-
 
 	}
 
@@ -32,95 +16,59 @@ namespace ZuneCraft {
 
 	}
 
-	void World::LoadPendingChunks() {
-		//if (m_ChunksToLoad.empty() || m_FreeChunks.empty()) {
-		//	return;
-		//}
-
-		//Chunk* chunk = m_FreeChunks.back();
-		//m_FreeChunks.pop_back();
-
-		//glm::ivec2 location = m_ChunksToLoad.back();
-		//m_ChunksToLoad.pop_back();
-
-		//chunk->SetIndex(location);
-		//chunk->GenTerrain();
-		//chunk->Update();
-
-		//m_Chunks.push_back(chunk);
-		//m_ChunkMap[location] = chunk;
-	}
 
 	void World::SetPlayerPos(glm::vec3 pos, const glm::vec3& lookDir) {
-		//glm::ivec2 playerChunkPos = ToChunkCoords(pos);
-		//Renderer::DrawDebugCube(ToWorldCoords(playerChunkPos) + glm::vec3(CHUNK_WIDTH/2, 0, CHUNK_WIDTH/2), glm::vec3(32.0, 1.0, 32.0), glm::vec3(0.0, 1.0, 1.0));
+		pos.y = 0;
+		m_LastChunk = m_CurrentChunk;
+		m_CurrentChunk = ToChunkCoords(pos);
 
-		//m_LastMapOffset = m_MapOffset;
-		//m_MapOffset = playerChunkPos;
+		if (m_CurrentChunk - m_LastChunk == glm::ivec2(0, 0)) {
+			return; //same chunk, don't need to load new chunks
+		}
 
-		//for (int x = m_MapOffset.x - VIEW_DISTANCE_CHUNKS + 1; x < m_MapOffset.x + VIEW_DISTANCE_CHUNKS; x++) {
-		//	for (int y = m_MapOffset.y - VIEW_DISTANCE_CHUNKS + 1; y < m_MapOffset.y + VIEW_DISTANCE_CHUNKS; y++) {
-		//		Renderer::DrawDebugCube(ToWorldCoords(glm::ivec2(x, y)) + glm::vec3(CHUNK_WIDTH / 2, 0, CHUNK_WIDTH / 2), glm::vec3(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-		//	}
-		//}
+		ZC_DEBUG("Load Chunks");
 
-		//if (m_LastMapOffset != m_MapOffset) {
-		//	delta = m_MapOffset - m_LastMapOffset;
+		std::vector<Chunk*>::iterator it = m_Chunks.begin();
+		while (it != m_Chunks.end()) {
+			float distance = glm::distance((*it)->GetWorldPositionCentered(), pos);
 
+			if (distance > VIEW_DISTANCE_BLOCKS) {
+				it = m_Chunks.erase(it);
+			}
+			else {
+				it++;
+			}
+		}
 
-		//	rowToLoad = m_MapOffset + delta * (VIEW_DISTANCE_CHUNKS - 1);
-		//	rowToUnload = m_LastMapOffset - delta * (VIEW_DISTANCE_CHUNKS - 1);
+		glm::ivec2 chLoadStart = m_CurrentChunk - (VIEW_DISTANCE_CHUNKS / 2);
+		glm::ivec2 chLoadEnd = m_CurrentChunk + (VIEW_DISTANCE_CHUNKS / 2);
 
+		std::vector<glm::ivec2> chunksToLoad;
 
-		//	//Load in y direction
-		//	if (rowToLoad.x != m_MapOffset.x) {
-		//		for (int y = rowToLoad.y - VIEW_DISTANCE_CHUNKS + 1; y < rowToLoad.y + VIEW_DISTANCE_CHUNKS; y++) {
-		//			glm::ivec2 index(rowToLoad.x, y);
-		//			m_ChunksToLoad.push_back(index);
-		//		}
-		//	}
+		for (int x = chLoadStart.x; x < chLoadEnd.x; x++) {
+			for (int y = chLoadStart.y; y < chLoadEnd.y; y++) {
+				chunksToLoad.push_back(glm::ivec2(x, y));
+				ZC_DEBUG("Consider chunk at x" << x << " y" << y);
+			}
+		}
 
-		//	//Load in x direction
-		//	if (rowToLoad.y != m_MapOffset.y) {
-		//		for (int x = rowToLoad.x - VIEW_DISTANCE_CHUNKS + 1; x < rowToLoad.x + VIEW_DISTANCE_CHUNKS; x++) {
-		//			glm::ivec2 index(x, rowToLoad.y);
-		//			m_ChunksToLoad.push_back(index);
-		//		}
-		//	}
+		for (int i = 0; i < chunksToLoad.size(); i++) {
+			bool chunkAlreadyLoaded = false;
 
+			for (int j = 0; j < m_Chunks.size(); j++) {
+				if (m_Chunks[j]->GetIndex() == chunksToLoad[i]) {
+					chunkAlreadyLoaded = true;
+					break;
+				}
+			}
 
-		//	////UnLoad in x direction
-		//	if (rowToUnload.y != m_MapOffset.y) {
-		//		for (int x = rowToUnload.x - VIEW_DISTANCE_CHUNKS + 1; x < rowToUnload.x + VIEW_DISTANCE_CHUNKS; x++) {
-		//			glm::ivec2 index(x, rowToUnload.y);
-		//			Chunk* chunk = m_ChunkMap[index];
+			if (chunkAlreadyLoaded) {
+				continue;
+			}
 
-		//			if (chunk != NULL) {
-		//				m_Chunks.erase(std::find(m_Chunks.begin(), m_Chunks.end(), chunk));
-		//				m_ChunkMap.erase(index);
-		//				m_FreeChunks.push_back(chunk);
-		//			}
-		//		}
-		//	}
-
-		//	//UnLoad in y direction
-		//	if (rowToUnload.x != m_MapOffset.x) {
-		//		for (int y = rowToUnload.y - VIEW_DISTANCE_CHUNKS + 1; y < rowToUnload.y + VIEW_DISTANCE_CHUNKS; y++) {
-		//			glm::ivec2 index(rowToUnload.x, y);
-		//			Chunk* chunk = m_ChunkMap[index];
-
-		//			if (chunk != NULL) {
-		//				m_Chunks.erase(std::find(m_Chunks.begin(), m_Chunks.end(), chunk));
-		//				m_ChunkMap.erase(index);
-		//				m_FreeChunks.push_back(chunk);
-		//			}
-		//		}
-		//	}
-
-		//}
-
-		//Renderer::DrawDebugCube(ToWorldCoords(rowToLoad) + glm::vec3(CHUNK_WIDTH / 2, 0, CHUNK_WIDTH / 2), glm::vec3(2.0), glm::vec3(0.0, 1.0, 0.0));
-		//Renderer::DrawDebugCube(ToWorldCoords(rowToUnload) + glm::vec3(CHUNK_WIDTH / 2, 0, CHUNK_WIDTH / 2), glm::vec3(2.0), glm::vec3(1.0, 0.0, 0.0));
-
+			Chunk* chunk = new Chunk(chunksToLoad[i]);
+			chunk->Update();
+			m_Chunks.push_back(chunk);
+		}
 	}
 }

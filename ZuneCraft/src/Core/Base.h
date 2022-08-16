@@ -11,11 +11,11 @@
 #define ZC_WARN(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LWARNING, s); }
 #define ZC_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LERROR, s); }
 
-#define ZC_FATAL_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LFATAL, s); exit(-1); }
+#define ZC_FATAL_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LFATAL, s); abort(); }
 
 #ifndef NDEBUG
 #define ZC_DEBUG(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LDEBUG, s); }
-#define ZC_ASSERT(test, msg) if((test) == false) { ZC_DEBUG("Debug test failed: " << msg); exit(-1); } 
+#define ZC_ASSERT(test, msg) if((test) == false) { ZC_DEBUG("Debug test failed: " << msg); abort(); } 
 #else
 #define ZC_DEBUG(x)
 #define ZC_ASSERT(x)

@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Base.h"
+#include <string>
 
 namespace ZuneCraft {
 	struct GLShader {
@@ -11,18 +12,13 @@ namespace ZuneCraft {
 		GLuint VertexArray;
 		GLenum Type;
 		GLuint AttributeCount;
-		GLuint Size;
+		GLuint Stride;
+		GLuint Count;
 	};
 
-	struct GLColorAttachement {
+	struct GLAttachement {
 		GLuint Id;
-		GLenum InternalFormat;
 		GLenum Format;
-		GLenum Type;
-	};
-
-	struct GLDepthAttachement {
-		GLuint Id;
 		GLenum Type;
 	};
 
@@ -30,8 +26,7 @@ namespace ZuneCraft {
 		GLuint Id;
 		GLuint Width;
 		GLuint Height;
-		GLDepthAttachement DepthAttachement;
-		std::vector<GLColorAttachement> ColorAttachements;
+		std::vector<GLAttachement> Attachements;
 	};
 
 	struct GLTexture {
@@ -40,5 +35,13 @@ namespace ZuneCraft {
 		GLuint Height;
 		GLenum Format;
 		GLenum DataType;
+	};
+
+	struct GLUniform {
+		GLuint ProgramId;
+		GLsizei Count;
+		StorageFormat Format;
+		GLint Location;
+		std::string Name;
 	};
 }

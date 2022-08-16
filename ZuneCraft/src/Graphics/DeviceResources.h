@@ -1,54 +1,44 @@
 #pragma once
-
-#include "Utility/StrongHandle.h"
 #include "Core/Base.h"
+#include "Utility/Handle.h"
+#include <vector>
 
 namespace ZuneCraft {
-	ZC_MAKE_STRONG_HANDLE(HShader, int, -1);
-	ZC_MAKE_STRONG_HANDLE(HBuffer, int, -1);
-	ZC_MAKE_STRONG_HANDLE(HTexture, int, -1);
-	ZC_MAKE_STRONG_HANDLE(HRenderTarget, int, -1);
-
 	ZC_ENUM DrawMode {
 		TRIANGLES = 0,
 		TRIANGLE_STRIP,
 		LINES
 	};
 
-	ZC_ENUM BufferType {
-		ARRAY = 0,
-		DRAW_INDIRECT_BUFFER
+	ZC_ENUM StorageType {
+		VERTEX = 0,
+		BATCH,
+		SHADER,
+		DRAW_COMMAND
 	};
 
-	ZC_ENUM BufferUsage {
-		STATIC_DRAW = 0,
-		STATIC_READ,
-		STATIC_COPY,
-
-		DYNAMIC_DRAW,
-		DYNAMIC_READ,
-		DYNAMIC_COPY,
-
-		STREAM_DRAW,
-		STREAM_READ,
-		STREAM_COPY
+	ZC_ENUM StorageUsage {
+		STATIC = 0,
+		DYNAMIC,
+		STREAM
 	};
 
-	ZC_ENUM DataType {
+	ZC_ENUM StorageFormat{
+		UBYTE_VEC4 = 0,
+		UBYTE_VEC4_VEC4,
+
+		FLOAT_VEC4,
+		FLOAT_VEC3,
+
+		INT_VEC1
+	};
+
+	ZC_ENUM DataType{
 		INT = 0,
 		FLOAT,
 		UNSIGNED_BYTE
 	};
 
-	struct BufferElement {
-		BufferElement(DataType type, uint32_t count, uint32_t divisor);
-		DataType Type;
-		uint32_t Count;
-		uint32_t Divisor;
-
-		uint32_t GetSizeInBytes() const;
-		bool IsIntegerType() const;
-	};
 
 	ZC_ENUM ClampMode {
 		REPEAT = 0,
@@ -69,15 +59,46 @@ namespace ZuneCraft {
 		DEPTH_COMPONENT32
 	};
 
-	ZC_ENUM AttachementType {
-		Color = 0,
-		Depth
-	};
-
 	struct RenderCommand {
 		uint32_t Count;
 		uint32_t InstanceCount;
 		uint32_t First;
 		uint32_t BaseInstance;
+	};
+
+	struct BufferSpec {
+		uint32_t Count;
+		StorageType Type;
+		StorageUsage Usage;
+		StorageFormat Format;
+		Id ParrentBuffer;
+		Id Shader;
+	};
+
+	struct TextureSpec {
+		uint32_t Width;
+		uint32_t Height;
+		TextureFormat Format;
+		DataType DataType;
+		ClampMode ClampMode;
+		FilterMode FilterMode;
+	};
+
+	ZC_ENUM AttachementType {
+		Color = 0,
+		Depth
+	};
+
+	struct FramebufferAttachement {
+		FramebufferAttachement(TextureFormat format, AttachementType type, bool writeOnly);
+		TextureFormat Format;
+		AttachementType Type;
+		bool WriteOnly;
+	};
+
+	struct FramebufferSpec {
+		uint32_t Width;
+		uint32_t Height;
+		std::vector<FramebufferAttachement> Attachements;
 	};
 }

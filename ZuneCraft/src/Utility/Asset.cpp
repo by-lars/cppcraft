@@ -13,12 +13,34 @@ namespace ZuneCraft {
 		std::string Asset::s_WorkingDirectory = "\\gametitle\\584E07D1\\Content\\";
 	#endif
 
-	std::string Asset::GetShaderSource(const std::string& name) {
-#ifdef ZC_PLATFORM_ZUNE
+	Result Asset::GetShaderAttribs(const std::string& name, std::vector<std::string>* _out_Lines) {
+		#ifdef ZC_PLATFORM_ZUNE
 		std::string localPath = s_WorkingDirectory + "\\" + name;
-#else
+		#else
 		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
-#endif
+		#endif
+
+		std::ifstream file(localPath.c_str());
+
+		if (file.is_open() == false) {
+			ZC_FATAL_ERROR("Could not open file: " << localPath);
+			return Result::FAILURE;
+		}
+
+		std::string line;
+		while (std::getline(file, line)) {
+			_out_Lines->push_back(line);
+		}
+
+		return Result::SUCCESS;
+	}
+
+	std::string Asset::GetShaderSource(const std::string& name) {
+	#ifdef ZC_PLATFORM_ZUNE
+		std::string localPath = s_WorkingDirectory + "\\" + name;
+	#else
+		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
+	#endif
 
 		std::ifstream file(localPath.c_str(), std::ios::ate);
 
@@ -37,11 +59,11 @@ namespace ZuneCraft {
 	}
 
 	Result Asset::GetImage(const std::string& name, Image* _out_Image) {
-#ifdef ZC_PLATFORM_ZUNE
+	#ifdef ZC_PLATFORM_ZUNE
 		std::string localPath = s_WorkingDirectory + "\\" + name;
-#else
+	#else
 		std::string localPath = s_WorkingDirectory + "image" + "\\" + name;
-#endif
+	#endif
 
 		stbi_set_flip_vertically_on_load(true);
 
@@ -55,12 +77,12 @@ namespace ZuneCraft {
 		return Result::SUCCESS;
 	}
 
-	Result Asset::GetShaderBinary(const std::string& name, Binary* _out_Binary) {
-#ifdef ZC_PLATFORM_ZUNE
+	Result Asset::GetShaderBinary(const std::string& name, std::vector<char>* _out_Binary) {
+	#ifdef ZC_PLATFORM_ZUNE
 		std::string localPath = s_WorkingDirectory + "\\" + name;
-#else
+	#else
 		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
-#endif
+	#endif
 
 		std::ifstream file(localPath.c_str(), std::ios::ate | std::ios::binary);
 
@@ -69,11 +91,11 @@ namespace ZuneCraft {
 			return Result::FAILURE;
 		}
 
-		_out_Binary->Size = file.tellg();
+		_out_Binary->resize(file.tellg());
 		file.seekg(0);
 
-		_out_Binary->Data = new char[_out_Binary->Size];
-		file.read(_out_Binary->Data, _out_Binary->Size);
+		
+		file.read(_out_Binary->data(), _out_Binary->size());
 		file.close();
 
 		return Result::SUCCESS;
@@ -100,14 +122,5 @@ namespace ZuneCraft {
 
 	Image::~Image() {
 		stbi_image_free(Data);
-	}
-
-	Binary::Binary() {
-		Data = nullptr;
-		Size = 0;
-	}
-
-	Binary::~Binary() {
-		delete[] Data;
 	}
 }

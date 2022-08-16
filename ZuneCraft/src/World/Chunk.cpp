@@ -26,24 +26,35 @@ namespace ZuneCraft {
 	void Chunk::GenTerrain() {
 		memset(&m_Voxels.Data[0], 0, CHUNK_SIZE_QUBED);
 		FastNoiseLite noise;
-		noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+
+		noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+		noise.SetFractalType(FastNoiseLite::FractalType_FBm);
+		noise.SetFractalOctaves(8.0f);
+		noise.SetFractalLacunarity(2.0f);
+		noise.SetFractalGain(0.5f);
+		noise.SetFrequency(0.005f);
+
+		//noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
 		
 		for (int x = 0; x < CHUNK_WIDTH; x++) {
 			for (int z = 0; z < CHUNK_WIDTH; z++) {
 
-				float w1 = noise.GetNoise((x + m_WorldPostion.x) / 16.0f, (z + m_WorldPostion.z) / 16.0f);
-				float w2 = noise.GetNoise(x + m_WorldPostion.x, z + m_WorldPostion.z);
-				float w3 = noise.GetNoise((x + m_WorldPostion.x) * 16.0f, (z + m_WorldPostion.z) * 16.0f);
-				float w4 = noise.GetNoise((x + m_WorldPostion.x) / 64.0f, (z + m_WorldPostion.z) / 64.0f);
+	
+				float height = noise.GetNoise((x + m_WorldPostion.x), (z + m_WorldPostion.z));
+				//height = powf(height, 2.5f);
 
-				int height = (w1 + w2 + w3 * w4) * CHUNK_HEIGHT;
-				for (int y = 0; y < height && y < CHUNK_HEIGHT; y++) {
-					if (y == height - 1) {
+
+				int blockHeight = CHUNK_HEIGHT/2 + height * CHUNK_HEIGHT/2;
+
+				for (int y = 0; y < blockHeight && y < CHUNK_HEIGHT; y++) {
+
+					if (y == (int)blockHeight - 1) {
 						m_Voxels.Data[x][y][z] = (uint8_t)BlockType::GRASS;
 					}
 					else {
 						m_Voxels.Data[x][y][z] = (uint8_t)BlockType::DIRT;
 					}
+					
 				}
 
 				m_Voxels.Data[x][0][z] = (uint8_t)BlockType::GRASS;

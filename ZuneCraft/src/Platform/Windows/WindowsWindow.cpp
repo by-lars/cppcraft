@@ -63,9 +63,6 @@ namespace ZuneCraft {
 		m_Height = 272 * 4;
 		m_Width = 480 * 4;
 
-        RenderAPI::API api = Game::Get().GetConfig().GraphicsAPI;
-        
-
         //glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
         //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
