@@ -1,5 +1,6 @@
 #pragma once
 #include "Graphics/DeviceResources.h"
+#include "Data/Handle.h"
 #include "Utility/Asset.h"
 #include <string>
 #include <glm/glm.hpp>
@@ -34,7 +35,8 @@ namespace ZuneCraft {
 		virtual Id RenderTargetCreate(const FramebufferSpec& spec) = 0;
 		virtual void RenderTargetBind(Id hRenderTarget) = 0;
 
-		virtual void RenderCommandPush(const RenderCommand& command) = 0;
+		virtual Id RenderCommandPush(const RenderCommand& command) = 0;
+		virtual void RenderCommandErase(Id hRenderCommand) = 0;
 		virtual void Flush() = 0;
 
 		virtual void Clear() = 0;

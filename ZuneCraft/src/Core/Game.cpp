@@ -8,14 +8,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-
 namespace ZuneCraft {
 	Game* Game::s_Instance = NULL;
 
 	Game::Game() {
 		s_Instance = this;
 		
-		m_GameConfig.GraphicsAPI = RenderAPI::API::OPENGL_ES_2;
+		m_GameConfig.GraphicsAPI = RenderAPI::API::OPENGL_4;
 
 		m_Window = Window::Create();
 		Renderer::Init();
@@ -30,9 +29,9 @@ namespace ZuneCraft {
 	}
 
 	Game::~Game() {
-		Renderer::Shutdown();
 		delete m_Window;
 		delete m_World;
+		Renderer::Shutdown();
 		Input::Shutdown();
 	}
 
@@ -83,12 +82,11 @@ namespace ZuneCraft {
 			didPlayerMove = true;
 		}
 
-		m_World->SetPlayerPos(m_Camera.GetPosition(), m_Camera.GetForwardVector());
-		//m_World->LoadPendingChunks();
+		Input::CheckToggleFocus();
 
 		Renderer::SetView(m_Camera.GetViewMatrix());
 		Renderer::BeginFrame();
-		//	m_World->Render();
+		m_World->SetPlayerPos(m_Camera.GetPosition(), m_Camera.GetForwardVector());
 		Renderer::EndFrame();
 
 		m_Window->Update();

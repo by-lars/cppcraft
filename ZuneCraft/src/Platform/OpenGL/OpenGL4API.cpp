@@ -444,18 +444,25 @@ namespace ZuneCraft {
 		}
 	}
 
-	void OpenGL4API::RenderCommandPush(const RenderCommand& command) {
-		if (m_BatchedDrawing.Commands.size() > 127) {
+	Id OpenGL4API::RenderCommandPush(const RenderCommand& command) {
+		if (m_BatchedDrawing.Commands.Size() > 128) {
 			ZC_WARN("Can't push more render commands");
-			return;
+			return Handle::INVALID;
 		}
-		m_BatchedDrawing.Commands.push_back(command);
+		Id handle = m_BatchedDrawing.Commands.PushBack(command);
+		m_BatchedDrawing.Invalidated = true;
+	
+		return handle;
+	}
+
+	void OpenGL4API::RenderCommandErase(Id hRenderCommand) {
+		m_BatchedDrawing.Commands.Erase(hRenderCommand);
 		m_BatchedDrawing.Invalidated = true;
 	}
 
 	void OpenGL4API::Flush() {
 		if (m_BatchedDrawing.Invalidated) {
-			StorageUpload(m_BatchedDrawing.CommandBuffer, m_BatchedDrawing.Commands.size(), 0, m_BatchedDrawing.Commands.data());
+			StorageUpload(m_BatchedDrawing.CommandBuffer, m_BatchedDrawing.Commands.Size(), 0, m_BatchedDrawing.Commands.Data());
 			m_BatchedDrawing.Invalidated = false;
 		}
 	}
@@ -491,6 +498,6 @@ namespace ZuneCraft {
 		glBindVertexArray(m_Buffers[Handle::GetIndex(hBuffer)].VertexArray);
 
 		GLenum drawMode = DrawModeToGLEnum(mode);
-		glMultiDrawArraysIndirect(drawMode, 0, m_BatchedDrawing.Commands.size(), 0);
+		glMultiDrawArraysIndirect(drawMode, 0, m_BatchedDrawing.Commands.Size(), 0);
 	}
 }

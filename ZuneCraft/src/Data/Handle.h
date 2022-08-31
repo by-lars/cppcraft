@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Base.h"
+#include <vector>
 
 namespace ZuneCraft {
 	typedef uint64_t Id;
@@ -39,6 +40,14 @@ namespace ZuneCraft {
 
 		inline bool IsValid(Id handle) {
 			return GetIndex(handle) != UINT32_MAX;
+		}
+
+		template<class T, class S>
+		S& Get(std::vector<S>& vec, Id handle) {
+			ZC_ASSERT(Handle::IsOfType<T>(handle), "Unexpected handle type");
+			size_t index = Handle::GetIndex(handle);
+			ZC_ASSERT(index >= 0 && index < vec.size(), "Invalid handle");
+			return vec[index];
 		}
 	}
 }

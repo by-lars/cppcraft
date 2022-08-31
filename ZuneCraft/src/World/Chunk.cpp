@@ -32,10 +32,8 @@ namespace ZuneCraft {
 		noise.SetFractalOctaves(8.0f);
 		noise.SetFractalLacunarity(2.0f);
 		noise.SetFractalGain(0.5f);
-		noise.SetFrequency(0.005f);
+		noise.SetFrequency(0.007f);
 
-		//noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-		
 		for (int x = 0; x < CHUNK_WIDTH; x++) {
 			for (int z = 0; z < CHUNK_WIDTH; z++) {
 
@@ -65,7 +63,8 @@ namespace ZuneCraft {
 	}
 
 	Chunk::~Chunk() {
-
+		ZC_DEBUG_ALLOC("Deleting Chunk with MeshID=" << Handle::GetIndex(m_MeshHandle));
+		Renderer::BatchFreeMesh(m_MeshHandle);
 	}
 
 	const glm::vec3& Chunk::GetWorldPosition() const {
@@ -100,6 +99,8 @@ namespace ZuneCraft {
 	void Chunk::Update() {
 		std::vector<Vertex> mesh;
 		Mesher::VoxelToGreedy(m_Voxels, 2, &mesh);
-		Renderer::BatchSubmitMesh(mesh, GetWorldPosition());
+		m_MeshHandle = Renderer::BatchSubmitMesh(mesh, GetWorldPosition());
+
+		ZC_DEBUG_ALLOC("Chunk with MeshID=" << Handle::GetIndex(m_MeshHandle));
 	}
 }

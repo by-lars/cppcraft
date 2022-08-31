@@ -1,6 +1,8 @@
 #pragma once
 #include "Graphics/RenderAPI.h"
 #include "Platform/OpenGL/OpenGLCommon.h"
+#include "Data/Handle.h"
+#include "Data/DenseArray.h"
 #include <vector>
 
 namespace ZuneCraft {
@@ -24,7 +26,8 @@ namespace ZuneCraft {
 		Id RenderTargetCreate(const FramebufferSpec& spec) override;
 		void RenderTargetBind(Id hRenderTarget) override;
 
-		void RenderCommandPush(const RenderCommand& command) override;
+		Id RenderCommandPush(const RenderCommand& command) override;
+		void RenderCommandErase(Id hRenderCommand) override;
 		void Flush() override;
 
 		void Clear() override;
@@ -42,7 +45,7 @@ namespace ZuneCraft {
 		std::vector<GLRenderTarget> m_RenderTargets;
 
 		struct {
-			std::vector<RenderCommand> Commands;
+			DenseArray<RenderCommand> Commands;
 			Id CommandBuffer;
 			bool Invalidated;
 		} m_BatchedDrawing;

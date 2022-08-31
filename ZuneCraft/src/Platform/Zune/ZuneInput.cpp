@@ -16,6 +16,8 @@ namespace ZuneCraft {
 		return false;
 	}
 
+	void Input::CheckToggleFocus() { }
+
 	bool Input::GetActionDebugGizmos() {
 		ZDK_INPUT_STATE input;
 		ZDKInput_GetState(&input);

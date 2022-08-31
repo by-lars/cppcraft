@@ -33,7 +33,7 @@ namespace ZuneCraft {
 
 	ZuneWindow::ZuneWindow() {
 		SuppressReboot();
-		ZDKSystem_ShowSplashScreen(true);
+		ZDKSystem_ShowSplashScreen(false);
 		ZDKSystem_SetOrientation(ORIENTATION_270);
 		ZDKGL_Initialize();
 		

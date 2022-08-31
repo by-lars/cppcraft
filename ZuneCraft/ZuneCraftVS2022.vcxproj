@@ -47,13 +47,13 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(ProjectDir)ext\imgui\imgui;$(ProjectDir)ext\imgui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)ext\glm;$(ProjectDir)ext\Platform\Win\glad;$(ProjectDir)ext\nothings;$(ProjectDir)ext\Platform\Win\glfw\include;$(ProjectDir)ext\fastnoise;$(ProjectDir)ext\imgui\imgui;$(ProjectDir)ext\imgui;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -88,6 +88,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ext\imgui\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="ext\imgui\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="ext\imgui\imgui\imgui.cpp" />
+    <ClCompile Include="ext\imgui\imgui\imgui_demo.cpp" />
+    <ClCompile Include="ext\imgui\imgui\imgui_draw.cpp" />
+    <ClCompile Include="ext\imgui\imgui\imgui_tables.cpp" />
+    <ClCompile Include="ext\imgui\imgui\imgui_widgets.cpp" />
     <ClCompile Include="ext\Platform\Win\glfw\src\context.c" />
     <ClCompile Include="ext\Platform\Win\glfw\src\egl_context.c" />
     <ClCompile Include="ext\Platform\Win\glfw\src\init.c" />
@@ -126,11 +133,13 @@
     <ClCompile Include="src\Platform\Windows\WindowsLogger.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Utility\Asset.cpp" />
-    <ClCompile Include="src\Utility\Handle.cpp" />
+    <ClCompile Include="src\Data\Handle.cpp" />
     <ClCompile Include="src\World\Chunk.cpp" />
     <ClCompile Include="src\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ext\imgui\imgui\imgui.h" />
+    <ClInclude Include="ext\imgui\imgui\imgui_internal.h" />
     <ClInclude Include="ext\Platform\Win\glfw\src\internal.h" />
     <ClInclude Include="ext\Platform\Win\glfw\src\mappings.h" />
     <ClInclude Include="ext\Platform\Win\glfw\src\null_joystick.h" />
@@ -146,6 +155,9 @@
     <ClInclude Include="src\Core\Input.h" />
     <ClInclude Include="src\Core\Logger.h" />
     <ClInclude Include="src\Core\GLWindow.h" />
+    <ClInclude Include="src\Data\DenseArray.h" />
+    <ClInclude Include="src\Data\HandleStore.h" />
+    <ClInclude Include="src\Data\LinkedList.h" />
     <ClInclude Include="src\Geometry\Material.h" />
     <ClInclude Include="src\Geometry\Mesher.h" />
     <ClInclude Include="src\Geometry\Vertex.h" />
@@ -155,13 +167,14 @@
     <ClInclude Include="src\Graphics\GL.h" />
     <ClInclude Include="src\Graphics\RenderAPI.h" />
     <ClInclude Include="src\Graphics\Renderer.h" />
+    <ClInclude Include="src\Graphics\VertexPool.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGL4API.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLCommon.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLES2API.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Utility\Asset.h" />
     <ClInclude Include="src\Utility\Convert.h" />
-    <ClInclude Include="src\Utility\Handle.h" />
+    <ClInclude Include="src\Data\Handle.h" />
     <ClInclude Include="src\World\Chunk.h" />
     <ClInclude Include="src\World\World.h" />
   </ItemGroup>

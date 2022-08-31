@@ -9,6 +9,7 @@ namespace ZuneCraft {
 
 #ifdef ZC_PLATFORM_ZUNE
 	PFNGLDRAWBUFFERSARBPROC glDrawBuffers;
+	PFNGLMULTIDRAWARRAYSEXTPROC glMultiDrawArrays;
 #endif
 
 #pragma region Constructor
@@ -21,30 +22,24 @@ namespace ZuneCraft {
 
 		ZC_LOG("Running " << oglVersion << " on " << oglRenderer << " - " << oglVendor);
 
-		m_BatchedDrawing.VertCount = 0;
-
 		glEnable(GL_DEPTH_TEST);
 		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_BACK);
 
 		//Load Extensions
 #ifdef ZC_PLATFORM_ZUNE
-		HINSTANCE dll = LoadLibraryW(L"opengl32.dll");
-
 		glDrawBuffers = NULL;
+		glMultiDrawArrays = NULL;
+
 		glDrawBuffers = (PFNGLDRAWBUFFERSARBPROC)eglGetProcAddress("glDrawBuffersARB");
-		if (glDrawBuffers == NULL) {
-			ZC_FATAL_ERROR("Could not load glDrawBuffers extension");
-		}
-		else {
-			ZC_LOG("address=" << glDrawBuffers);
-			ZC_LOG("Loaded Extension!!!!");
-		}
+		ZC_ASSERT(glDrawBuffers != NULL, "Could not load glDrawBuffersARB");
+		
+		//glMultiDrawArrays = (PFNGLMULTIDRAWARRAYSEXTPROC)eglGetProcAddress("glMultiDrawArraysEXT");
+		//ZC_ASSERT(glMultiDrawArrays != NULL, "Could not load glMultiDrawArraysEXT");
 #endif
 	}
 
 	OpenGLES2API::~OpenGLES2API() {
-
 		for (int i = 0; i < m_Shaders.size(); i++) {
 			ZC_DEBUG_ALLOC("Deleting Shader Id=" << m_Shaders[i].Id);
 			glDeleteProgram(m_Shaders[i].Id);
@@ -548,10 +543,12 @@ namespace ZuneCraft {
 		}
 	}
 
-	void OpenGLES2API::RenderCommandPush(const RenderCommand& command) {
-		m_BatchedDrawing.First.push_back(command.First);
-		m_BatchedDrawing.Count.push_back(command.Count);
-		m_BatchedDrawing.VertCount += command.Count;
+	Id OpenGLES2API::RenderCommandPush(const RenderCommand& command) {
+		return m_RenderCommands.PushBack(command);
+	}
+
+	void OpenGLES2API::RenderCommandErase(Id hRenderCommand) {
+		m_RenderCommands.Erase(hRenderCommand);
 	}
 
 	void OpenGLES2API::Flush() {
@@ -580,7 +577,13 @@ namespace ZuneCraft {
 		glDrawArrays(drawMode, offset, count);
 	}
 
-	void OpenGLES2API::Draw(Id shader, Id buffer, DrawMode mode) {
-		DrawArrays(shader, buffer, mode, 0, m_BatchedDrawing.VertCount);
+	void OpenGLES2API::Draw(Id hShader, Id hBuffer, DrawMode mode) {
+		glUseProgram(m_Shaders[Handle::GetIndex(hShader)].Id);
+		BindBuffer(hBuffer);
+		GLenum drawMode = DrawModeToGLEnum(mode);
+
+		for (int i = 0; i < m_RenderCommands.Size(); i++) {
+			glDrawArrays(drawMode, m_RenderCommands[i].First, m_RenderCommands[i].Count);
+		}
 	}
 }

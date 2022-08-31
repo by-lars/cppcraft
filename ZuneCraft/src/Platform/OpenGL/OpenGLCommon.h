@@ -1,6 +1,8 @@
 #pragma once
 #include "Core/Base.h"
+#include "Graphics/DeviceResources.h"
 #include <string>
+#include <vector>
 
 namespace ZuneCraft {
 	struct GLShader {

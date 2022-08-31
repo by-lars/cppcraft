@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Logger.h"
+#include "Build/PlatformDefines.h"
 #include <cstdlib>
 #include <sstream>
 
@@ -10,11 +11,11 @@
 #define ZC_WARN(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LWARNING, s); }
 #define ZC_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LERROR, s); }
 
-#define ZC_FATAL_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LFATAL, s); exit(-1); }
+#define ZC_FATAL_ERROR(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LFATAL, s); ZC_ABORT(); }
 
 #ifndef NDEBUG
 #define ZC_DEBUG(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LDEBUG, s); }
-#define ZC_ASSERT(test, msg) if((test) == false) { ZC_DEBUG("Debug test failed: " << msg); exit(-1); } 
+#define ZC_ASSERT(test, msg) if((test) == false) { ZC_FATAL_ERROR(__FILE__ << "(" << __LINE__ << "): " << "Debug test failed: " << msg); ZC_ABORT(); } 
 #else
 #define ZC_DEBUG(x)
 #define ZC_ASSERT(x)

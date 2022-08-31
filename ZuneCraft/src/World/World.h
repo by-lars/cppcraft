@@ -19,7 +19,7 @@ namespace ZuneCraft {
 		static inline glm::vec3 ToWorldCoords(const glm::ivec2& pos) { return glm::vec3(pos.x * (float)CHUNK_WIDTH, 0, pos.y * (float)CHUNK_WIDTH); };
 
 	private:
-		static const int VIEW_DISTANCE_CHUNKS = 4;
+		static const int VIEW_DISTANCE_CHUNKS = 6;
 		static const int VIEW_DISTANCE_BLOCKS = VIEW_DISTANCE_CHUNKS * CHUNK_WIDTH;
 
 		std::vector<Chunk*> m_Chunks;

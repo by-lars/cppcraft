@@ -4,3 +4,6 @@
 [submodule "ZuneCraft/ext/nothings/stb"]
 	path = ZuneCraft/ext/nothings/stb
 	url = https://github.com/nothings/stb.git
+[submodule "ZuneCraft/ext/imgui/imgui"]
+	path = ZuneCraft/ext/imgui/imgui
+	url = https://github.com/ocornut/imgui

@@ -9,9 +9,9 @@ namespace ZuneCraft {
 		static void Shutdown();
 		static glm::vec2 GetAxies();
 
+		static void CheckToggleFocus();
 		static bool GetActionDebugWireframe();
 		static bool GetActionDebugGizmos();
-
 
 		static bool GetActionForward();
 		static bool GetActionBackward();

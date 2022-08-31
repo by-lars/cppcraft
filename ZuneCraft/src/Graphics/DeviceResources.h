@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/Base.h"
-#include "Utility/Handle.h"
+#include "Data/Handle.h"
 #include <vector>
 
 namespace ZuneCraft {
