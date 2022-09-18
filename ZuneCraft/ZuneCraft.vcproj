@@ -252,6 +252,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Data\DenseArray.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Graphics\DeviceResources.h"
 				>
 			</File>
@@ -272,7 +276,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Utility\Handle.h"
+				RelativePath=".\src\Data\Handle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Data\HandleStore.h"
 				>
 			</File>
 			<File
@@ -284,6 +292,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Data\LinkedList.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Core\Logger.h"
 				>
 			</File>
@@ -292,7 +304,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Geometry\Mesher.h"
+				RelativePath=".\src\World\Material.h"
 				>
 			</File>
 			<File
@@ -305,6 +317,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Build\PlatformDefines.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Utility\Profiling.h"
 				>
 			</File>
 			<File
@@ -328,7 +344,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Geometry\Vertex.h"
+				RelativePath=".\src\Graphics\Vertex.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Graphics\VertexPool.h"
 				>
 			</File>
 			<File
@@ -384,11 +404,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Utility\Handle.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\Geometry\Mesher.cpp"
+				RelativePath=".\src\Data\Handle.cpp"
 				>
 			</File>
 			<File
@@ -408,7 +424,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Geometry\Vertex.cpp"
+				RelativePath=".\src\Graphics\Vertex.cpp"
 				>
 			</File>
 			<File

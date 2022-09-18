@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Core/Base.h"
-#include "Geometry/Mesher.h"
 #include "Graphics/DeviceResources.h"
-
+#include "Graphics/Vertex.h"
 #include <glm/glm.hpp>
 #include <vector>
 

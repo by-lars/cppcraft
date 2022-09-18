@@ -1,5 +1,8 @@
 #include "World/World.h"
 #include "Graphics/Renderer.h"
+#include "Core/Game.h"
+
+#include <fastnoise/FastNoiseLite.h>
 
 namespace ZuneCraft {
 	World::World() {
@@ -7,25 +10,17 @@ namespace ZuneCraft {
 		m_CurrentChunk = glm::ivec2(0, 0);
 
 
-
-		glm::ivec2 chLoadEnd = glm::ivec2((VIEW_DISTANCE_CHUNKS / 2));
-		glm::ivec2 chLoadStart = chLoadEnd * -1;
-
-		for (int x = chLoadStart.x; x < chLoadEnd.x; x++) {
-			for (int y = chLoadStart.y; y < chLoadEnd.y; y++) {
-				Chunk* chunk = new Chunk(glm::ivec2(x,y));
-				chunk->Update();
-				m_Chunks.push_back(chunk);
-
+		for (int x = 0; x < Game::Get().GetConfig().RenderDistance; x++) {
+			for (int y = 0; y < Game::Get().GetConfig().RenderDistance; y++) {
+				m_Chunks.push_back( new Chunk() );
 			}
 		}
 
+		SetPlayerPos(glm::vec3(123,123,123), glm::vec3(0));
 	}
 
 	World::~World() {
-		for (int i = 0; i < m_Chunks.size(); i++) {
-			delete m_Chunks[i];
-		}
+
 	}
 
 	void World::Render() {
@@ -47,8 +42,9 @@ namespace ZuneCraft {
 		while (it != m_Chunks.end()) {
 			float distance = glm::distance((*it)->GetWorldPositionCentered(), pos);
 
-			if (distance > VIEW_DISTANCE_BLOCKS) {
-				delete (*it);
+			if (distance > Game::Get().GetConfig().RenderDistance * Chunk::WIDTH) {
+				(*it)->Unload();
+				m_FreeChunks.push_back(*it);
 				it = m_Chunks.erase(it);
 			}
 			else {
@@ -56,8 +52,8 @@ namespace ZuneCraft {
 			}
 		}
 
-		glm::ivec2 chLoadStart = m_CurrentChunk - (VIEW_DISTANCE_CHUNKS / 2);
-		glm::ivec2 chLoadEnd = m_CurrentChunk + (VIEW_DISTANCE_CHUNKS / 2);
+		glm::ivec2 chLoadStart = m_CurrentChunk - glm::ivec2(Game::Get().GetConfig().RenderDistance / 2);
+		glm::ivec2 chLoadEnd = m_CurrentChunk + glm::ivec2(Game::Get().GetConfig().RenderDistance / 2);
 
 		std::vector<glm::ivec2> chunksToLoad;
 
@@ -82,9 +78,20 @@ namespace ZuneCraft {
 				continue;
 			}
 
-			Chunk* chunk = new Chunk(chunksToLoad[i]);
-			chunk->Update();
+			Chunk* chunk = nullptr;
+
+			if (m_FreeChunks.empty()) {
+				chunk = new Chunk();
+			}
+			else {
+				chunk = m_FreeChunks.back();
+				m_FreeChunks.pop_back();
+			}
+
+
+			chunk->Load(chunksToLoad[i]);
 			m_Chunks.push_back(chunk);
+			
 		}
 
 

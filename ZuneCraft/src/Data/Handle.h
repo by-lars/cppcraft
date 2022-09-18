@@ -44,6 +44,7 @@ namespace ZuneCraft {
 
 		template<class T, class S>
 		S& Get(std::vector<S>& vec, Id handle) {
+			ZC_ASSERT(Handle::IsValid(handle), "Invalid Handle");
 			ZC_ASSERT(Handle::IsOfType<T>(handle), "Unexpected handle type");
 			size_t index = Handle::GetIndex(handle);
 			ZC_ASSERT(index >= 0 && index < vec.size(), "Invalid handle");

@@ -2,8 +2,7 @@
 #include "Core/Base.h"
 #include "Graphics/GL.h"
 #include "Core/Game.h"
-#include "Geometry/Vertex.h"
-#include "Geometry/Mesher.h"
+#include "Graphics/Vertex.h"
 #include "Graphics/RenderAPI.h"
 #include "Utility/Asset.h"
 #include "Utility/Convert.h"
@@ -14,16 +13,63 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <queue>
-
-#include <imgui/backends/imgui_impl_opengl3.h>
-#include <imgui/backends/imgui_impl_glfw.h>
-#include <imgui/imgui.h>
+//
+//#include <imgui/backends/imgui_impl_opengl3.h>
+//#include <imgui/backends/imgui_impl_glfw.h>
+//#include <imgui/imgui.h>
 
 #ifdef ZC_PLATFORM_ZUNE
 #include <zdk.h> 
 #endif
 
 namespace ZuneCraft {
+	static const float LineCubeVertices[] = {
+		   -0.5f, -0.5f, -0.5f,
+			0.5f, -0.5f, -0.5f,
+			0.5f, -0.5f, -0.5f,
+			0.5f, -0.5f, 0.5f,
+			0.5f, -0.5f, 0.5f,
+		   -0.5f, -0.5f, 0.5f,
+		   -0.5f, -0.5f, 0.5f,
+		   -0.5f, -0.5f, -0.5f,
+
+		   -0.5f, 0.5f, -0.5f,
+			0.5f, 0.5f, -0.5f,
+			0.5f, 0.5f, -0.5f,
+			0.5f, 0.5f, 0.5f,
+			0.5f, 0.5f, 0.5f,
+		   -0.5f, 0.5f, 0.5f,
+		   -0.5f, 0.5f, 0.5f,
+		   -0.5f, 0.5f, -0.5f,
+
+		   0.5f, -0.5f, -0.5f,
+		   0.5f, 0.5f, -0.5f,
+		   -0.5f, -0.5f, -0.5f,
+		   -0.5f, 0.5f, -0.5f,
+		   0.5f, -0.5f, 0.5f,
+		   0.5f, 0.5f, 0.5f,
+		   -0.5f, -0.5f, 0.5f,
+		   -0.5f, 0.5f, 0.5f,
+	};
+
+#ifdef ZC_PLATFORM_ZUNE
+	//Texture coords are rotated, to render in landscape on a portrait buffer
+	static const unsigned char FullscreenQuad[] = {
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		1, 1, 0, 1,
+		1, 0, 1, 1
+	};
+#elif ZC_PLATFORM_WIN32
+	static const unsigned char FullscreenQuad[] = {
+		0, 1, 0, 1,
+		0, 0, 0, 0,
+		1, 1, 1, 1,
+		1, 0, 1, 0
+	};
+#endif
+
+
 	static RenderAPI* s_Device = nullptr;
 
 	static const size_t MAX_BATCH_MESHES = 128;
@@ -109,7 +155,7 @@ namespace ZuneCraft {
 		s_Device->SetShaderUniform(s_Data.MeshShader, "uSkyColor", glm::vec3(0.51f, 0.64f, 1.0f));
 
 		//Mesh Buffer
-		s_Data.BatchMesh = new VertexPool<Vertex>(s_Device, StorageFormat::UBYTE_VEC4_VEC4, (CHUNK_SIZE_QUBED/8) * MAX_BATCH_MESHES);
+		s_Data.BatchMesh = new VertexPool<Vertex>(s_Device, StorageFormat::UBYTE_VEC4_VEC4, (Chunk::VOLUME_SIZE/8) * MAX_BATCH_MESHES);
 
 		//Mesh Batch Data
 		BufferSpec dataBufferSpec = { };
@@ -130,21 +176,21 @@ namespace ZuneCraft {
 		quadBufferSpec.Count = 4;
 		quadBufferSpec.ParrentBuffer = Handle::INVALID;
 		s_Data.PPQuadBuffer = s_Device->StorageCreate(quadBufferSpec);
-		s_Device->StorageUpload(s_Data.PPQuadBuffer, 4, 0, (void*)&Mesher::FullscreenQuad[0]);
+		s_Device->StorageUpload(s_Data.PPQuadBuffer, 4, 0, (void*)&FullscreenQuad[0]);
 
-		//Init ImGUI
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), true);
-		ImGui_ImplOpenGL3_Init("#version 130");
+		////Init ImGUI
+		//IMGUI_CHECKVERSION();
+		//ImGui::CreateContext();
+		//ImGui::StyleColorsDark();
+		//ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), true);
+		//ImGui_ImplOpenGL3_Init("#version 130");
 	}	
 
 	void Renderer::Shutdown() {
 		delete s_Device;
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
+		//ImGui_ImplOpenGL3_Shutdown();
+		//ImGui_ImplGlfw_Shutdown();
+		//ImGui::DestroyContext();
 	}
 
 	void Renderer::SetView(const glm::mat4& viewMat) {
@@ -167,11 +213,11 @@ namespace ZuneCraft {
 
 		s_Data.BatchMesh->Cleanup();
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		//ImGui_ImplOpenGL3_NewFrame();
+		//ImGui_ImplGlfw_NewFrame();
+		//ImGui::NewFrame();
 
-		s_Data.BatchMesh->DebugDraw();
+		//s_Data.BatchMesh->DebugDraw();
 
 		s_Device->RenderTargetBind(s_Data.PPRenderTarget);
 		s_Device->SetViewport(0, 0, s_Data.RenderWidth, s_Data.RenderHeight);
@@ -193,8 +239,8 @@ namespace ZuneCraft {
 		s_Device->Clear();
 		s_Device->DrawArrays(s_Data.PPShader, s_Data.PPQuadBuffer, DrawMode::TRIANGLE_STRIP, 0, 4);
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		//ImGui::Render();
+		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		#ifdef ZC_PLATFORM_ZUNE
 		ZDKGL_EndDraw();
@@ -227,7 +273,10 @@ namespace ZuneCraft {
 		VPNode* memLocation = s_Data.BatchMesh->PushBack(mesh, batchDataLocation);
 		s_Data.BatchCurrentOffset += mesh.size();
 
-		return s_Data.Meshes.PushBack(MeshInfo{ memLocation, batchDataLocation });
+		MeshInfo info;
+		info.MemoryLocation = memLocation;
+		info.BatchId = batchDataLocation;
+		return s_Data.Meshes.PushBack(info);
 	}
 
 	void Renderer::BatchDrawMesh(Id hMesh) {

@@ -11,6 +11,8 @@
 namespace ZuneCraft {
 	struct GameConfig {
 		RenderAPI::API GraphicsAPI;
+
+		uint32_t RenderDistance;
 	};
 
 	class Game {

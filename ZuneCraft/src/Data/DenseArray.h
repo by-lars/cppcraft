@@ -7,7 +7,7 @@ namespace ZuneCraft {
 	template<typename T>
 	class DenseArray {
 	public:
-		DenseArray() = default;
+		DenseArray() { }
 
 		Id PushBack(const T& object) {
 			m_Handles.push_back(m_Objects.size());

@@ -120,8 +120,7 @@
     <ClCompile Include="src\Core\EntryPoint.cpp" />
     <ClCompile Include="src\Core\Game.cpp" />
     <ClCompile Include="src\Core\GLWindow.cpp" />
-    <ClCompile Include="src\Geometry\Mesher.cpp" />
-    <ClCompile Include="src\Geometry\Vertex.cpp" />
+    <ClCompile Include="src\Graphics\Vertex.cpp" />
     <ClCompile Include="src\Graphics\Camera.cpp" />
     <ClCompile Include="src\Graphics\DeviceResources.cpp" />
     <ClCompile Include="src\Graphics\RenderAPI.cpp" />
@@ -158,10 +157,10 @@
     <ClInclude Include="src\Data\DenseArray.h" />
     <ClInclude Include="src\Data\HandleStore.h" />
     <ClInclude Include="src\Data\LinkedList.h" />
-    <ClInclude Include="src\Geometry\Material.h" />
-    <ClInclude Include="src\Geometry\Mesher.h" />
-    <ClInclude Include="src\Geometry\Vertex.h" />
-    <ClInclude Include="src\Geometry\VoxelStorage.h" />
+    <ClInclude Include="src\Utility\Profiling.h" />
+    <ClInclude Include="src\World\Chunk.h" />
+    <ClInclude Include="src\World\Material.h" />
+    <ClInclude Include="src\Graphics\Vertex.h" />
     <ClInclude Include="src\Graphics\Camera.h" />
     <ClInclude Include="src\Graphics\DeviceResources.h" />
     <ClInclude Include="src\Graphics\GL.h" />
@@ -175,7 +174,6 @@
     <ClInclude Include="src\Utility\Asset.h" />
     <ClInclude Include="src\Utility\Convert.h" />
     <ClInclude Include="src\Data\Handle.h" />
-    <ClInclude Include="src\World\Chunk.h" />
     <ClInclude Include="src\World\World.h" />
   </ItemGroup>
   <ItemGroup>

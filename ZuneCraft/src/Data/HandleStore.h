@@ -13,18 +13,18 @@ namespace ZuneCraft {
 			bool IsActive;
 		};
 
-		HandleStore() = default;
+		HandleStore() { }
 
 		Id PushBack(const T& object) {
 			if (m_FreeHandles.empty()) {
 				
 				Id handle = Handle::Create<HandleStore<T>>(m_Objects.size());
 
-				m_Objects.push_back(Entry{
-					.Handle = handle,
-					.Object = object,
-					.IsActive = true
-				});
+				Entry entry;
+				entry.Handle = handle;
+				entry.Object = object;
+				entry.IsActive = true;
+				m_Objects.push_back(entry);
 
 				return handle;
 			}

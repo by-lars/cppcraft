@@ -1,14 +1,19 @@
 #pragma once
 #include "Core/Base.h"
-#include "Geometry/VoxelStorage.h"
-#include "Geometry/Material.h"
+#include "World/Material.h"
 #include "Data/Handle.h"
 #include <glm/glm.hpp>
 
 namespace ZuneCraft {
 	class Chunk {
+
 	public:
-		Chunk(const glm::ivec2& offset);
+		const static int WIDTH = 32;
+		const static int HEIGHT = 128;
+		const static int VOLUME_SIZE = WIDTH * WIDTH * HEIGHT;
+		const static int AREA_SIZE = WIDTH * WIDTH;
+
+		Chunk();
 		~Chunk();
 
 		const glm::ivec2& GetIndex() const;
@@ -17,18 +22,15 @@ namespace ZuneCraft {
 		const glm::vec3& GetWorldPosition() const;
 		const glm::vec3 GetWorldPositionCentered() const;
 
-		void Load();
+		void Load(const glm::ivec2& index);
 		void Unload();
-		void GenTerrain();
 		void Update();
-		
-		uint8_t TryGet(int x, int y, int z);
-		void TrySet(int x, int y, int z, BlockType type);
-
-		bool IsVoidAt(int x, int y, int z);
 
 	private:
-		VoxelStorage m_Voxels;
+		void GenTerrain();
+		void GenMeshAndUpload();
+
+		uint8_t m_Voxels[WIDTH][HEIGHT][WIDTH];
 		Id m_MeshHandle;
 
 		glm::ivec2 m_Index;

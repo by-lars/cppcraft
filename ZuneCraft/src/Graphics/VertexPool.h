@@ -5,7 +5,7 @@
 #include "Utility/Convert.h"
 #include <vector>
 #include <queue>
-#include <imgui/imgui.h>
+//#include <imgui/imgui.h>
 
 
 namespace ZuneCraft {
@@ -48,6 +48,8 @@ namespace ZuneCraft {
 		}
 		
 		VPNode* PushBack(std::vector<MeshType>& mesh, size_t batchId) {
+			if (mesh.size() < 1) { ZC_WARN("Can't push empty mesh"); return nullptr; }
+
 			VPNode* node = m_pLayout;
 			bool found = false;
 			size_t size = mesh.size();
@@ -105,7 +107,7 @@ namespace ZuneCraft {
 			return m_Buffer;
 		}
 
-		void DebugDraw() {
+		/*void DebugDraw() {
 			ImGui::Begin("VertexPool Info");
 			ImGui::Text("Size: %i", m_MaxCount);
 		
@@ -150,7 +152,7 @@ namespace ZuneCraft {
 				counter++;
 			}
 			ImGui::End();
-		}
+		}*/
 
 		void Cleanup() {
 			VPNode* node = m_pLayout;

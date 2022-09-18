@@ -15,6 +15,7 @@ namespace ZuneCraft {
 		s_Instance = this;
 		
 		m_GameConfig.GraphicsAPI = RenderAPI::API::OPENGL_4;
+		m_GameConfig.RenderDistance = 4;
 
 		m_Window = Window::Create();
 		Renderer::Init();
