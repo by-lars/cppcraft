@@ -304,11 +304,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Geometry\Material.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\World\Material.h"
 				>
 			</File>
 			<File
-				RelativePath=".\src\Geometry\Material.h"
+				RelativePath=".\src\Threading\Mutex.h"
 				>
 			</File>
 			<File
@@ -345,6 +349,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Graphics\Shader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Threading\Signal.h"
 				>
 			</File>
 			<File
@@ -424,6 +432,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Threading\Mutex.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Platform\OpenGL\OpenGLES2API.cpp"
 				>
 			</File>
@@ -441,6 +453,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Core\Service.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Threading\Signal.cpp"
 				>
 			</File>
 			<File

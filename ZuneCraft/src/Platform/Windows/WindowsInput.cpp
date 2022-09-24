@@ -15,10 +15,11 @@ namespace ZuneCraft {
 		glfwSetInputMode((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
-	//void Input::Shutdown() {
 
-	//}
+	Input::~Input() {
 
+	}
+	
 	void Input::CheckToggleFocus() {
 		static float lastPressTime = 0;
 

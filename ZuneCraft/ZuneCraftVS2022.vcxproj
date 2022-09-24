@@ -132,6 +132,8 @@
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsLogger.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Threading\Mutex.cpp" />
+    <ClCompile Include="src\Threading\Signal.cpp" />
     <ClCompile Include="src\Threading\ThreadPool.cpp" />
     <ClCompile Include="src\Utility\Asset.cpp" />
     <ClCompile Include="src\Data\Handle.cpp" />
@@ -160,6 +162,8 @@
     <ClInclude Include="src\Core\GLWindow.h" />
     <ClInclude Include="src\Data\DenseArray.h" />
     <ClInclude Include="src\Data\HandleStore.h" />
+    <ClInclude Include="src\Threading\Mutex.h" />
+    <ClInclude Include="src\Threading\Signal.h" />
     <ClInclude Include="src\Threading\ThreadPool.h" />
     <ClInclude Include="src\World\Chunk.h" />
     <ClInclude Include="src\World\Entity.h" />

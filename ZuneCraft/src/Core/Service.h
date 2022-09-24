@@ -6,6 +6,7 @@ namespace ZuneCraft {
 	class IService {
 	public:
 		virtual void Init() = 0;
+		virtual ~IService() {}
 	};
 
 	class Services {

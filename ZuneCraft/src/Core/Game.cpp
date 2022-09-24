@@ -27,6 +27,7 @@ namespace ZuneCraft {
 		Services::Initialize();
 
 		m_Input = Services::Get<Input>();
+		m_ThreadPool = Services::Get<ThreadPool>();
 
 		m_World = new World();
 
@@ -36,12 +37,13 @@ namespace ZuneCraft {
 	Game::~Game() {
 		delete m_Window;
 		delete m_World;
-
 		Services::Shutdown();
 	}
 
 	void Game::Update() {
 		m_Input->CheckToggleFocus();
+
+		m_ThreadPool->RunCallbacks();
 
 		m_World->Tick();
 		m_World->Render();

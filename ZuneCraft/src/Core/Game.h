@@ -5,7 +5,7 @@
 #include "Graphics/Camera.h"
 #include "Core/GLWindow.h"
 #include "Graphics/RenderAPI.h"
-
+#include "Threading/ThreadPool.h"
 #include "Graphics/Renderer.h"
 #include "Core/Input.h"
 
@@ -34,6 +34,8 @@ namespace ZuneCraft {
 		Window* m_Window;
 		World* m_World;
 		Input* m_Input;
+		ThreadPool* m_ThreadPool;
+
 		static Game* s_Instance;
 		GameConfig m_GameConfig;
 	};

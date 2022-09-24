@@ -1,14 +1,38 @@
 #include "Core/Base.h"
+#include "Core/Service.h"
+#include "Build/PlatformDefines.h"
 #include "World/Chunk.h"
 #include "Graphics/GL.h"
 #include "Graphics/Renderer.h"
-#include "Build/PlatformDefines.h"
-#include "Core/Service.h"
+#include "Threading/ThreadPool.h"
 
 #include <time.h>
 #include <fastnoise/FastNoiseLite.h>
 
 namespace ZuneCraft {
+	Chunk::Chunk() {
+		m_MeshHandle = Handle::INVALID;
+		m_Renderer = Services::Get<Renderer>();
+		m_ThreadPool = Services::Get<ThreadPool>();
+		m_State = State::UNLOADED;
+		ZC_DEBUG("m_Renderer=" << m_Renderer);
+	}
+
+	Chunk::~Chunk() {
+		ZC_DEBUG_ALLOC("Deleting Chunk with MeshID=" << Handle::GetIndex(m_MeshHandle));
+		if (Handle::IsValid(m_MeshHandle)) {
+			m_Renderer->BatchFreeMesh(m_MeshHandle);
+		}
+	}
+
+	void Chunk::OnMeshBuilt(void* context) {
+		Chunk* chunk = (Chunk*)context;
+		chunk->m_MeshHandle = chunk->m_Renderer->BatchSubmitMesh(chunk->m_Mesh, chunk->GetWorldPosition());
+		chunk->m_State = State::LOADED;
+		chunk->m_Mesh.clear();
+		chunk->m_Mesh.resize(0);
+	}
+
 	void Chunk::SetIndex(const glm::ivec2& index) {
 		m_Index = index;
 		m_WorldPostion = glm::vec3(index.x * WIDTH, 0, index.y * WIDTH);
@@ -18,14 +42,38 @@ namespace ZuneCraft {
 		return m_Index;
 	}
 
-	void Chunk::Update() {
+	void Chunk::Tick() {
+		switch (m_State)
+		{
+		case Chunk::State::UNLOADED:
 
+			break;
+
+		case Chunk::State::BUILDING:
+
+			break;
+
+		case Chunk::State::BUILT:
+			break;
+
+		case Chunk::State::LOADED:
+
+			break;
+		}
 	}
 
 	void Chunk::Load(const glm::ivec2& index) {
 		SetIndex(index);
+
 		GenTerrain();
-		GenMeshAndUpload();
+
+		m_State = State::BUILDING;
+
+		ThreadPool::Job job;
+		job.JobFunction = GenMesh;
+		job.CallbackFunction = OnMeshBuilt;
+		job.Context = this;
+		m_ThreadPool->SubmitWork(job);
 	}
 
 	void Chunk::Unload() {
@@ -34,12 +82,18 @@ namespace ZuneCraft {
 		}
 	}
 
-	void Chunk::GenMeshAndUpload() {
-		std::vector<Vertex> mesh;
-		mesh.reserve(Chunk::VOLUME_SIZE);
+	void Chunk::GenMesh(void* context) {
+		static int CHUNK_DIMENSIONS[3] = { Chunk::WIDTH , Chunk::HEIGHT, Chunk::WIDTH};
+		
+		Chunk* chunk = (Chunk*)context;
+		
+		//std::vector<Vertex> mesh;
+		//mesh.reserve(Chunk::VOLUME_SIZE);
+
+		chunk->m_Mesh.clear();
+		chunk->m_Mesh.reserve(Chunk::VOLUME_SIZE);
 
 		Face* mask = new Face[Chunk::WIDTH * Chunk::HEIGHT];
-		int CHUNK_DIMENSIONS[3] = { Chunk::WIDTH , Chunk::HEIGHT, Chunk::WIDTH};
 
 		for (int d = 0; d < 3; d++) {
 			int w, h, k;
@@ -64,8 +118,8 @@ namespace ZuneCraft {
 				int n = 0;
 				for (x[v] = 0; x[v] < CHUNK_DIMENSIONS[v]; x[v]++) {
 					for (x[u] = 0; x[u] < CHUNK_DIMENSIONS[u]; x[u]++) {
-						Material voxel = (x[d] >= 0) ? (Material)m_Voxels[x[0]][x[1]][x[2]] : Material::AIR;
-						Material nextVoxel = (x[d] < CHUNK_DIMENSIONS[d] - 1) ? (Material)m_Voxels[x[0] + q[0]][x[1] + q[1]][x[2] + q[2]] : Material::AIR;
+						Material voxel = (x[d] >= 0) ? (Material)chunk->m_Voxels[x[0]][x[1]][x[2]] : Material::AIR;
+						Material nextVoxel = (x[d] < CHUNK_DIMENSIONS[d] - 1) ? (Material)chunk->m_Voxels[x[0] + q[0]][x[1] + q[1]][x[2] + q[2]] : Material::AIR;
 
 						bool isVoxelSolid = (voxel == Material::AIR);
 						bool isNextVoxelSolid = (nextVoxel == Material::AIR);
@@ -111,20 +165,20 @@ namespace ZuneCraft {
 							int dv[3] = { 0 }; dv[v] = h;
 							normal = mask[n].IsBackFace;
 							if (mask[n].IsBackFace) {
-								mesh.push_back(Vertex(x[0] + du[0],			x[1] + du[1],			x[2] + du[2],			w, h, (uint8_t)mask[n].Type,	normal)); //Top Right
-								mesh.push_back( Vertex(x[0],					x[1],					x[2],					0, h, (uint8_t)mask[n].Type, normal)); //Top Left Cornor
-								mesh.push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, (uint8_t)mask[n].Type, normal)); //Lower right cornor
-								mesh.push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, (uint8_t)mask[n].Type, normal)); //Lower right cornor
-								mesh.push_back( Vertex(x[0],					x[1],					x[2],					0, h, (uint8_t)mask[n].Type, normal)); //Top Left Cornor
-								mesh.push_back( Vertex(x[0] + dv[0],			x[1] + dv[1],			x[2] + dv[2],			0, 0, (uint8_t)mask[n].Type, normal)); //Lower left cornor
+								chunk->m_Mesh.push_back(Vertex(x[0] + du[0],			x[1] + du[1],			x[2] + du[2],			w, h, (uint8_t)mask[n].Type,	normal)); //Top Right
+								chunk->m_Mesh.push_back( Vertex(x[0],					x[1],					x[2],					0, h, (uint8_t)mask[n].Type, normal)); //Top Left Cornor
+								chunk->m_Mesh.push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, (uint8_t)mask[n].Type, normal)); //Lower right cornor
+								chunk->m_Mesh.push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1],	x[2] + du[2] + dv[2],	w, 0, (uint8_t)mask[n].Type, normal)); //Lower right cornor
+								chunk->m_Mesh.push_back( Vertex(x[0],					x[1],					x[2],					0, h, (uint8_t)mask[n].Type, normal)); //Top Left Cornor
+								chunk->m_Mesh.push_back( Vertex(x[0] + dv[0],			x[1] + dv[1],			x[2] + dv[2],			0, 0, (uint8_t)mask[n].Type, normal)); //Lower left cornor
 							}
 							else {
-								mesh.push_back( Vertex(x[0] + du[0], x[1] + du[1], x[2] + du[2], w, h, (uint8_t)mask[n].Type, normal)); //Top Right
-								mesh.push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, (uint8_t)mask[n].Type, normal)); //Lower right cornor
-								mesh.push_back( Vertex(x[0], x[1], x[2], 0, h, (uint8_t)mask[n].Type, normal)); //Top Left Cornor
-								mesh.push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, (uint8_t)mask[n].Type, normal)); //Lower right cornor
-								mesh.push_back( Vertex(x[0] + dv[0], x[1] + dv[1], x[2] + dv[2], 0, 0, (uint8_t)mask[n].Type, normal)); //Lower left cornor
-								mesh.push_back( Vertex(x[0], x[1], x[2], 0, h, (uint8_t)mask[n].Type, normal)); //Top Left Cornor
+								chunk->m_Mesh.push_back( Vertex(x[0] + du[0], x[1] + du[1], x[2] + du[2], w, h, (uint8_t)mask[n].Type, normal)); //Top Right
+								chunk->m_Mesh.push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, (uint8_t)mask[n].Type, normal)); //Lower right cornor
+								chunk->m_Mesh.push_back( Vertex(x[0], x[1], x[2], 0, h, (uint8_t)mask[n].Type, normal)); //Top Left Cornor
+								chunk->m_Mesh.push_back( Vertex(x[0] + du[0] + dv[0], x[1] + du[1] + dv[1], x[2] + du[2] + dv[2], w, 0, (uint8_t)mask[n].Type, normal)); //Lower right cornor
+								chunk->m_Mesh.push_back( Vertex(x[0] + dv[0], x[1] + dv[1], x[2] + dv[2], 0, 0, (uint8_t)mask[n].Type, normal)); //Lower left cornor
+								chunk->m_Mesh.push_back( Vertex(x[0], x[1], x[2], 0, h, (uint8_t)mask[n].Type, normal)); //Top Left Cornor
 							}
 
 							for (int l = 0; l < h; l++)
@@ -145,8 +199,8 @@ namespace ZuneCraft {
 		}
 
 		delete[] mask;
-	
-		m_MeshHandle = m_Renderer->BatchSubmitMesh(mesh, GetWorldPosition());
+		
+	//	m_MeshHandle = m_Renderer->BatchSubmitMesh(mesh, GetWorldPosition());
 	}
 
 	void Chunk::GenTerrain() {
@@ -185,19 +239,6 @@ namespace ZuneCraft {
 
 				m_Voxels[x][0][z] = (uint8_t)Material::GRASS;
 			}
-		}
-	}
-
-	Chunk::Chunk() {
-		m_MeshHandle = Handle::INVALID;
-		m_Renderer = Services::Get<Renderer>();
-		ZC_DEBUG("m_Renderer=" << m_Renderer);
-	}
-
-	Chunk::~Chunk() {
-		ZC_DEBUG_ALLOC("Deleting Chunk with MeshID=" << Handle::GetIndex(m_MeshHandle));
-		if (Handle::IsValid(m_MeshHandle)) {
-			m_Renderer->BatchFreeMesh(m_MeshHandle);
 		}
 	}
 
