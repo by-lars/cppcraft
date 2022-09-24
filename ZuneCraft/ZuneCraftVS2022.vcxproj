@@ -120,6 +120,7 @@
     <ClCompile Include="src\Core\EntryPoint.cpp" />
     <ClCompile Include="src\Core\Game.cpp" />
     <ClCompile Include="src\Core\GLWindow.cpp" />
+    <ClCompile Include="src\Core\Service.cpp" />
     <ClCompile Include="src\Graphics\Vertex.cpp" />
     <ClCompile Include="src\Graphics\Camera.cpp" />
     <ClCompile Include="src\Graphics\DeviceResources.cpp" />
@@ -131,9 +132,11 @@
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsLogger.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Threading\ThreadPool.cpp" />
     <ClCompile Include="src\Utility\Asset.cpp" />
     <ClCompile Include="src\Data\Handle.cpp" />
     <ClCompile Include="src\World\Chunk.cpp" />
+    <ClCompile Include="src\World\Player.cpp" />
     <ClCompile Include="src\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,13 +155,14 @@
     <ClInclude Include="src\Core\Base.h" />
     <ClInclude Include="src\Core\Game.h" />
     <ClInclude Include="src\Core\Input.h" />
+    <ClInclude Include="src\Core\Service.h" />
     <ClInclude Include="src\Core\Logger.h" />
     <ClInclude Include="src\Core\GLWindow.h" />
     <ClInclude Include="src\Data\DenseArray.h" />
     <ClInclude Include="src\Data\HandleStore.h" />
-    <ClInclude Include="src\Data\LinkedList.h" />
-    <ClInclude Include="src\Utility\Profiling.h" />
+    <ClInclude Include="src\Threading\ThreadPool.h" />
     <ClInclude Include="src\World\Chunk.h" />
+    <ClInclude Include="src\World\Entity.h" />
     <ClInclude Include="src\World\Material.h" />
     <ClInclude Include="src\Graphics\Vertex.h" />
     <ClInclude Include="src\Graphics\Camera.h" />
@@ -174,6 +178,7 @@
     <ClInclude Include="src\Utility\Asset.h" />
     <ClInclude Include="src\Utility\Convert.h" />
     <ClInclude Include="src\Data\Handle.h" />
+    <ClInclude Include="src\World\Player.h" />
     <ClInclude Include="src\World\World.h" />
   </ItemGroup>
   <ItemGroup>

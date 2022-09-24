@@ -6,6 +6,9 @@
 #include "Core/GLWindow.h"
 #include "Graphics/RenderAPI.h"
 
+#include "Graphics/Renderer.h"
+#include "Core/Input.h"
+
 #include <vector>
 
 namespace ZuneCraft {
@@ -28,16 +31,10 @@ namespace ZuneCraft {
 		GameConfig& GetConfig();
 
 	private:
-		Camera m_Camera;
 		Window* m_Window;
-
 		World* m_World;
-
-		bool m_IsFlipped;
-		int m_Frame;
-
+		Input* m_Input;
 		static Game* s_Instance;
-
 		GameConfig m_GameConfig;
 	};
 }

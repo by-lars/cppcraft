@@ -1,21 +1,24 @@
 #pragma once
 
+#include "Core/Service.h"
 #include <glm/glm.hpp>
 
 namespace ZuneCraft {
-	class Input {
+	class Input : public IService {
 	public:
-		static void Init();
-		static void Shutdown();
-		static glm::vec2 GetAxies();
+		Input();
+		~Input();
+		void Init() override;
 
-		static void CheckToggleFocus();
-		static bool GetActionDebugWireframe();
-		static bool GetActionDebugGizmos();
+		glm::vec2 GetAxies();
 
-		static bool GetActionForward();
-		static bool GetActionBackward();
-		static bool GetActionLeft();
-		static bool GetActionRight();
+		void CheckToggleFocus();
+		bool GetActionDebugWireframe();
+		bool GetActionDebugGizmos();
+
+		bool GetActionForward();
+		bool GetActionBackward();
+		bool GetActionLeft();
+		bool GetActionRight();
 	};
 }

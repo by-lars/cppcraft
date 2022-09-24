@@ -6,6 +6,7 @@
 
 namespace ZuneCraft {
     Camera::Camera() {
+
         m_Pos = glm::vec3(16,10,16);
         m_WorldUp = glm::vec3(0, 1, 0);
         m_Pitch = 0;

@@ -3,6 +3,7 @@
 #include "Graphics/GL.h"
 #include "Graphics/Renderer.h"
 #include "Build/PlatformDefines.h"
+#include "Core/Service.h"
 
 #include <time.h>
 #include <fastnoise/FastNoiseLite.h>
@@ -29,7 +30,7 @@ namespace ZuneCraft {
 
 	void Chunk::Unload() {
 		if (Handle::IsValid(m_MeshHandle)) {
-			Renderer::BatchFreeMesh(m_MeshHandle);
+			m_Renderer->BatchFreeMesh(m_MeshHandle);
 		}
 	}
 
@@ -145,7 +146,7 @@ namespace ZuneCraft {
 
 		delete[] mask;
 	
-		m_MeshHandle = Renderer::BatchSubmitMesh(mesh, GetWorldPosition());
+		m_MeshHandle = m_Renderer->BatchSubmitMesh(mesh, GetWorldPosition());
 	}
 
 	void Chunk::GenTerrain() {
@@ -154,7 +155,7 @@ namespace ZuneCraft {
 
 		noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
 		noise.SetFractalType(FastNoiseLite::FractalType_FBm);
-		noise.SetFractalOctaves(8.0f);
+		noise.SetFractalOctaves(8);
 		noise.SetFractalLacunarity(2.0f);
 		noise.SetFractalGain(0.5f);
 		noise.SetFrequency(0.005f);
@@ -167,7 +168,7 @@ namespace ZuneCraft {
 				height = powf(height, 1.5f);
 
 
-				int blockHeight =  height * HEIGHT;
+				int blockHeight = int(height * HEIGHT);
 
 				//blockHeight = 5;
 
@@ -189,12 +190,14 @@ namespace ZuneCraft {
 
 	Chunk::Chunk() {
 		m_MeshHandle = Handle::INVALID;
+		m_Renderer = Services::Get<Renderer>();
+		ZC_DEBUG("m_Renderer=" << m_Renderer);
 	}
 
 	Chunk::~Chunk() {
 		ZC_DEBUG_ALLOC("Deleting Chunk with MeshID=" << Handle::GetIndex(m_MeshHandle));
 		if (Handle::IsValid(m_MeshHandle)) {
-			Renderer::BatchFreeMesh(m_MeshHandle);
+			m_Renderer->BatchFreeMesh(m_MeshHandle);
 		}
 	}
 

@@ -107,53 +107,6 @@ namespace ZuneCraft {
 			return m_Buffer;
 		}
 
-		/*void DebugDraw() {
-			ImGui::Begin("VertexPool Info");
-			ImGui::Text("Size: %i", m_MaxCount);
-		
-			int width = ImGui::GetWindowSize().x;
-
-			ImGui::GetWindowWidth(); 
-			VPNode* node = m_pLayout;
-			int counter = 0;
-			srand(0);
-			ImGui::SetCursorPosY(100);
-
-			ImDrawList* drawList = ImGui::GetWindowDrawList();
-
-			while (node != nullptr) {
-				ImGui::Text("Node #%i: Start: %i Length: %i IsFree: %i", counter, node->Start, node->GetSize(), node->IsFree);
-
-				int eStart = ((float)node->Start / (float)m_MaxCount) * (float)width;
-				int eWidth = ((float)node->GetSize() / (float)m_MaxCount) * (float)width;
-				eWidth += eStart;
-				
-
-				ImVec2 min(eStart, 45); 
-				min.x += ImGui::GetWindowPos().x;
-				min.y += ImGui::GetWindowPos().y;
-
-				ImVec2 max(eWidth, 64);
-				max.x += ImGui::GetWindowPos().x;
-				max.y += ImGui::GetWindowPos().y;
-
-
-				if (node->IsFree) {
-					drawList->AddRect(min, max, IM_COL32(0, 255, 0, 255), 0, 0, 2.0f);
-				}
-				else {
-					drawList->AddRectFilled(min, max, IM_COL32(rand() % 255, 0, rand() % 255, 255));
-				}
-			
-				std::string text = "#" + ToString(counter);
-				drawList->AddText(min, IM_COL32(255, 255, 255, 255), text.c_str());
-				
-				node = node->Next;
-				counter++;
-			}
-			ImGui::End();
-		}*/
-
 		void Cleanup() {
 			VPNode* node = m_pLayout;
 

@@ -17,8 +17,8 @@
 #define ZC_DEBUG(msg) { std::stringstream s; s << msg; Logger::Log(LogLevel::LDEBUG, s); }
 #define ZC_ASSERT(test, msg) if((test) == false) { ZC_FATAL_ERROR(__FILE__ << "(" << __LINE__ << "): " << "Debug test failed: " << msg); ZC_ABORT(); } 
 #else
-#define ZC_DEBUG(x)
-#define ZC_ASSERT(x)
+#define ZC_DEBUG(x) 
+#define ZC_ASSERT(x, y) 
 #endif
 
 typedef signed __int8     int8_t;

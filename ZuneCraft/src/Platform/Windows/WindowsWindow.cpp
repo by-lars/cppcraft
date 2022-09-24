@@ -1,6 +1,7 @@
 #include "Platform/Windows/WindowsWindow.h"
 #include "Core/Base.h"
 #include "Graphics/Renderer.h"
+#include "Core/Service.h"
 #include "Core/Game.h"
 
 #include <glad/gl.h>
@@ -96,7 +97,7 @@ namespace ZuneCraft {
 
     void WindowsWindow::OnWindowResized(GLFWwindow* window, int width, int height) {
         if (width > 0 && height > 0) {
-            Renderer::SetResolution(width, height);
+            Services::Get<Renderer>()->SetResolution(width, height);
         }
     }
 

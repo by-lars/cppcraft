@@ -8,7 +8,11 @@ namespace ZuneCraft {
 		ZDKInput_Initialize();
 	}
 
-	void Input::Shutdown() {
+	Input::Input() {
+	
+	}
+
+	Input::~Input() {
 		ZDKInput_Shutdown();
 	}
 

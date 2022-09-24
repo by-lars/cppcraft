@@ -4,7 +4,10 @@
 #include "Data/Handle.h"
 #include <glm/glm.hpp>
 
+
 namespace ZuneCraft {
+	class Renderer;
+
 	class Chunk {
 
 	public:
@@ -32,6 +35,8 @@ namespace ZuneCraft {
 
 		uint8_t m_Voxels[WIDTH][HEIGHT][WIDTH];
 		Id m_MeshHandle;
+
+		Renderer* m_Renderer;
 
 		glm::ivec2 m_Index;
 		glm::vec3 m_WorldPostion;

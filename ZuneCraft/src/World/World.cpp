@@ -1,38 +1,42 @@
 #include "World/World.h"
 #include "Graphics/Renderer.h"
 #include "Core/Game.h"
+#include "Core/Service.h"
 
 #include <fastnoise/FastNoiseLite.h>
 
 namespace ZuneCraft {
 	World::World() {
+		m_Renderer = Services::Get<Renderer>();
+
 		m_LastChunk = glm::ivec2(0, 0);
 		m_CurrentChunk = glm::ivec2(0, 0);
 
-
-		for (int x = 0; x < Game::Get().GetConfig().RenderDistance; x++) {
-			for (int y = 0; y < Game::Get().GetConfig().RenderDistance; y++) {
-				m_Chunks.push_back( new Chunk() );
-			}
-		}
-
-		SetPlayerPos(glm::vec3(123,123,123), glm::vec3(0));
+		LoadChunks(glm::vec3(glm::vec3(16, 10, 16)),  true);
 	}
 
 	World::~World() {
 
 	}
 
-	void World::Render() {
+	void World::Tick() {
+		m_Renderer->BeginFrame();
 
+		m_Player.Tick();
+
+		LoadChunks(m_Player.GetPos());
+	}
+
+	void World::Render() {
+		m_Renderer->EndFrame();
 	}
 
 
-	void World::SetPlayerPos(glm::vec3 pos, const glm::vec3& lookDir) {
+	void World::LoadChunks(glm::vec3 pos, bool forceLoad) {
 		pos.y = 0;
 		m_CurrentChunk = ToChunkCoords(pos);
 
-		if (m_CurrentChunk - m_LastChunk == glm::ivec2(0, 0)) {
+		if (m_CurrentChunk - m_LastChunk == glm::ivec2(0, 0) && forceLoad != true) {
 			return; //same chunk, don't need to load new chunks
 		}
 

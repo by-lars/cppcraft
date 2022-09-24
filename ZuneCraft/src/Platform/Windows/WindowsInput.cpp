@@ -7,13 +7,17 @@
 namespace ZuneCraft {
 	static bool IsFocused = true;
 
+	Input::Input() {
+
+	}
+
 	void Input::Init() {
 		glfwSetInputMode((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
-	void Input::Shutdown() {
+	//void Input::Shutdown() {
 
-	}
+	//}
 
 	void Input::CheckToggleFocus() {
 		static float lastPressTime = 0;

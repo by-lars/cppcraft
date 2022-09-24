@@ -4,6 +4,9 @@
 #include <vector>
 
 namespace ZuneCraft {
+	/*
+	* 
+	*/
 	template<typename T>
 	class DenseArray {
 	public:

@@ -11,8 +11,6 @@ int main(int argc, char* argv[]) {
 #endif
 
 	ZuneCraft::Logger::Init();
-	
-
 	ZuneCraft::Game* game = new ZuneCraft::Game();
 
 	while (game->GetWindow().ShouldClose() == false) {
