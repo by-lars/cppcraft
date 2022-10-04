@@ -6,99 +6,104 @@
 #include <fastnoise/FastNoiseLite.h>
 
 namespace ZuneCraft {
-	World::World() {
+	World::World() : m_Player(*this) {
 		m_Renderer = Services::Get<Renderer>();
+		m_ThreadPool = Services::Get<ThreadPool>();
 
-		m_LastChunk = glm::ivec2(0, 0);
-		m_CurrentChunk = glm::ivec2(0, 0);
-
-		LoadChunks(glm::vec3(glm::vec3(16, 10, 16)),  true);
+		LoadChunks(glm::vec3(glm::vec3(16, 10, 16)), true);
 	}
 
 	World::~World() {
 
 	}
 
+	ChunkIndex World::ToChunkIndex(const WorldCoords& pos) {
+		return ChunkIndex(
+			floor(pos.x / (float)Chunk::WIDTH), 
+			floor(pos.z / (float)Chunk::WIDTH)
+		);
+	};
+
+	ChunkCoords World::ToChunkCoords(const WorldCoords& pos) {
+		return ChunkCoords(
+			(int)floor(abs(pos.x)) % Chunk::WIDTH,
+			(int)floor(abs(pos.y)),
+			(int)floor(abs(pos.z)) % Chunk::WIDTH
+		);
+	}
+
+	Material World::GetVoxel(const WorldCoords& pos) {
+		ChunkIndex chunkIndex = ToChunkIndex(pos);
+		
+		if (m_ChunkMap.find(chunkIndex) != m_ChunkMap.end()) {
+			Chunk* chunk = m_ChunkMap[chunkIndex];
+			ChunkCoords chunkCoords = ToChunkCoords(pos);
+			return chunk->GetVoxel(chunkCoords);
+		}
+
+		ZC_WARN("Could not get chunk");
+		return Material::AIR;
+	}
+
 	void World::Tick() {
-		m_Renderer->BeginFrame();
+		//m_Renderer->BeginFrame();
 
 		m_Player.Tick();
-
-		LoadChunks(m_Player.GetPos());
+	
+		LoadChunks(m_Player.GetPos(), false);
 	}
 
 	void World::Render() {
-		m_Renderer->EndFrame();
+		//m_Renderer->EndFrame();
+		m_Renderer->Draw();
 	}
 
-
 	void World::LoadChunks(glm::vec3 pos, bool forceLoad) {
+		static ChunkIndex lastChunk;
+		
 		pos.y = 0;
-		m_CurrentChunk = ToChunkCoords(pos);
 
-		if (m_CurrentChunk - m_LastChunk == glm::ivec2(0, 0) && forceLoad != true) {
-			return; //same chunk, don't need to load new chunks
-		}
+		ChunkIndex currentChunk = ToChunkIndex(m_Player.GetPos());
+		ChunkIndex chunkDelta = currentChunk - lastChunk;
+		if (currentChunk - lastChunk == glm::ivec2(0, 0) && !forceLoad) { return; }
 
-		ZC_DEBUG("Load Chunks");
+		for (auto it = m_ChunkMap.begin(); it != m_ChunkMap.end();) {
+			WorldCoords chunkPos = it->second->GetWorldPositionCentered();
 
-		std::vector<Chunk*>::iterator it = m_Chunks.begin();
-		while (it != m_Chunks.end()) {
-			float distance = glm::distance((*it)->GetWorldPositionCentered(), pos);
+			int distance = glm::distance(chunkPos, pos);
 
 			if (distance > Game::Get().GetConfig().RenderDistance * Chunk::WIDTH) {
-				(*it)->Unload();
-				m_FreeChunks.push_back(*it);
-				it = m_Chunks.erase(it);
+				it->second->Unload();
+				m_FreeChunks.push_back(it->second);
+				it = m_ChunkMap.erase(it);
 			}
-			else {
+			else 
 				it++;
-			}
 		}
 
-		glm::ivec2 chLoadStart = m_CurrentChunk - glm::ivec2(Game::Get().GetConfig().RenderDistance / 2);
-		glm::ivec2 chLoadEnd = m_CurrentChunk + glm::ivec2(Game::Get().GetConfig().RenderDistance / 2);
-
-		std::vector<glm::ivec2> chunksToLoad;
-
-		for (int x = chLoadStart.x; x < chLoadEnd.x; x++) {
-			for (int y = chLoadStart.y; y < chLoadEnd.y; y++) {
-				chunksToLoad.push_back(glm::ivec2(x, y));
-				//ZC_DEBUG("Consider chunk at x" << x << " y" << y);
-			}
-		}
-
-		for (int i = 0; i < chunksToLoad.size(); i++) {
-			bool chunkAlreadyLoaded = false;
-
-			for (int j = 0; j < m_Chunks.size(); j++) {
-				if (m_Chunks[j]->GetIndex() == chunksToLoad[i]) {
-					chunkAlreadyLoaded = true;
-					break;
+		ChunkIndex chLoadStart = currentChunk - ChunkIndex(Game::Get().GetConfig().RenderDistance / 2);
+		ChunkIndex chLoadEnd = currentChunk + ChunkIndex(Game::Get().GetConfig().RenderDistance / 2);
+		ChunkIndex chunkToLoad;
+		for (chunkToLoad.x = chLoadStart.x; chunkToLoad.x <= chLoadEnd.x; chunkToLoad.x++) {
+			for (chunkToLoad.y = chLoadStart.y; chunkToLoad.y <= chLoadEnd.y; chunkToLoad.y++) {
+				if (m_ChunkMap.find(chunkToLoad) != m_ChunkMap.end()) {
+					continue;
 				}
+
+				Chunk* newChunk = nullptr;
+				if (m_FreeChunks.empty()) {
+					newChunk = new Chunk();
+				}
+				else {
+					newChunk = m_FreeChunks.back();
+					m_FreeChunks.pop_back();
+				}
+				
+				newChunk->Load(chunkToLoad);
+				m_ChunkMap[chunkToLoad] = newChunk;
 			}
-
-			if (chunkAlreadyLoaded) {
-				continue;
-			}
-
-			Chunk* chunk = nullptr;
-
-			if (m_FreeChunks.empty()) {
-				chunk = new Chunk();
-			}
-			else {
-				chunk = m_FreeChunks.back();
-				m_FreeChunks.pop_back();
-			}
-
-
-			chunk->Load(chunksToLoad[i]);
-			m_Chunks.push_back(chunk);
-			
 		}
-
-
-		m_LastChunk = m_CurrentChunk;
+			
+		lastChunk = currentChunk;
 	}
 }

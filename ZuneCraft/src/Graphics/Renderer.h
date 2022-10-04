@@ -3,7 +3,7 @@
 #include "Core/Service.h"
 #include "Core/Base.h"
 #include "Graphics/DeviceResources.h"
-#include "Graphics/Vertex.h"
+#include "Data/Vertex.h"
 #include "Graphics/VertexPool.h"
 #include "Data/HandleStore.h"
 #include "Graphics/RenderAPI.h"
@@ -18,11 +18,7 @@ namespace ZuneCraft {
 		Renderer();
 		~Renderer();
 
-		void Init() override;
-		void Shutdown();
-
-		void BeginFrame();
-		void EndFrame();
+		void Draw();
 
 		void SetResolution(int width, int height);
 		void SetView(const glm::mat4& viewMat);
@@ -48,18 +44,14 @@ namespace ZuneCraft {
 		GLuint m_RenderWidth;
 		GLuint m_RenderHeight;
 
-		//PostProcessing
-		Id m_PPShader;
-		Id m_PPQuadBuffer;
-		Id m_PPRenderTarget;
+		Pipeline* m_MeshPipeline;
+		Pipeline* m_FXPipeline;
+		GPUStorage* m_BatchDataBuffer;
 
-		//Mesh Rendering
-		Id m_BatchDataBuffer;
-		Id m_MeshShader;
 		size_t m_BatchCurrentOffset;
 
 		std::vector<BatchData> m_BatchData;
-		VertexPool<Vertex>* m_BatchMesh;
+		VertexPool* m_BatchMesh;
 		std::queue<size_t> m_BatchDataFreeSlots;
 
 		HandleStore<MeshInfo> m_Meshes;

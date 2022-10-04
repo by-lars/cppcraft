@@ -1,10 +1,8 @@
 #include "Core/Logger.h"
 #include "Core/Base.h"
-#include "Graphics/GL.h"
 
 #include <iostream>
 #include <Windows.h>
-#undef ERROR
 
 namespace ZuneCraft {
 	void Logger::Init() {

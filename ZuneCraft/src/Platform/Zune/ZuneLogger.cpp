@@ -1,6 +1,5 @@
 #include "Core/Logger.h"
 #include "Core/Base.h"
-#include "Graphics/GL.h"
 #include <windows.h>
 #include <cstdlib>
 #include <zdk.h>

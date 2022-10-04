@@ -16,5 +16,6 @@ void main() {
     vec2 coords = vTilePos + size * fract(vTexCoords);
 
     vec4 albedo = texture2D(uAtlas, coords) * 0.8 + vec4(vec3(vNormal / 10.0), 1.0) * 0.2;
-    FragColor = mix(vec4(uSkyColor, 1.0), albedo, vVisibility);;
+   // FragColor = mix(vec4(uSkyColor, 1.0), albedo, vVisibility);;
+   FragColor = albedo;
 }

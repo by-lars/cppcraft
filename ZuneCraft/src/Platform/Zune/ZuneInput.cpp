@@ -4,16 +4,19 @@
 #include <zdk.h>
 
 namespace ZuneCraft {
-	void Input::Init() {
-		ZDKInput_Initialize();
-	}
-
 	Input::Input() {
-	
+		ZDKInput_Initialize();
+		QueryPerformanceFrequency((LARGE_INTEGER*)&m_TimerFrequency);
 	}
 
 	Input::~Input() {
 		ZDKInput_Shutdown();
+	}
+
+	double Input::GetTime() {
+		uint64_t time = 0;
+		QueryPerformanceCounter((LARGE_INTEGER*)&time);
+		return time / m_TimerFrequency;
 	}
 
 	bool Input::GetActionDebugWireframe() {

@@ -1,35 +1,41 @@
 #include "Core/Game.h"
 #include "Core/Base.h"
 #include "Core/Logger.h"
-#include "Graphics/GL.h"
 #include "Core/Input.h"
-#include "Threading/ThreadPool.h"
 #include "Core/Service.h"
-#include <windows.h>
-#include <string>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "Threading/ThreadPool.h"
 
 namespace ZuneCraft {
 	Game* Game::s_Instance = NULL;
 
+	/*
+	* TODO LIST:
+	* - FIX ZUNE VERSION
+	* - OpenGLAPI: Add memory management, store the create pointers and release them when the destructor is called
+	* - Renderer: Improve the way batches are handled
+	* - Renderer: Add Occlusion Culling
+	* - GPUStorage: Add Push and Erase methods, also usage hints for TightlyPacked and LastUsed
+	* - GPUStorage: Add automatic resize
+	* - Cleanup Vertex Pool
+	* - World: Improve Chunk Selection, or also add to ThreadPool (this is problematic because the chunks also use the threadpool)
+	* - World: Add Player Collision
+	* - General: Cleanup unsused #includes
+	*/
+
 	Game::Game() {
 		s_Instance = this;
-		
+		m_DeltaTime = 0; 
+
 		m_GameConfig.GraphicsAPI = RenderAPI::API::OPENGL_4;
 		m_GameConfig.RenderDistance = 4;
 
-		m_Window = Window::Create();
-		
-		Services::Register<ThreadPool>();
-		Services::Register<Input>();
-		Services::Register<Renderer>();
-		Services::Initialize();
+		m_Window		= Window::Create();
 
-		m_Input = Services::Get<Input>();
-		m_ThreadPool = Services::Get<ThreadPool>();
+		m_ThreadPool	= Services::Initialize<ThreadPool>();
+		m_Input			= Services::Initialize<Input>();
+						  Services::Initialize<Renderer>();
 
-		m_World = new World();
+		m_World			= new World();
 
 		ZC_LOG("The cake is a lie");
 	}
@@ -41,6 +47,12 @@ namespace ZuneCraft {
 	}
 
 	void Game::Update() {
+		//Calculate delta time
+		static float lastFrameTime = 0;
+		float currentFrameTime = m_Input->GetTime();
+		m_DeltaTime = currentFrameTime - lastFrameTime;
+		lastFrameTime = currentFrameTime;
+
 		m_Input->CheckToggleFocus();
 
 		m_ThreadPool->RunCallbacks();
@@ -49,6 +61,10 @@ namespace ZuneCraft {
 		m_World->Render();
 
 		m_Window->Update();
+	}
+
+	float Game::GetDeltaTime() {
+		return m_DeltaTime;
 	}
 
 	GameConfig& Game::GetConfig() {

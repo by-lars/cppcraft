@@ -5,7 +5,6 @@
 namespace ZuneCraft {
 	class IService {
 	public:
-		virtual void Init() = 0;
 		virtual ~IService() {}
 	};
 
@@ -17,13 +16,13 @@ namespace ZuneCraft {
 		}
 
 		template<class T>
-		static void Register() {
+		static T* Initialize() {
 			ZC_DEBUG("Registering Service " << typeid(T).name());
 			GetServiceIndex<T>();
 			s_Services.push_back(new T());
+			return (T*)s_Services.back();
 		}
 
-		static void Initialize();
 		static void Shutdown();
 
 	private:

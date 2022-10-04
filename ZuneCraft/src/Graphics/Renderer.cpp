@@ -1,8 +1,8 @@
 #include "Graphics/Renderer.h"
 #include "Core/Base.h"
-#include "Graphics/GL.h"
+#include "Platform/OpenGL/GL.h"
 #include "Core/Game.h"
-#include "Graphics/Vertex.h"
+#include "Data/Vertex.h"
 #include "Graphics/RenderAPI.h"
 #include "Utility/Asset.h"
 #include "Utility/Convert.h"
@@ -13,10 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <queue>
-//
-//#include <imgui/backends/imgui_impl_opengl3.h>
-//#include <imgui/backends/imgui_impl_glfw.h>
-//#include <imgui/imgui.h>
+
 
 #ifdef ZC_PLATFORM_ZUNE
 #include <zdk.h> 
@@ -73,100 +70,63 @@ namespace ZuneCraft {
 	static const size_t MAX_BATCH_MESHES = 128;
 
 	Renderer::Renderer() {
-
-	}
-
-	Renderer::~Renderer() {
-
-	}
-
-	void Renderer::Init() {
 		ZC_DEBUG("Initializing Renderer");
+
 		m_RenderWidth = Game::Get().GetWindow().GetWidth();
 		m_RenderHeight = Game::Get().GetWindow().GetHeight();
+		glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)m_RenderWidth / (float)m_RenderHeight, 0.1f, 400.0f);
 
 		//Initialize Rendering Device
 		m_Device = RenderAPI::Create();
 
 		//Setup default state
 		m_Device->SetClearColor(0.51f, 0.64f, 1.0f, 1.0f);
-		m_Device->SetViewport(0, 0, m_RenderWidth, m_RenderHeight);
 
-		//Load Texture Atlas
+		//Load Texture Atlas -- TODO: The atlas shouldn't be hard coded...
 		Image atlas; Asset::GetImage("atlas.png", &atlas);
-		glActiveTexture(GL_TEXTURE1);
-		TextureSpec atlasSpec = { };
-		atlasSpec.Width = atlas.Width;
-		atlasSpec.Height = atlas.Height;
-		atlasSpec.Format = atlas.GetFormat();
-		atlasSpec.DataType = DataType::UNSIGNED_BYTE;
-		atlasSpec.ClampMode = ClampMode::CLAMP_TO_EDGE;
-		atlasSpec.FilterMode = FilterMode::NEAREST;
-		Id tex = m_Device->TextureCreate(atlasSpec);
-		m_Device->TextureUploadData(tex, atlas.Data);
+		m_Device->ActivateTextureSlot(1);
+		m_Device->CreateTexture(atlas.Width, atlas.Height, atlas.GetFormat(), FilterMode::NEAREST)->Upload(atlas.Data);
+	
+		m_FXPipeline = m_Device->CreatePipeline()
+			.SetViewport(0, 0, m_RenderWidth, m_RenderHeight)
+			.SetDrawMode(DrawMode::TRIANGLE_STRIP)
+			.SetShader("PostProcess")
+			.AddStorage(StorageUsage::MESH_STATIC, StorageFormat::UBYTE_VEC4, 4, (void*)&FullscreenQuad[0])
+			.Build();
+		m_FXPipeline->PushCommand(RenderCommand{4,0,0,0});
 
-		//PP Frame Buffer
-		glActiveTexture(GL_TEXTURE0);
-		FramebufferSpec fboSpec = { };
-		fboSpec.Width = m_RenderWidth;
-		fboSpec.Height = m_RenderHeight;
-		fboSpec.Attachements.push_back(FramebufferAttachement(TextureFormat::RGBA, AttachementType::Color, false));
-		fboSpec.Attachements.push_back(FramebufferAttachement(TextureFormat::DEPTH_COMPONENT24, AttachementType::Depth, true));
-		m_PPRenderTarget = m_Device->RenderTargetCreate(fboSpec);
+		m_Device->ActivateTextureSlot(0);
+		m_MeshPipeline = m_Device->CreatePipeline()
+			.SetViewport(0, 0, m_RenderWidth, m_RenderHeight)
+			.SetDrawMode(DrawMode::TRIANGLES)
+			.SetShader("main")
+			.AddStorage(StorageUsage::MESH_DYNAMIC, StorageFormat::UBYTE_VEC4_VEC4, (Chunk::VOLUME_SIZE / 8) * MAX_BATCH_MESHES, nullptr)
+			.AddStorage(StorageUsage::INSTANCE_DATA, StorageFormat::FLOAT_VEC3, MAX_BATCH_MESHES, nullptr)
+			.AddRenderTexture(TextureFormat::RGBA)
+			.AddRenderBuffer(TextureFormat::DEPTH_COMPONENT24)
+			.Build();
 
-		//Setup Post Processing Shader
-		m_PPShader = m_Device->ShaderCreate("PostProcess");
-		m_Device->SetShaderUniform(m_PPShader, "uTexture", 0);
+		m_MeshPipeline->GetShader()->Set("uProj", proj);
+		m_MeshPipeline->GetShader()->Set("uAtlas", 1);
+		m_MeshPipeline->GetShader()->Set("uSkyColor", glm::vec3(0.51f, 0.64f, 1.0f));
+
+		m_FXPipeline->GetShader()->Set("uTexture", 0);
+
 		SetFlip(false);
 
-		//Setup Default Mesh Shader Uniforms
-		m_MeshShader = m_Device->ShaderCreate("main");
-		glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)m_RenderWidth / (float)m_RenderHeight, 0.1f, 400.0f);
-		m_Device->SetShaderUniform(m_MeshShader, "uProj", proj);
-		m_Device->SetShaderUniform(m_MeshShader, "uAtlas", 1);
-		m_Device->SetShaderUniform(m_MeshShader, "uSkyColor", glm::vec3(0.51f, 0.64f, 1.0f));
+		m_BatchMesh = new VertexPool(m_MeshPipeline, m_MeshPipeline->GetStorage(0), (Chunk::VOLUME_SIZE / 8) * MAX_BATCH_MESHES);
+		m_BatchDataBuffer = m_MeshPipeline->GetStorage(1);
 
-		//Mesh Buffer
-		m_BatchMesh = new VertexPool<Vertex>(m_Device, StorageFormat::UBYTE_VEC4_VEC4, (Chunk::VOLUME_SIZE/8) * MAX_BATCH_MESHES);
-
-		//Mesh Batch Data
-		BufferSpec dataBufferSpec = { };
-		dataBufferSpec.Type = StorageType::BATCH;
-		dataBufferSpec.Usage = StorageUsage::DYNAMIC;
-		dataBufferSpec.Format = StorageFormat::FLOAT_VEC3;
-		dataBufferSpec.ParrentBuffer = m_BatchMesh->GetBufferId();
-		dataBufferSpec.Count = MAX_BATCH_MESHES;
-		dataBufferSpec.Shader = m_MeshShader;
-		m_BatchDataBuffer = m_Device->StorageCreate(dataBufferSpec);
 		m_BatchCurrentOffset = 0;
+	}
 
-		//Setup Post Processing Fullscreen Quad
-		BufferSpec quadBufferSpec = { };
-		quadBufferSpec.Type = StorageType::VERTEX;
-		quadBufferSpec.Usage = StorageUsage::STATIC;
-		quadBufferSpec.Format = StorageFormat::UBYTE_VEC4;
-		quadBufferSpec.Count = 4;
-		quadBufferSpec.ParrentBuffer = Handle::INVALID;
-		m_PPQuadBuffer = m_Device->StorageCreate(quadBufferSpec);
-		m_Device->StorageUpload(m_PPQuadBuffer, 4, 0, (void*)&FullscreenQuad[0]);
-
-		////Init ImGUI
-		//IMGUI_CHECKVERSION();
-		//ImGui::CreateContext();
-		//ImGui::StyleColorsDark();
-		//ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), true);
-		//ImGui_ImplOpenGL3_Init("#version 130");
-	}	
-
-	void Renderer::Shutdown() {
+	Renderer::~Renderer() {
 		delete m_Device;
-		//ImGui_ImplOpenGL3_Shutdown();
-		//ImGui_ImplGlfw_Shutdown();
-		//ImGui::DestroyContext();
+		delete m_BatchMesh;
 	}
 
 	void Renderer::SetView(const glm::mat4& viewMat) {
-		m_Device->SetShaderUniform(m_MeshShader, "uView", viewMat);
+		m_MeshPipeline->GetShader()->Set("uView", viewMat);
 	}
 
 	void Renderer::SetResolution(int width, int height) {
@@ -174,49 +134,19 @@ namespace ZuneCraft {
 	}
 
 	void Renderer::SetFlip(bool flipped) {
-		m_Device->SetShaderUniform(m_PPShader, "uFlip", flipped == true ? -1 : 1);
+		m_FXPipeline->GetShader()->Set("uFlip", flipped == true ? -1 : 1);
 	}
 
-	void Renderer::BeginFrame() {
-		#ifdef ZC_PLATFORM_ZUNE
-			ZDKGL_BeginDraw();
-		#endif                  
-		 
+	void Renderer::Draw() {
+		m_Device->BeginFrame();
 
 		m_BatchMesh->Cleanup();
+		m_BatchMesh->GenerateRenderCommands();
 
-		//ImGui_ImplOpenGL3_NewFrame();
-		//ImGui_ImplGlfw_NewFrame();
-		//ImGui::NewFrame();
+		m_MeshPipeline->Draw();
+		m_FXPipeline->Draw();
 
-		//m_BatchMesh->DebugDraw();
-
-		m_Device->RenderTargetBind(m_PPRenderTarget);
-		m_Device->SetViewport(0, 0, m_RenderWidth, m_RenderHeight);
-		m_Device->Clear();
-	}
-
-	void Renderer::EndFrame() {
-		m_Device->Flush();
-		m_Device->Draw(m_MeshShader, m_BatchMesh->GetBufferId(), DrawMode::TRIANGLES);
-		
-		m_Device->RenderTargetBind(Handle::INVALID);
-		
-		#ifdef ZC_PLATFORM_ZUNE
-		m_Device->SetViewport(0, 0, m_RenderHeight, m_RenderWidth);
-		#else
-		m_Device->SetViewport(0, 0, m_RenderWidth, m_RenderHeight);
-		#endif
-
-		m_Device->Clear();
-		m_Device->DrawArrays(m_PPShader, m_PPQuadBuffer, DrawMode::TRIANGLE_STRIP, 0, 4);
-
-		//ImGui::Render();
-		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-		#ifdef ZC_PLATFORM_ZUNE
-		ZDKGL_EndDraw();
-		#endif
+		m_Device->EndFrame();
 	}
 
 	Id Renderer::BatchSubmitMesh(std::vector<Vertex>& mesh, const glm::vec3& translation) {
@@ -225,6 +155,7 @@ namespace ZuneCraft {
 
 		size_t batchDataLocation = 0;
 
+		//THIS needs improvement. Add Push and Erase to GPUStorage
 		if (m_BatchDataFreeSlots.empty()) {
 			m_BatchData.push_back(data);
 			batchDataLocation = m_BatchData.size() - 1;
@@ -236,13 +167,13 @@ namespace ZuneCraft {
 		}
 
 
-		m_Device->StorageUpload(m_BatchDataBuffer, m_BatchData.size(), 0, &m_BatchData[0]);
+		m_BatchDataBuffer->Upload(m_BatchData.size(), 0, &m_BatchData[0]);
 	
 		for (int i = 0; i < mesh.size(); i++) {
 			mesh[i].BatchIndex = batchDataLocation;
 		}
 
-		VPNode* memLocation = m_BatchMesh->PushBack(mesh, batchDataLocation);
+		VPNode* memLocation = m_BatchMesh->PushBack(&mesh[0], mesh.size(), batchDataLocation);
 		m_BatchCurrentOffset += mesh.size();
 
 		MeshInfo info;
@@ -252,7 +183,7 @@ namespace ZuneCraft {
 	}
 
 	void Renderer::BatchDrawMesh(Id hMesh) {
-
+		//TODO: Use this to hide / show a mesh, used for frustum culling
 	}
 
 	void Renderer::BatchFreeMesh(Id hMesh) {

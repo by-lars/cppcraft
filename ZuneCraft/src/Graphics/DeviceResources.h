@@ -2,25 +2,21 @@
 #include "Core/Base.h"
 #include "Data/Handle.h"
 #include <vector>
+#include <glm/glm.hpp>
 
 namespace ZuneCraft {
-	ZC_ENUM DrawMode {
-		TRIANGLES = 0,
-		TRIANGLE_STRIP,
-		LINES
-	};
 
-	ZC_ENUM StorageType {
-		VERTEX = 0,
-		BATCH,
-		SHADER,
+	ZC_ENUM StorageUsage{
+		MESH_STATIC = 0,
+		MESH_DYNAMIC,
+		INSTANCE_DATA,
 		DRAW_COMMAND
 	};
 
-	ZC_ENUM StorageUsage {
-		STATIC = 0,
-		DYNAMIC,
-		STREAM
+	ZC_ENUM DrawMode{
+		TRIANGLES = 0,
+		TRIANGLE_STRIP,
+		LINES
 	};
 
 	ZC_ENUM StorageFormat{
@@ -29,20 +25,11 @@ namespace ZuneCraft {
 
 		FLOAT_VEC4,
 		FLOAT_VEC3,
+		FLOAT_VEC2,
 
-		INT_VEC1
-	};
+		INT_VEC1,
 
-	ZC_ENUM DataType{
-		INT = 0,
-		FLOAT,
-		UNSIGNED_BYTE
-	};
-
-
-	ZC_ENUM ClampMode {
-		REPEAT = 0,
-		CLAMP_TO_EDGE,
+		DRAW_COMMAND
 	};
 
 	ZC_ENUM FilterMode {
@@ -50,13 +37,18 @@ namespace ZuneCraft {
 		LINEAR
 	};
 
-	ZC_ENUM TextureFormat {
+	ZC_ENUM TextureFormat{
 		RGB = 0,
 		RGBA,
 
-		DEPTH_COMPONENT16, 
-		DEPTH_COMPONENT24, 
+		DEPTH_COMPONENT16,
+		DEPTH_COMPONENT24,
 		DEPTH_COMPONENT32
+	};
+
+	ZC_ENUM UsageHint {
+		DYNAMIC = 0,
+		STATIC = 1
 	};
 
 	struct RenderCommand {
@@ -66,39 +58,57 @@ namespace ZuneCraft {
 		uint32_t BaseInstance;
 	};
 
-	struct BufferSpec {
-		uint32_t Count;
-		StorageType Type;
-		StorageUsage Usage;
-		StorageFormat Format;
-		Id ParrentBuffer;
-		Id Shader;
+	class Texture {
+	public:
+		virtual ~Texture() { }
+		virtual void Bind() = 0;
+		virtual void Upload(void* data) = 0;
+		virtual uint32_t GetNativeHandle() = 0;
 	};
 
-	struct TextureSpec {
-		uint32_t Width;
-		uint32_t Height;
-		TextureFormat Format;
-		DataType DataType;
-		ClampMode ClampMode;
-		FilterMode FilterMode;
+	class Shader {
+	public:
+		virtual ~Shader() { }
+		virtual void Bind() = 0;
+		virtual void Set(const std::string& name, int value) = 0;
+		virtual void Set(const std::string& name, float value) = 0;
+		virtual void Set(const std::string& name, const glm::vec3& value) = 0;
+		virtual void Set(const std::string& name, const glm::vec4& value) = 0;
+		virtual void Set(const std::string& name, const glm::mat4& value) = 0;
+		virtual uint32_t GetNativeHandle() = 0;
 	};
 
-	ZC_ENUM AttachementType {
-		Color = 0,
-		Depth
+	class RenderTarget {
+	public:
+		virtual ~RenderTarget() { }
+		virtual void AddTexture(TextureFormat format) = 0;
+		virtual void AddRenderBuffer(TextureFormat format) = 0;
+		virtual void Finalize() = 0;
+		virtual void Resize(uint32_t width, uint32_t height) = 0;
+		virtual void Bind() = 0;
+		virtual uint32_t GetNativeHandle() = 0;
 	};
 
-	struct FramebufferAttachement {
-		FramebufferAttachement(TextureFormat format, AttachementType type, bool writeOnly);
-		TextureFormat Format;
-		AttachementType Type;
-		bool WriteOnly;
+	class GPUStorage {
+	public:
+		virtual ~GPUStorage() {}
+		virtual void Upload(uint32_t size, uint32_t offset, void* data) = 0;
+		virtual void Bind() = 0;
+		virtual uint32_t GetNativeHandle() = 0;
 	};
 
-	struct FramebufferSpec {
-		uint32_t Width;
-		uint32_t Height;
-		std::vector<FramebufferAttachement> Attachements;
+	class VertexLayout {
+	public:
+		virtual ~VertexLayout() { }
+		virtual void AddFormat(GPUStorage* storage, StorageFormat format, StorageUsage usage) = 0;
+		virtual void Bind() = 0;
+	};
+
+	class CommandQueue {
+	public:
+		virtual ~CommandQueue() { }
+		virtual void Push(const RenderCommand& cmd) = 0;
+		virtual void Clear() = 0;
+		virtual void Draw() = 0;
 	};
 }

@@ -20,10 +20,7 @@ namespace ZuneCraft {
 				
 				Id handle = Handle::Create<HandleStore<T>>(m_Objects.size());
 
-				Entry entry;
-				entry.Handle = handle;
-				entry.Object = object;
-				entry.IsActive = true;
+				Entry entry { handle , object, true };
 				m_Objects.push_back(entry);
 
 				return handle;
@@ -51,6 +48,10 @@ namespace ZuneCraft {
 			Entry& entry = Handle::Get<HandleStore<T>>(m_Objects, handle);
 			entry.IsActive = false;
 			m_FreeHandles.push(entry.Handle);
+		}
+
+		T& operator[] (Id handle) {
+			return Get(handle);
 		}
 
 	private:

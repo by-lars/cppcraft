@@ -16,10 +16,11 @@ namespace ZuneCraft {
 	public:
 		Camera();
 		void Rotate(const glm::vec2& offset, bool resetStartPoint);
-		void Move(Direction dir);
 
-		const glm::vec3& GetPosition();
 		const glm::vec3& GetForwardVector();
+		const glm::vec3& GetRightVector();
+
+		void SetPosition(const glm::vec3& pos);
 
 		glm::mat4 GetViewMatrix();
 	private:

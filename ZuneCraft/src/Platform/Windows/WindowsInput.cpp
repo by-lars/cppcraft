@@ -8,16 +8,18 @@ namespace ZuneCraft {
 	static bool IsFocused = true;
 
 	Input::Input() {
-
-	}
-
-	void Input::Init() {
 		glfwSetInputMode((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		QueryPerformanceFrequency((LARGE_INTEGER*)&m_TimerFrequency);
 	}
-
 
 	Input::~Input() {
 
+	}
+
+	double Input::GetTime() {
+		uint64_t time = 0;
+		QueryPerformanceCounter((LARGE_INTEGER*)&time);
+		return (double)time / (double)m_TimerFrequency;
 	}
 	
 	void Input::CheckToggleFocus() {
@@ -96,7 +98,16 @@ namespace ZuneCraft {
 		return glfwGetKey((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_KEY_D) == GLFW_PRESS;
 	}
 
-	glm::vec2 Input::GetAxies() {
+	glm::vec2 Input::GetMovementAxies() {
+		bool forward = glfwGetKey((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_KEY_W) == GLFW_PRESS;
+		bool backward = glfwGetKey((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_KEY_S) == GLFW_PRESS;
+		bool left = glfwGetKey((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_KEY_A) == GLFW_PRESS;
+		bool right = glfwGetKey((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_KEY_D) == GLFW_PRESS;
+
+		return glm::vec2(forward - backward, right - left);
+	}
+
+	glm::vec2 Input::GetRotationAxies() {
 		if (!IsFocused) return glm::vec2(0,0);
 
 		static double lastX = 0;

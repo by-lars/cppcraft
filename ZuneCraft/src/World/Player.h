@@ -6,15 +6,17 @@
 namespace ZuneCraft {
 	class Renderer;
 	class Input;
+	class World;
 
 	class Player : public Entity {
 	public:
-		Player();
+		Player(World& world);
 		void Tick() override;
 
-		glm::vec3 GetPos() override;
-
 	private:
+		float m_MovementSpeed;
+
+		World& m_World;
 		Renderer* m_Renderer;
 		Input* m_Input;
 		Camera m_Camera;

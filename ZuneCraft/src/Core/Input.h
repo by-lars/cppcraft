@@ -8,9 +8,11 @@ namespace ZuneCraft {
 	public:
 		Input();
 		~Input();
-		void Init() override;
 
-		glm::vec2 GetAxies();
+		double GetTime();
+
+		glm::vec2 GetMovementAxies();
+		glm::vec2 GetRotationAxies();
 
 		void CheckToggleFocus();
 		bool GetActionDebugWireframe();
@@ -20,5 +22,8 @@ namespace ZuneCraft {
 		bool GetActionBackward();
 		bool GetActionLeft();
 		bool GetActionRight();
+	
+	private:
+		uint64_t m_TimerFrequency;
 	};
 }

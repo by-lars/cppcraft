@@ -1,8 +1,6 @@
 #include "Core/Base.h"
 #include "Core/Service.h"
-#include "Build/PlatformDefines.h"
 #include "World/Chunk.h"
-#include "Graphics/GL.h"
 #include "Graphics/Renderer.h"
 #include "Threading/ThreadPool.h"
 
@@ -15,7 +13,6 @@ namespace ZuneCraft {
 		m_Renderer = Services::Get<Renderer>();
 		m_ThreadPool = Services::Get<ThreadPool>();
 		m_State = State::UNLOADED;
-		ZC_DEBUG("m_Renderer=" << m_Renderer);
 	}
 
 	Chunk::~Chunk() {
@@ -27,18 +24,27 @@ namespace ZuneCraft {
 
 	void Chunk::OnMeshBuilt(void* context) {
 		Chunk* chunk = (Chunk*)context;
+		std::vector<Vertex> emptyVector;
 		chunk->m_MeshHandle = chunk->m_Renderer->BatchSubmitMesh(chunk->m_Mesh, chunk->GetWorldPosition());
 		chunk->m_State = State::LOADED;
-		chunk->m_Mesh.clear();
-		chunk->m_Mesh.resize(0);
+		chunk->m_Mesh.swap(emptyVector);
 	}
 
-	void Chunk::SetIndex(const glm::ivec2& index) {
+	Material Chunk::GetVoxel(const ChunkCoords& pos) {
+		if (pos.x > Chunk::WIDTH || pos.x < 0) { ZC_WARN("invalid chunk coord"); return Material::AIR; }
+		if (pos.y > Chunk::HEIGHT || pos.y < 0) { ZC_WARN("invalid chunk coord"); return Material::AIR; }
+		if (pos.z > Chunk::WIDTH || pos.z < 0) { ZC_WARN("invalid chunk coord"); return Material::AIR; }
+
+		return (Material)m_Voxels[pos.x][pos.y][pos.z];
+	}
+
+
+	void Chunk::SetIndex(const ChunkIndex& index) {
 		m_Index = index;
 		m_WorldPostion = glm::vec3(index.x * WIDTH, 0, index.y * WIDTH);
 	}
 
-	const glm::ivec2& Chunk::GetIndex() const{
+	const ChunkIndex& Chunk::GetIndex() const{
 		return m_Index;
 	}
 
@@ -62,24 +68,32 @@ namespace ZuneCraft {
 		}
 	}
 
-	void Chunk::Load(const glm::ivec2& index) {
+	void Chunk::Load(const ChunkIndex& index) {
+		if (m_State == State::BUILDING) {
+			ZC_WARN("Tried to load chunk multiple times");
+			return;
+		}
+		
 		SetIndex(index);
 
 		GenTerrain();
 
 		m_State = State::BUILDING;
 
-		ThreadPool::Job job;
-		job.JobFunction = GenMesh;
-		job.CallbackFunction = OnMeshBuilt;
-		job.Context = this;
-		m_ThreadPool->SubmitWork(job);
+		m_ThreadPool->SubmitWork(GenMesh, OnMeshBuilt, this);
 	}
 
 	void Chunk::Unload() {
+		if (m_State == State::BUILDING) {
+			ZC_WARN("Tried to unload while building");
+			return;
+		}
+
 		if (Handle::IsValid(m_MeshHandle)) {
 			m_Renderer->BatchFreeMesh(m_MeshHandle);
 		}
+
+		m_MeshHandle = Handle::INVALID;
 	}
 
 	void Chunk::GenMesh(void* context) {
@@ -215,7 +229,7 @@ namespace ZuneCraft {
 		noise.SetFrequency(0.005f);
 
 		for (int x = 0; x < WIDTH; x++) {
-			for (int z = 0; z < HEIGHT; z++) {
+			for (int z = 0; z < WIDTH; z++) {
 
 	
 				float height = noise.GetNoise((x + m_WorldPostion.x), (z + m_WorldPostion.z));
@@ -224,7 +238,7 @@ namespace ZuneCraft {
 
 				int blockHeight = int(height * HEIGHT);
 
-				//blockHeight = 5;
+	//			blockHeight = 5;
 
 				for (int y = 0; y < blockHeight && y < HEIGHT; y++) {
 
@@ -242,11 +256,11 @@ namespace ZuneCraft {
 		}
 	}
 
-	const glm::vec3& Chunk::GetWorldPosition() const {
+	const WorldCoords& Chunk::GetWorldPosition() const {
 		return m_WorldPostion;
 	}
 
-	const glm::vec3 Chunk::GetWorldPositionCentered() const {
+	WorldCoords Chunk::GetWorldPositionCentered() const {
 		return m_WorldPostion + glm::vec3(WIDTH / 2, 0, WIDTH / 2);
 	}
 

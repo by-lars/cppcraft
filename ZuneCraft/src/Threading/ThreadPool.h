@@ -7,6 +7,7 @@
 namespace ZuneCraft {
 	class ThreadPool : public IService {
 	public:
+		typedef void (*function_t)(void* context);
 
 		struct Job {
 			Job() {
@@ -15,16 +16,15 @@ namespace ZuneCraft {
 				Context = nullptr;
 			}
 
-			void (*JobFunction)(void* context);
-			void (*CallbackFunction)(void* context);
+			function_t JobFunction;
+			function_t CallbackFunction;
 			void* Context;
 		};
 
 		ThreadPool();
 		~ThreadPool();
 
-		void Init() override;
-		void SubmitWork(const Job& job);
+		void SubmitWork(function_t jobFunction, function_t callbackFunction, void* context);
 		void RunCallbacks();
 
 		static void ThreadProc(LPVOID instance);

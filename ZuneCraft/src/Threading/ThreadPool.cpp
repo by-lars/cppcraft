@@ -26,7 +26,6 @@ namespace ZuneCraft {
 
 				if (pool->m_Jobs.empty()) {
 					pool->m_JobMutex.Unlock();
-					ZC_DEBUG("Thread " << std::this_thread::get_id() << " is waiting");
 					pool->m_JobSignal.Wait();
 					pool->m_JobMutex.Lock();
 				}
@@ -42,7 +41,6 @@ namespace ZuneCraft {
 			}
 			
 			if (job.JobFunction != nullptr) {
-				ZC_DEBUG("Thread " << std::this_thread::get_id() << " executing job " << job.JobFunction);
 				job.JobFunction(job.Context);
 			}
 		}
@@ -52,19 +50,25 @@ namespace ZuneCraft {
 
 	ThreadPool::ThreadPool() {
 		m_IsRunning = true;
-	}
-
-	void ThreadPool::Init() {
+	
 		int numThreads = 1;
 
 		#ifdef ZC_PLATFORM_WIN32
-		numThreads = std::thread::hardware_concurrency();
+			HANDLE currentThread = GetCurrentThread();
+			SetThreadPriority(currentThread, THREAD_PRIORITY_ABOVE_NORMAL);
+			numThreads = std::thread::hardware_concurrency();
 		#endif
-		
+
 		ZC_LOG("ThreadPool: Spawning " << numThreads << " threads");
 
 		for (int i = 0; i < numThreads; i++) {
 			HANDLE handle = CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ThreadProc, this, NULL, NULL);
+
+			if (handle == NULL) {
+				ZC_FATAL_ERROR("Could not create thread");
+			}
+
+			SetThreadPriority(handle, THREAD_PRIORITY_LOWEST);
 			m_Threads.push_back(handle);
 		}
 	}
@@ -76,6 +80,10 @@ namespace ZuneCraft {
 		m_IsRunning = false;
 		m_JobMutex.Unlock();
 		
+		for (int i = 0; i < m_Threads.size(); i++) {
+			m_JobSignal.SignalOne();
+		}
+
 		WaitForMultipleObjects(m_Threads.size(), &m_Threads[0], TRUE, INFINITE);
  	
 		for (int i = 0; i < m_Threads.size(); i++) {
@@ -83,7 +91,12 @@ namespace ZuneCraft {
 		}
 	}
 
-	void ThreadPool::SubmitWork(const Job& job) {
+	void ThreadPool::SubmitWork(function_t jobFunction, function_t callbackFunction, void* context) {
+		Job job;
+		job.JobFunction = jobFunction;
+		job.CallbackFunction = callbackFunction;
+		job.Context = context;
+
 		ScopedLock lock(m_JobMutex);
 		m_Jobs.push_back(job);
 		m_JobSignal.SignalOne();

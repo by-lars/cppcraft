@@ -10,7 +10,8 @@ namespace ZuneCraft {
 
 		virtual void Tick() = 0;
 		
-	private:
+	protected:
 		glm::vec3 m_Position;
+		glm::vec3 m_Velocity;
 	};
 }

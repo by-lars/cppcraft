@@ -2,13 +2,17 @@
 #include "Core/Base.h"
 #include "World/Material.h"
 #include "Data/Handle.h"
-#include "Graphics/Vertex.h"
+#include "Data/Vertex.h"
 #include <glm/glm.hpp>
 #include <vector>
 
 namespace ZuneCraft {
 	class Renderer;
 	class ThreadPool;
+
+	typedef glm::ivec3 ChunkCoords;
+	typedef glm::vec3 WorldCoords;
+	typedef glm::ivec2 ChunkIndex;
 
 	class Chunk {
 	public:
@@ -27,13 +31,11 @@ namespace ZuneCraft {
 		Chunk();
 		~Chunk();
 
-		static void OnMeshBuilt(void* context);
+		const ChunkIndex& GetIndex() const;
+		const WorldCoords& GetWorldPosition() const;
+		WorldCoords GetWorldPositionCentered() const;
 
-		const glm::ivec2& GetIndex() const;
-		void SetIndex(const glm::ivec2& index);
-
-		const glm::vec3& GetWorldPosition() const;
-		const glm::vec3 GetWorldPositionCentered() const;
+		Material GetVoxel(const ChunkCoords& pos);
 
 		void Load(const glm::ivec2& index);
 		void Unload();
@@ -42,12 +44,14 @@ namespace ZuneCraft {
 
 	private:
 		void GenTerrain();
+		void SetIndex(const glm::ivec2& index);
+		static void OnMeshBuilt(void* context);
 		static void GenMesh(void* context);
 
 		State m_State;
 
 		uint8_t m_Voxels[WIDTH][HEIGHT][WIDTH];
-		//Face m_Mask[Chunk::WIDTH * Chunk::HEIGHT];
+
 		std::vector<Vertex> m_Mesh;
 
 		Id m_MeshHandle;
@@ -55,7 +59,7 @@ namespace ZuneCraft {
 		Renderer* m_Renderer;
 		ThreadPool* m_ThreadPool;
 
-		glm::ivec2 m_Index;
-		glm::vec3 m_WorldPostion;
+		ChunkIndex m_Index;
+		WorldCoords m_WorldPostion;
 	};
 }

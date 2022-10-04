@@ -1,4 +1,4 @@
-#include "Graphics/Vertex.h"
+#include "Data/Vertex.h"
 
 namespace ZuneCraft {
 	Vertex::Vertex() {
