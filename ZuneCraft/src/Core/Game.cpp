@@ -27,7 +27,7 @@ namespace ZuneCraft {
 		m_DeltaTime = 0; 
 
 		m_GameConfig.GraphicsAPI = RenderAPI::API::OPENGL_4;
-		m_GameConfig.RenderDistance = 4;
+		m_GameConfig.RenderDistance = 32;
 
 		m_Window		= Window::Create();
 

@@ -272,7 +272,39 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Platform\OpenGL\GL.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Graphics\GL.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLAPI.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLCommandQueue.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLRenderTarget.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLShader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLStorage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLTexture.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLVertexLayout.h"
 				>
 			</File>
 			<File
@@ -304,11 +336,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Geometry\Material.h"
+				RelativePath=".\src\World\Material.h"
 				>
 			</File>
 			<File
-				RelativePath=".\src\World\Material.h"
+				RelativePath=".\src\Geometry\Material.h"
 				>
 			</File>
 			<File
@@ -321,6 +353,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Platform\OpenGL\OpenGLES2API.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Graphics\Pipeline.h"
 				>
 			</File>
 			<File
@@ -369,6 +405,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Graphics\Vertex.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Data\Vertex.h"
 				>
 			</File>
 			<File
@@ -424,6 +464,34 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Platform\OpenGL\GLAPI.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLCommandQueue.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLRenderTarget.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLShader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLStorage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLTexture.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Platform\OpenGL\GLVertexLayout.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Core\GLWindow.cpp"
 				>
 			</File>
@@ -437,6 +505,10 @@
 			</File>
 			<File
 				RelativePath=".\src\Platform\OpenGL\OpenGLES2API.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Graphics\Pipeline.cpp"
 				>
 			</File>
 			<File
@@ -468,7 +540,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Data\Vertex.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Graphics\Vertex.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Graphics\VertexPool.cpp"
 				>
 			</File>
 			<File

@@ -1,13 +1,13 @@
 #include "Graphics/VertexPool.h"
+#include <functional>
 
 namespace ZuneCraft {
-	VertexPool::VertexPool(Pipeline* pipeline, GPUStorage* storage, uint32_t maxCount)
-		: m_Pipeline(pipeline), m_Storage(storage), m_MaxCount(maxCount) {
-		//m_Buffer = m_Device->CreateStorage(StorageUsage::MESH_DYNAMIC, format, maxCount);
-
+	VertexPool::VertexPool(Pipeline* pipeline, GPUStorage* storage)
+		: m_Pipeline(pipeline), m_Storage(storage), m_Invalidated(false) {
+	
 		m_pLayout = new VPNode();
 		m_pLayout->Start = 0;
-		m_pLayout->End = maxCount;
+		m_pLayout->End = m_Storage->GetMaxCount();
 		m_pLayout->IsFree = true;
 		m_pLayout->Next = nullptr;
 	}
@@ -27,9 +27,13 @@ namespace ZuneCraft {
 		VPNode* node = m_pLayout;
 		bool found = false;
 
-		while (node != nullptr) {
+		while (found == false) {
 			if (node->IsFree && node->GetSize() >= meshSize) {
 				found = true;
+				break;
+			}
+
+			if (node->Next == nullptr) {
 				break;
 			}
 
@@ -37,8 +41,17 @@ namespace ZuneCraft {
 		}
 
 		if (!found) {
-			ZC_WARN("OUT OF MEM");
-			return nullptr;
+			ZC_WARN("VertexPool: Out of mem, allocating more...");
+			VPNode* newNode = new VPNode();
+			newNode->Start = node->End;
+			
+			uint32_t newSize = (m_Storage->GetMaxCount()+meshSize) * 1.75f;
+			m_Storage->Resize(newSize);
+			newNode->End = newSize;
+			newNode->IsFree = true;
+			node->Next = newNode;
+
+			node = newNode;
 		}
 
 		m_Storage->Upload(meshSize, node->Start, meshData);
@@ -104,23 +117,27 @@ namespace ZuneCraft {
 
 		m_Pipeline->ClearCommands();
 
+		//int counter = 0;
+
 		VPNode* node = m_pLayout;
 		while (node != nullptr) {
 			if (node->Next == nullptr)
 				break;
 
 			if (node->IsFree == false) {
-				RenderCommand cmd;
+				RenderCommand cmd { };
 				cmd.Count = node->GetSize();
 				cmd.InstanceCount = 1;
 				cmd.First = node->Start;
 				cmd.BaseInstance = node->BatchId;
 				m_Pipeline->PushCommand(cmd);
+		//		counter++;
 			}
 
 			node = node->Next;
 		}
 
+		//ZC_DEBUG(counter);
 		m_Invalidated = false;
 	}
 }

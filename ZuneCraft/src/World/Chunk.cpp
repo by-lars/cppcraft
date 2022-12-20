@@ -226,19 +226,18 @@ namespace ZuneCraft {
 		noise.SetFractalOctaves(8);
 		noise.SetFractalLacunarity(2.0f);
 		noise.SetFractalGain(0.5f);
-		noise.SetFrequency(0.005f);
+		noise.SetFrequency(0.05f);
 
 		for (int x = 0; x < WIDTH; x++) {
 			for (int z = 0; z < WIDTH; z++) {
 
 	
-				float height = noise.GetNoise((x + m_WorldPostion.x), (z + m_WorldPostion.z));
+				float height = noise.GetNoise((float)(x + m_WorldPostion.x) / (float)Chunk::WIDTH, (float)(z + m_WorldPostion.z) / (float)Chunk::WIDTH);
+				height = (height + 1.0f) / 2.0f;
 				height = powf(height, 1.5f);
 
 
 				int blockHeight = int(height * HEIGHT);
-
-	//			blockHeight = 5;
 
 				for (int y = 0; y < blockHeight && y < HEIGHT; y++) {
 

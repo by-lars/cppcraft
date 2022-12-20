@@ -39,7 +39,7 @@ namespace ZuneCraft {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_ColorAttachements.size(), GL_TEXTURE_2D, texture, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GLenum(GL_COLOR_ATTACHMENT0 + m_ColorAttachements.size()), GL_TEXTURE_2D, texture, 0);
 
 		m_ColorAttachements.push_back(texture);
 	}
@@ -60,7 +60,7 @@ namespace ZuneCraft {
 		Bind();
 		GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 		if (m_ColorAttachements.size() > 0) {
-			glDrawBuffers(m_ColorAttachements.size(), &attachments[0]);
+			glDrawBuffers((GLsizei)m_ColorAttachements.size(), &attachments[0]);
 		}
 
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);

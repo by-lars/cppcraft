@@ -84,7 +84,7 @@ namespace ZuneCraft {
 			m_JobSignal.SignalOne();
 		}
 
-		WaitForMultipleObjects(m_Threads.size(), &m_Threads[0], TRUE, INFINITE);
+		WaitForMultipleObjects((DWORD)m_Threads.size(), &m_Threads[0], TRUE, INFINITE);
  	
 		for (int i = 0; i < m_Threads.size(); i++) {
 			CloseHandle(m_Threads[i]);

@@ -34,7 +34,7 @@ namespace ZuneCraft {
 		GPUStorage* storage = nullptr;
 
 		if (usage == StorageUsage::INSTANCE_DATA && m_Device->GetCapabilities().AttributeDivisor == false) {
-			ZC_ASSERT(m_Shader != nullptr, "API: " << m_Device->GetAPIName() << ": requires a Shader inorder to add a INSTANCE_DATA buffer");
+			ZC_ASSERT(m_Shader != nullptr, "API: " << m_Device->GetAPIName() << ": requires a Shader in order to add a INSTANCE_DATA buffer");
 			ZC_ASSERT(initialData == nullptr, "API: " << m_Device->GetAPIName() << ": can't provide default data for INSTANCE_DATA buffer"); 
 
 			storage = m_Device->CreateShaderStorage(m_Shader, "uBatchData", format, initialSize);

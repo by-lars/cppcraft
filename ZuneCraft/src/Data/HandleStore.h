@@ -18,7 +18,7 @@ namespace ZuneCraft {
 		Id PushBack(const T& object) {
 			if (m_FreeHandles.empty()) {
 				
-				Id handle = Handle::Create<HandleStore<T>>(m_Objects.size());
+				Id handle = Handle::Create<HandleStore<T>>((Handle::HIndex)m_Objects.size());
 
 				Entry entry { handle , object, true };
 				m_Objects.push_back(entry);

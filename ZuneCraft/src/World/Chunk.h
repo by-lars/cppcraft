@@ -17,7 +17,7 @@ namespace ZuneCraft {
 	class Chunk {
 	public:
 		const static int WIDTH = 32;
-		const static int HEIGHT = 128;
+		const static int HEIGHT = 255;
 		const static int VOLUME_SIZE = WIDTH * WIDTH * HEIGHT;
 		const static int AREA_SIZE = WIDTH * WIDTH;
 

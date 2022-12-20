@@ -16,17 +16,17 @@ namespace ZuneCraft {
 
 	}
 
-	double Input::GetTime() {
+	float Input::GetTime() {
 		uint64_t time = 0;
 		QueryPerformanceCounter((LARGE_INTEGER*)&time);
-		return (double)time / (double)m_TimerFrequency;
+		return (float)time / (float)m_TimerFrequency;
 	}
 	
 	void Input::CheckToggleFocus() {
 		static float lastPressTime = 0;
 
 		if (glfwGetKey((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-			float pressTime = glfwGetTime();
+			float pressTime = (float)glfwGetTime();
 
 			if (pressTime - lastPressTime > 0.1f) {
 				IsFocused = !IsFocused;
@@ -49,7 +49,7 @@ namespace ZuneCraft {
 		
 	
 		if (glfwGetKey((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_KEY_F1) == GLFW_PRESS) {
-			float pressTime = glfwGetTime();
+			float pressTime = (float)glfwGetTime();
 
 			if (pressTime - lastPressTime > 0.1f) {
 				debug = !debug;
@@ -66,7 +66,7 @@ namespace ZuneCraft {
 		static float lastPressTime = 0;
 
 		if (glfwGetKey((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_KEY_F2) == GLFW_PRESS) {
-			float pressTime = glfwGetTime();
+			float pressTime = (float)glfwGetTime();
 
 			if (pressTime - lastPressTime > 0.1f) {
 				debug = !debug;

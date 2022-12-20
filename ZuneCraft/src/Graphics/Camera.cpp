@@ -26,8 +26,8 @@ namespace ZuneCraft {
     }
 
     void Camera::Rotate(const glm::vec2& offset, bool resetStartPoint)  {
-        m_Yaw += offset.x * 0.6;
-        m_Pitch += offset.y * 0.6;
+        m_Yaw += offset.x * 0.6f;
+        m_Pitch += offset.y * 0.6f;
 
 		if (m_Pitch > 88.0f)
 			m_Pitch = 88.0f;

@@ -67,14 +67,14 @@ namespace ZuneCraft {
 #endif
 
 
-	static const size_t MAX_BATCH_MESHES = 128;
+	static const size_t MAX_BATCH_MESHES = 512;
 
 	Renderer::Renderer() {
 		ZC_DEBUG("Initializing Renderer");
 
 		m_RenderWidth = Game::Get().GetWindow().GetWidth();
 		m_RenderHeight = Game::Get().GetWindow().GetHeight();
-		glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)m_RenderWidth / (float)m_RenderHeight, 0.1f, 400.0f);
+		glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)m_RenderWidth / (float)m_RenderHeight, 0.1f, 800.0f);
 
 		//Initialize Rendering Device
 		m_Device = RenderAPI::Create();
@@ -82,7 +82,7 @@ namespace ZuneCraft {
 		//Setup default state
 		m_Device->SetClearColor(0.51f, 0.64f, 1.0f, 1.0f);
 
-		//Load Texture Atlas -- TODO: The atlas shouldn't be hard coded...
+		//Load Texturs
 		Image atlas; Asset::GetImage("atlas.png", &atlas);
 		m_Device->ActivateTextureSlot(1);
 		m_Device->CreateTexture(atlas.Width, atlas.Height, atlas.GetFormat(), FilterMode::NEAREST)->Upload(atlas.Data);
@@ -100,7 +100,7 @@ namespace ZuneCraft {
 			.SetViewport(0, 0, m_RenderWidth, m_RenderHeight)
 			.SetDrawMode(DrawMode::TRIANGLES)
 			.SetShader("main")
-			.AddStorage(StorageUsage::MESH_DYNAMIC, StorageFormat::UBYTE_VEC4_VEC4, (Chunk::VOLUME_SIZE / 8) * MAX_BATCH_MESHES, nullptr)
+			.AddStorage(StorageUsage::MESH_DYNAMIC, StorageFormat::UBYTE_VEC4_VEC4, MAX_BATCH_MESHES * (Chunk::VOLUME_SIZE / 8), nullptr)
 			.AddStorage(StorageUsage::INSTANCE_DATA, StorageFormat::FLOAT_VEC3, MAX_BATCH_MESHES, nullptr)
 			.AddRenderTexture(TextureFormat::RGBA)
 			.AddRenderBuffer(TextureFormat::DEPTH_COMPONENT24)
@@ -109,12 +109,11 @@ namespace ZuneCraft {
 		m_MeshPipeline->GetShader()->Set("uProj", proj);
 		m_MeshPipeline->GetShader()->Set("uAtlas", 1);
 		m_MeshPipeline->GetShader()->Set("uSkyColor", glm::vec3(0.51f, 0.64f, 1.0f));
-
 		m_FXPipeline->GetShader()->Set("uTexture", 0);
 
 		SetFlip(false);
 
-		m_BatchMesh = new VertexPool(m_MeshPipeline, m_MeshPipeline->GetStorage(0), (Chunk::VOLUME_SIZE / 8) * MAX_BATCH_MESHES);
+		m_BatchMesh = new VertexPool(m_MeshPipeline, m_MeshPipeline->GetStorage(0));
 		m_BatchDataBuffer = m_MeshPipeline->GetStorage(1);
 
 		m_BatchCurrentOffset = 0;
@@ -150,7 +149,7 @@ namespace ZuneCraft {
 	}
 
 	Id Renderer::BatchSubmitMesh(std::vector<Vertex>& mesh, const glm::vec3& translation) {
-		BatchData data;
+		BatchData data{};
 		data.Translation = translation;
 
 		size_t batchDataLocation = 0;
@@ -166,8 +165,9 @@ namespace ZuneCraft {
 			m_BatchDataFreeSlots.pop();
 		}
 
+		//ZC_ASSERT(batchDataLocation < UINT8_MAX, "Invalid batch data location");
 
-		m_BatchDataBuffer->Upload(m_BatchData.size(), 0, &m_BatchData[0]);
+		m_BatchDataBuffer->Upload((uint32_t)m_BatchData.size(), 0, &m_BatchData[0]);
 	
 		for (int i = 0; i < mesh.size(); i++) {
 			mesh[i].BatchIndex = batchDataLocation;
@@ -176,7 +176,7 @@ namespace ZuneCraft {
 		VPNode* memLocation = m_BatchMesh->PushBack(&mesh[0], mesh.size(), batchDataLocation);
 		m_BatchCurrentOffset += mesh.size();
 
-		MeshInfo info;
+		MeshInfo info { };
 		info.MemoryLocation = memLocation;
 		info.BatchId = batchDataLocation;
 		return m_Meshes.PushBack(info);

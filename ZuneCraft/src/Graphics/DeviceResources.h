@@ -4,22 +4,24 @@
 #include <vector>
 #include <glm/glm.hpp>
 
+#include "Data/Event.h"
+
 namespace ZuneCraft {
 
-	ZC_ENUM StorageUsage{
+	ZC_ENUM StorageUsage {
 		MESH_STATIC = 0,
 		MESH_DYNAMIC,
 		INSTANCE_DATA,
 		DRAW_COMMAND
 	};
 
-	ZC_ENUM DrawMode{
+	ZC_ENUM DrawMode {
 		TRIANGLES = 0,
 		TRIANGLE_STRIP,
 		LINES
 	};
 
-	ZC_ENUM StorageFormat{
+	ZC_ENUM StorageFormat {
 		UBYTE_VEC4 = 0,
 		UBYTE_VEC4_VEC4,
 
@@ -94,7 +96,10 @@ namespace ZuneCraft {
 		virtual ~GPUStorage() {}
 		virtual void Upload(uint32_t size, uint32_t offset, void* data) = 0;
 		virtual void Bind() = 0;
+		virtual size_t GetMaxCount() = 0;
 		virtual uint32_t GetNativeHandle() = 0;
+		virtual void Resize(uint32_t newSize) = 0;
+		Event<size_t> OnResize;
 	};
 
 	class VertexLayout {

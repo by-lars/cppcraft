@@ -74,10 +74,12 @@ namespace ZuneCraft {
 		}
 		
 		switch (hint) {
-			case ZuneCraft::UsageHint::DYNAMIC: new GLIndirectCommandQueue(this, glDrawMode); break;
-			case ZuneCraft::UsageHint::STATIC: new GLDirectCommandQueue(glDrawMode); break;
+			case ZuneCraft::UsageHint::DYNAMIC: return new GLIndirectCommandQueue(this, glDrawMode); break;
+			case ZuneCraft::UsageHint::STATIC: return new GLDirectCommandQueue(glDrawMode); break;
 			default: ZC_ASSERT(false, "Unkown Usage Hint");break;
 		}
+
+		ZC_ASSERT(false, "Fatal Error - Did not retrun from switch");
 	}
 
 	VertexLayout* OpenGLAPI::CreateVertexLayout() {

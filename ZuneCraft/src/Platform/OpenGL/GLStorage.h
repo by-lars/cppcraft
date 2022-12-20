@@ -14,13 +14,16 @@ namespace ZuneCraft {
 		
 		void Upload(uint32_t size, uint32_t offset, void* data) override;
 		void Bind() override;
+		size_t GetMaxCount() override;
 		uint32_t GetNativeHandle() override;
+		void Resize(uint32_t newSize) override;
 
 	private:
 		GLuint m_Handle;
 		GLuint m_MaxCount;
 		GLuint m_Stride;
 		GLenum m_Type;
+		GLenum m_Usage;
 	};
 
 	class GLUniformStorage : public GPUStorage {
@@ -28,7 +31,9 @@ namespace ZuneCraft {
 		GLUniformStorage(Shader* shader, const std::string& location, StorageFormat format, GLuint initialSize);
 		void Upload(uint32_t size, uint32_t offset, void* data) override;
 		void Bind() override;
+		size_t GetMaxCount() override;
 		uint32_t GetNativeHandle() override;
+		void Resize(uint32_t newSize) override;
 
 	private:
 		Shader* m_Shader;

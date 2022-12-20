@@ -70,7 +70,7 @@ namespace ZuneCraft {
 		for (auto it = m_ChunkMap.begin(); it != m_ChunkMap.end();) {
 			WorldCoords chunkPos = it->second->GetWorldPositionCentered();
 
-			int distance = glm::distance(chunkPos, pos);
+			int distance = (int)glm::distance(chunkPos, pos);
 
 			if (distance > Game::Get().GetConfig().RenderDistance * Chunk::WIDTH) {
 				it->second->Unload();
@@ -83,7 +83,7 @@ namespace ZuneCraft {
 
 		ChunkIndex chLoadStart = currentChunk - ChunkIndex(Game::Get().GetConfig().RenderDistance / 2);
 		ChunkIndex chLoadEnd = currentChunk + ChunkIndex(Game::Get().GetConfig().RenderDistance / 2);
-		ChunkIndex chunkToLoad;
+		ChunkIndex chunkToLoad(0);
 		for (chunkToLoad.x = chLoadStart.x; chunkToLoad.x <= chLoadEnd.x; chunkToLoad.x++) {
 			for (chunkToLoad.y = chLoadStart.y; chunkToLoad.y <= chLoadEnd.y; chunkToLoad.y++) {
 				if (m_ChunkMap.find(chunkToLoad) != m_ChunkMap.end()) {

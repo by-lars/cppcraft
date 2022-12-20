@@ -41,7 +41,7 @@ namespace ZuneCraft {
 			glVertexAttribPointer(m_AttribCounter + 1, 4, GL_UNSIGNED_BYTE, GL_FALSE, 8, (const void*)4);
 			glEnableVertexAttribArray(m_AttribCounter + 1);
 			glVertexAttribDivisor(m_AttribCounter + 1, usage == StorageUsage::INSTANCE_DATA);
-			m_AttribCounter++; //Extra increment because 2 Vec4
+			m_AttribCounter++; //Extra increment because 2x Vec4
 			break;
 		default: ZC_FATAL_ERROR("Unknown Buffer Format"); break;
 		}
