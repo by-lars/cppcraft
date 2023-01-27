@@ -1,6 +1,6 @@
 #include "Core/Base.h"
 #include "Threading/Mutex.h"
-#include <Windows.h>
+#include <windows.h>
 
 namespace ZuneCraft {
 	Mutex::Mutex() {

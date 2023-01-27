@@ -1,16 +1,15 @@
 #pragma once
 
 #ifdef ZC_PLATFORM_WIN32
-
 #include <glad/gl.h>
 #define GL_NVIDIA_PLATFORM_BINARY_NV 0
-
 #endif
 
 #ifdef ZC_PLATFORM_ZUNE
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <EGL/egl.h>
+#include <zdkgl.h>
 
 #undef GL_COLOR_ATTACHMENT0
 #define GL_COLOR_ATTACHMENT0 GL_COLOR_ATTACHMENT0_NV 

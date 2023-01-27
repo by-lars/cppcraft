@@ -16,7 +16,7 @@ namespace ZuneCraft {
 
 	}
 
-	float Input::GetTime() {
+	double Input::GetTime() {
 		uint64_t time = 0;
 		QueryPerformanceCounter((LARGE_INTEGER*)&time);
 		return (float)time / (float)m_TimerFrequency;

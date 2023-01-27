@@ -1,0 +1,3 @@
+/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/ZuneCraft.dir
+/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/edit_cache.dir
+/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/rebuild_cache.dir

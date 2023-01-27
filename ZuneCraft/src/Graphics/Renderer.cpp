@@ -169,7 +169,7 @@ namespace ZuneCraft {
 
 		m_BatchDataBuffer->Upload((uint32_t)m_BatchData.size(), 0, &m_BatchData[0]);
 	
-		for (int i = 0; i < mesh.size(); i++) {
+		for (size_t i = 0; i < mesh.size(); i++) {
 			mesh[i].BatchIndex = batchDataLocation;
 		}
 

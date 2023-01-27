@@ -1,7 +1,7 @@
 #include "Core/Base.h"
 #include "Threading/ThreadPool.h"
 #include "Threading/Mutex.h"
-#include <Windows.h>
+#include <windows.h>
 
 #ifdef ZC_PLATFORM_WIN32
 #include <thread>

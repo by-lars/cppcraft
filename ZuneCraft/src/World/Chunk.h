@@ -21,7 +21,7 @@ namespace ZuneCraft {
 		const static int VOLUME_SIZE = WIDTH * WIDTH * HEIGHT;
 		const static int AREA_SIZE = WIDTH * WIDTH;
 
-		ZC_ENUM State {
+		enum class State {
 			UNLOADED = 0,
 			BUILDING,
 			BUILT,

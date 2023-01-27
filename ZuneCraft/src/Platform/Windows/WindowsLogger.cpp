@@ -2,7 +2,7 @@
 #include "Core/Base.h"
 
 #include <iostream>
-#include <Windows.h>
+#include <windows.h>
 
 namespace ZuneCraft {
 	void Logger::Init() {

@@ -11,7 +11,7 @@
 namespace ZuneCraft {
 	class RenderAPI {
 	public:
-		ZC_ENUM API{
+		enum class API{
 			NONE = 0,
 			OPENGL_ES_2,
 			OPENGL_4

@@ -1,0 +1,152 @@
+[
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Build/glad.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Build/glad.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Build/glad.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Build/stb_image.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Build/stb_image.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Build/stb_image.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Core/EntryPoint.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Core/EntryPoint.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Core/EntryPoint.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Core/GLWindow.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Core/GLWindow.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Core/GLWindow.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Core/Game.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Core/Game.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Core/Game.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Core/Service.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Core/Service.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Core/Service.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Data/Handle.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Data/Handle.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Data/Handle.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Data/Vertex.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Data/Vertex.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Data/Vertex.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Graphics/Camera.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/Camera.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/Camera.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Graphics/Pipeline.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/Pipeline.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/Pipeline.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Graphics/RenderAPI.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/RenderAPI.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/RenderAPI.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Graphics/Renderer.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/Renderer.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/Renderer.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Graphics/VertexPool.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/VertexPool.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Graphics/VertexPool.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/OpenGL/GLAPI.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLAPI.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLAPI.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/OpenGL/GLCommandQueue.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLCommandQueue.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLCommandQueue.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/OpenGL/GLRenderTarget.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLRenderTarget.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLRenderTarget.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/OpenGL/GLShader.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLShader.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLShader.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/OpenGL/GLStorage.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLStorage.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLStorage.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/OpenGL/GLTexture.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLTexture.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLTexture.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/OpenGL/GLVertexLayout.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLVertexLayout.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/OpenGL/GLVertexLayout.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/Zune/ZuneInput.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/Zune/ZuneInput.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/Zune/ZuneInput.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/Zune/ZuneLogger.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/Zune/ZuneLogger.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/Zune/ZuneLogger.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Platform/Zune/ZuneWindow.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/Zune/ZuneWindow.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Platform/Zune/ZuneWindow.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Threading/Mutex.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Threading/Mutex.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Threading/Mutex.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Threading/Signal.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Threading/Signal.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Threading/Signal.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Threading/ThreadPool.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Threading/ThreadPool.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Threading/ThreadPool.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/Utility/Asset.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Utility/Asset.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/Utility/Asset.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/World/Chunk.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/World/Chunk.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/World/Chunk.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/World/Player.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/World/Player.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/World/Player.cpp"
+},
+{
+  "directory": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build",
+  "command": "/usr/bin/arm-mingw32ce-g++ -DDEBUG -DUNDER_CE -DUNICODE -DWINCE -DZC_PLATFORM_ZUNE -DZUNE_HD -D_ARM_ -D_CRT_SECURE_NO_WARNINGS -D_DEBUG -D_UNICODE -D_WIN32_WCE=0x600 -D_WINDOWS -I/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src -isystem /opt/OpenZDK/ZUNE/Include/ZDK -isystem /opt/OpenZDK/NVIDIA/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/glm -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glad -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/nothings -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/Platform/Win/glfw/include -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/fastnoise -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui/imgui -isystem /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/ext/imgui -Wall -g -std=gnu++17 -o CMakeFiles/ZuneCraft.dir/src/World/World.cpp.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/World/World.cpp",
+  "file": "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/src/World/World.cpp"
+}
+]

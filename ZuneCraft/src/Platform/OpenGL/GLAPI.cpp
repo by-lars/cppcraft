@@ -29,6 +29,10 @@ namespace ZuneCraft {
 		case RenderAPI::API::OPENGL_ES_2:
 			m_Capabilities.AttributeDivisor = false;
 			break;
+
+		default:
+			ZC_ASSERT(false, "Unknown OpenGL Version");
+			break;
 		}
 
 		glEnable(GL_DEPTH_TEST);
@@ -45,8 +49,10 @@ namespace ZuneCraft {
 			case TextureFormat::RGB: return GL_RGB; break;
 			case TextureFormat::RGBA: return GL_RGBA; break;
 			case TextureFormat::DEPTH_COMPONENT16: return GL_DEPTH_COMPONENT16; break;
+	#ifdef ZC_PLATFORM_WIN32
 			case TextureFormat::DEPTH_COMPONENT24: return GL_DEPTH_COMPONENT24; break;
 			case TextureFormat::DEPTH_COMPONENT32: return GL_DEPTH_COMPONENT32; break;
+	#endif
 			default: ZC_ASSERT(false, "Unknown Texture Format"); break;
 		}
 	}
@@ -102,9 +108,11 @@ namespace ZuneCraft {
 			default: ZC_ASSERT(false, "Unknown StorageFormat Enum");			 break;
 		}
 		
+	#ifdef ZC_PLATFORM_WIN32
 		if (usage == StorageUsage::DRAW_COMMAND) {
 			return new GLVBOStorage(GL_DRAW_INDIRECT_BUFFER, initialCount, stride, GL_DYNAMIC_DRAW, initialData);
 		}
+	#endif
 
 		GLenum glUsage = (usage == StorageUsage::MESH_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 		return new GLVBOStorage(GL_ARRAY_BUFFER, initialCount, stride, glUsage, initialData);

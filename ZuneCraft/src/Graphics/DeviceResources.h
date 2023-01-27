@@ -8,20 +8,20 @@
 
 namespace ZuneCraft {
 
-	ZC_ENUM StorageUsage {
+	enum class StorageUsage {
 		MESH_STATIC = 0,
 		MESH_DYNAMIC,
 		INSTANCE_DATA,
 		DRAW_COMMAND
 	};
 
-	ZC_ENUM DrawMode {
+	enum class DrawMode {
 		TRIANGLES = 0,
 		TRIANGLE_STRIP,
 		LINES
 	};
 
-	ZC_ENUM StorageFormat {
+	enum class StorageFormat {
 		UBYTE_VEC4 = 0,
 		UBYTE_VEC4_VEC4,
 
@@ -34,12 +34,12 @@ namespace ZuneCraft {
 		DRAW_COMMAND
 	};
 
-	ZC_ENUM FilterMode {
+	enum class FilterMode {
 		NEAREST = 0,
 		LINEAR
 	};
 
-	ZC_ENUM TextureFormat{
+	enum class TextureFormat{
 		RGB = 0,
 		RGBA,
 
@@ -48,7 +48,7 @@ namespace ZuneCraft {
 		DEPTH_COMPONENT32
 	};
 
-	ZC_ENUM UsageHint {
+	enum class UsageHint {
 		DYNAMIC = 0,
 		STATIC = 1
 	};

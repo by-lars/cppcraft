@@ -3,7 +3,7 @@
 #include <functional>
 
 namespace ZuneCraft {
-	template<class... Args>
+	template<typename... Args>
 	class Event {
 	public:
 		using Callback = std::function<void(Args...)>;

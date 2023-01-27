@@ -2,7 +2,7 @@
 #include "Core/Base.h"
 
 namespace ZuneCraft {
-	ZC_ENUM Material {
+	enum class Material {
 		AIR = 0,
 		GRASS = 1,
 		STONE = 2,

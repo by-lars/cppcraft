@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Base.h"
 #include <vector>
+#include <typeinfo>
 
 namespace ZuneCraft {
 	class IService {

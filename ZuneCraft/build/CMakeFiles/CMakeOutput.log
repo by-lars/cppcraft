@@ -1,0 +1,55 @@
+The system is: Linux - 5.10.16.3-microsoft-standard-WSL2 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/arm-mingw32ce-gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.exe"
+
+The C compiler identification is GNU, found in "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/3.22.1/CompilerIdC/a.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/bin/arm-mingw32ce-g++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.exe"
+
+The CXX compiler identification is GNU, found in "/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/3.22.1/CompilerIdCXX/a.exe"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_5d303/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_5d303.dir/build.make CMakeFiles/cmTC_5d303.dir/build
+gmake[1]: Entering directory '/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5d303.dir/testCCompiler.c.o
+/usr/bin/arm-mingw32ce-gcc    -o CMakeFiles/cmTC_5d303.dir/testCCompiler.c.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_5d303
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5d303.dir/link.txt --verbose=1
+/usr/bin/arm-mingw32ce-gcc CMakeFiles/cmTC_5d303.dir/testCCompiler.c.o -o cmTC_5d303 
+gmake[1]: Leaving directory '/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_fdd32/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_fdd32.dir/build.make CMakeFiles/cmTC_fdd32.dir/build
+gmake[1]: Entering directory '/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_fdd32.dir/testCXXCompiler.cxx.o
+/usr/bin/arm-mingw32ce-g++    -o CMakeFiles/cmTC_fdd32.dir/testCXXCompiler.cxx.o -c /mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_fdd32
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fdd32.dir/link.txt --verbose=1
+/usr/bin/arm-mingw32ce-g++ CMakeFiles/cmTC_fdd32.dir/testCXXCompiler.cxx.o -o cmTC_fdd32 
+gmake[1]: Leaving directory '/mnt/s/Dev/C++/ZuneCraft/ZuneCraft/build/CMakeFiles/CMakeTmp'
+
+
+

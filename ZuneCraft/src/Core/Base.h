@@ -21,14 +21,14 @@
 #define ZC_ASSERT(x, y) 
 #endif
 
-typedef signed __int8     int8_t;
-typedef signed __int16    int16_t;
-typedef signed __int32    int32_t;
-typedef unsigned __int8   uint8_t;
-typedef unsigned __int16  uint16_t;
-typedef unsigned __int32  uint32_t;
-typedef signed __int64    int64_t;
-typedef unsigned __int64  uint64_t;
+// typedef signed __int8     int8_t;
+// typedef signed __int16    int16_t;
+// typedef signed __int32    int32_t;
+// typedef unsigned __int8   uint8_t;
+// typedef unsigned __int16  uint16_t;
+// typedef unsigned __int32  uint32_t;
+// typedef signed __int64    int64_t;
+// typedef unsigned __int64  uint64_t;
 
 typedef unsigned int     GLuint;
 typedef			 int     GLint;
@@ -41,7 +41,7 @@ typedef			 int	 GLsizei;
 #endif
 
 namespace ZuneCraft {
-	ZC_ENUM Result {
+	enum class Result {
 		FAILURE = 0,
 		SUCCESS = 1
 	};

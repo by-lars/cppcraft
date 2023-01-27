@@ -2,7 +2,7 @@
 #include "Core/Service.h"
 #include "Threading/Mutex.h"
 #include "Threading/Signal.h"
-#include <Windows.h>
+#include <windows.h>
 
 namespace ZuneCraft {
 	class ThreadPool : public IService {

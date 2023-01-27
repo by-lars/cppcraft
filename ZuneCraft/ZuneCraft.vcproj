@@ -264,6 +264,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Data\Event.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Utility\File.h"
 				>
 			</File>
@@ -404,11 +408,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Graphics\Vertex.h"
+				RelativePath=".\src\Data\Vertex.h"
 				>
 			</File>
 			<File
-				RelativePath=".\src\Data\Vertex.h"
+				RelativePath=".\src\Graphics\Vertex.h"
 				>
 			</File>
 			<File
@@ -540,11 +544,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Data\Vertex.cpp"
+				RelativePath=".\src\Graphics\Vertex.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\Graphics\Vertex.cpp"
+				RelativePath=".\src\Data\Vertex.cpp"
 				>
 			</File>
 			<File

@@ -7,8 +7,8 @@
 #endif
 
 #ifdef ZC_PLATFORM_ZUNE
-#define ZC_ENUM enum
-#define nullptr NULL
-#pragma warning (disable : 4482)
+// #define ZC_ENUM enum
+// #define nullptr NULL
+// #pragma warning (disable : 4482)
 #define ZC_ABORT() exit(-1)
 #endif

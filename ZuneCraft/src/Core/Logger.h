@@ -6,7 +6,7 @@
 #include <iostream>
 
 namespace ZuneCraft {
-	ZC_ENUM LogLevel {
+	enum class LogLevel {
 		LALLOC = 0,
 		LDEBUG,
 		LLOG,

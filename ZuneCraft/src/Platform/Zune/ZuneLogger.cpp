@@ -33,10 +33,10 @@ namespace ZuneCraft {
 		case LogLevel::LFATAL: std::cout << "[FATAL] "; break;
 		}
 
-		if (level == LERROR || level == LFATAL) {
+		if (level == LogLevel::LERROR || level == LogLevel::LFATAL) {
 			wchar_t wtext[1024];
 			std::string msg = stream.str();
-			std::mbstowcs(wtext, msg.c_str(), msg.length() + 1);
+			mbstowcs(wtext, msg.c_str(), msg.length() + 1);
 			ZDKSystem_ShowMessageBox(wtext, MESSAGEBOX_TYPE_OK);
 		}
 		

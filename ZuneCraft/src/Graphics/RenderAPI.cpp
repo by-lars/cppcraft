@@ -4,14 +4,12 @@
 
 #include "Platform/OpenGL/GLAPI.h"
 
-
-
 namespace ZuneCraft {
 	RenderAPI* RenderAPI::Create() {
 	#ifdef ZC_PLATFORM_ZUNE
-		Game::Get().GetConfig().GraphicsAPI = RenderAPI::API::OPENGL_ES_2;
-		return new OpenGLES2API();
-	#else 
+		Game::Get().GetConfig().GraphicsAPI = RenderAPI::API::OPENGL_ES_2; 
+	#endif
+
 		switch (Game::Get().GetConfig().GraphicsAPI) {
 			case RenderAPI::API::NONE: ZC_ASSERT(false, "RenderAPI None is currently not supported."); break;
 
@@ -21,7 +19,6 @@ namespace ZuneCraft {
 
 			default: ZC_FATAL_ERROR("Unknown RenderAPI."); break;
 		}
-	#endif
 	}
 
 	RenderAPI::API RenderAPI::GetAPI() {

@@ -1,6 +1,6 @@
 #include "Core/Base.h"
 #include "Threading/Signal.h"
-#include <Windows.h>
+#include <windows.h>
 
 namespace ZuneCraft {
 	Signal::Signal() {

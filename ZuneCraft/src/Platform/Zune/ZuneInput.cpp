@@ -57,7 +57,7 @@ namespace ZuneCraft {
 		return false;
 	}
 
-	glm::vec2 Input::GetAxies() {
+	glm::vec2 Input::GetRotationAxies() {
 		static float lastX = 0;
 		static float lastY = 0;
 		static bool isFirstTouch = true;

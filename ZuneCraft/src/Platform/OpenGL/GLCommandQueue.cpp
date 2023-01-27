@@ -17,7 +17,7 @@ namespace ZuneCraft {
 	}
 
 	void GLDirectCommandQueue::Draw() {
-		for (int i = 0; i < m_Commands.size(); i++) {
+		for (size_t i = 0; i < m_Commands.size(); i++) {
 			glDrawArrays(m_DrawMode, m_Commands[i].First, m_Commands[i].Count);
 		}
 	}
@@ -39,8 +39,9 @@ namespace ZuneCraft {
 	}
 
 	void GLIndirectCommandQueue::Draw() {
+#ifdef ZC_PLATFORM_WIN32
 		glMultiDrawArraysIndirect(m_DrawMode, 0, m_Count, 0);
+#endif
 	}
-
 
 }

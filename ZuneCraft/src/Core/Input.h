@@ -9,7 +9,7 @@ namespace ZuneCraft {
 		Input();
 		~Input();
 
-		float GetTime();
+		double GetTime();
 
 		glm::vec2 GetMovementAxies();
 		glm::vec2 GetRotationAxies();
