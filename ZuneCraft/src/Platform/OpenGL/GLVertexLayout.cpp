@@ -12,7 +12,7 @@ namespace ZuneCraft {
 		ZC_DEBUG("Created GLVertexLayout");
 	}
 
-	void GLVertexLayout::AddFormat(GPUStorage* storage, StorageFormat format, StorageUsage usage) {
+	void GLVertexLayout::AddFormat(Ref<GPUStorage>& storage, StorageFormat format, StorageUsage usage) {
 	#ifdef ZC_PLATFORM_WIN32
 		Bind();
 		storage->Bind();
@@ -64,7 +64,7 @@ namespace ZuneCraft {
 		ZC_DEBUG("Created GLES2VertexLayout");
 	}
 
-	void GLES2VertexLayout::AddFormat(GPUStorage* storage, StorageFormat format, StorageUsage usage) {
+	void GLES2VertexLayout::AddFormat(Ref<GPUStorage>& storage, StorageFormat format, StorageUsage usage) {
 		ZC_ASSERT(usage != StorageUsage::INSTANCE_DATA, "StorageUsage::INSTANCE_DATA not supported by GLES2, used ShaderStorage instead");
 		
 		Layout layout;

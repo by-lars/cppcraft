@@ -37,7 +37,7 @@ namespace ZuneCraft {
 
 		glEnable(GL_DEPTH_TEST);
 
-		m_DefaultRenderTarget = new GLRenderTarget(0, Game::Get().GetWindow().GetWidth(), Game::Get().GetWindow().GetHeight());
+		m_DefaultRenderTarget = CreateRef<GLRenderTarget>(0, Game::Get().GetWindow().GetWidth(), Game::Get().GetWindow().GetHeight());
 	}
 
 	OpenGLAPI::~OpenGLAPI() {
@@ -57,15 +57,15 @@ namespace ZuneCraft {
 		}
 	}
 
-	Shader* OpenGLAPI::CreateShader(const std::string& assetName) {
-		return new GLShader(assetName);
+	Ref<Shader> OpenGLAPI::CreateShader(const std::string& assetName) {
+		return CreateRef<GLShader>(assetName);
 	}
 
 	Pipeline& OpenGLAPI::CreatePipeline() {
 		return *(new Pipeline(this));
 	}
 
-	CommandQueue* OpenGLAPI::CreateCommandQueue(DrawMode drawMode, UsageHint hint) {
+	Ref<CommandQueue> OpenGLAPI::CreateCommandQueue(DrawMode drawMode, UsageHint hint) {
 		GLenum glDrawMode = GL_INVALID_ENUM;
 		switch (drawMode) {
 			case DrawMode::TRIANGLES: glDrawMode = GL_TRIANGLES; break;
@@ -76,28 +76,28 @@ namespace ZuneCraft {
 		
 		if (GetAPI() == RenderAPI::API::OPENGL_ES_2) {
 			//GLES2 Does not support the "Draw Indirect Buffer"
-			return new GLDirectCommandQueue(glDrawMode);
+			return CreateRef<GLDirectCommandQueue>(glDrawMode);
 		}
 		
 		switch (hint) {
-			case ZuneCraft::UsageHint::DYNAMIC: return new GLIndirectCommandQueue(this, glDrawMode); break;
-			case ZuneCraft::UsageHint::STATIC: return new GLDirectCommandQueue(glDrawMode); break;
+			case ZuneCraft::UsageHint::DYNAMIC: return CreateRef<GLIndirectCommandQueue>(this, glDrawMode); break;
+			case ZuneCraft::UsageHint::STATIC: return CreateRef<GLDirectCommandQueue>(glDrawMode); break;
 			default: ZC_ASSERT(false, "Unkown Usage Hint");break;
 		}
 
 		ZC_ASSERT(false, "Fatal Error - Did not retrun from switch");
 	}
 
-	VertexLayout* OpenGLAPI::CreateVertexLayout() {
+	Ref<VertexLayout> OpenGLAPI::CreateVertexLayout() {
 		if (GetAPI() == RenderAPI::API::OPENGL_ES_2) {
 			//GLES2 Does not support VertexArrayObjects
-			return new GLES2VertexLayout();
+			return CreateRef<GLES2VertexLayout>();
 		}
 
-		return new GLVertexLayout();
+		return CreateRef<GLVertexLayout>();
 	}
 
-	GPUStorage* OpenGLAPI::CreateStorage(StorageUsage usage, StorageFormat format, uint32_t initialCount, void* initialData) {
+	Ref<GPUStorage> OpenGLAPI::CreateStorage(StorageUsage usage, StorageFormat format, uint32_t initialCount, void* initialData) {
 		GLuint stride = 0;
 		switch (format) {
 			case StorageFormat::UBYTE_VEC4:		 stride = 4;					 break;
@@ -110,19 +110,19 @@ namespace ZuneCraft {
 		
 	#ifdef ZC_PLATFORM_WIN32
 		if (usage == StorageUsage::DRAW_COMMAND) {
-			return new GLVBOStorage(GL_DRAW_INDIRECT_BUFFER, initialCount, stride, GL_DYNAMIC_DRAW, initialData);
+			return CreateRef<GLVBOStorage>(GL_DRAW_INDIRECT_BUFFER, initialCount, stride, GL_DYNAMIC_DRAW, initialData);
 		}
 	#endif
 
 		GLenum glUsage = (usage == StorageUsage::MESH_STATIC ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
-		return new GLVBOStorage(GL_ARRAY_BUFFER, initialCount, stride, glUsage, initialData);
+		return CreateRef<GLVBOStorage>(GL_ARRAY_BUFFER, initialCount, stride, glUsage, initialData);
 	}
 
-	GPUStorage* OpenGLAPI::CreateShaderStorage(Shader* shader, const std::string& location, StorageFormat format, uint32_t initialSize) {
-		return new GLUniformStorage(shader, location, format, initialSize);
+	Ref<GPUStorage> OpenGLAPI::CreateShaderStorage(Ref<Shader>& shader, const std::string& location, StorageFormat format, uint32_t initialSize) {
+		return CreateRef<GLUniformStorage>(shader, location, format, initialSize);
 	}
 
-	Texture* OpenGLAPI::CreateTexture(uint32_t width,uint32_t height, TextureFormat format, FilterMode filterMode) {
+	Ref<Texture> OpenGLAPI::CreateTexture(uint32_t width, uint32_t height, TextureFormat format, FilterMode filterMode) {
 		GLenum glTextureFormat = TextureFormatToNative(format);
 		GLenum glMinFilterMode = GL_INVALID_ENUM;
 		GLenum glMagFilterMode = GL_INVALID_ENUM;
@@ -139,7 +139,7 @@ namespace ZuneCraft {
 			default: ZC_FATAL_ERROR("Unkown Filter Mode"); break;
 		}
 
-		return new GLTexture(width, height, glTextureFormat, glMinFilterMode, glMagFilterMode);
+		return CreateRef<GLTexture>(width, height, glTextureFormat, glMinFilterMode, glMagFilterMode);
 	}
 
 
@@ -147,8 +147,8 @@ namespace ZuneCraft {
 		glActiveTexture(GL_TEXTURE0 + slot);
 	}
 
-	RenderTarget* OpenGLAPI::CreateRenderTarget(GLuint width, GLuint height) {
-		return new GLRenderTarget(width, height);
+	Ref<RenderTarget> OpenGLAPI::CreateRenderTarget(GLuint width, GLuint height) {
+		return CreateRef<GLRenderTarget>(width, height);
 	}
 
 	void OpenGLAPI::Clear() {
@@ -163,7 +163,7 @@ namespace ZuneCraft {
 		glViewport(x, y, width, height);
 	}
 
-	RenderTarget* OpenGLAPI::GetDefaultRenderTarget() {
+	Ref<RenderTarget> OpenGLAPI::GetDefaultRenderTarget() {
 		return m_DefaultRenderTarget;
 	}
 

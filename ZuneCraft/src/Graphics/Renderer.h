@@ -29,7 +29,7 @@ namespace ZuneCraft {
 		void BatchFreeMesh(Id hMesh);
 
 	private:
-		RenderAPI* m_Device;
+		Ref<RenderAPI> m_Device;
 
 		struct BatchData {
 			glm::vec3 Translation;
@@ -46,7 +46,7 @@ namespace ZuneCraft {
 
 		Pipeline* m_MeshPipeline;
 		Pipeline* m_FXPipeline;
-		GPUStorage* m_BatchDataBuffer;
+		Ref<GPUStorage> m_BatchDataBuffer;
 
 		size_t m_BatchCurrentOffset;
 

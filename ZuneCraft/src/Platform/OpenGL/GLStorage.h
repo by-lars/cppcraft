@@ -28,7 +28,7 @@ namespace ZuneCraft {
 
 	class GLUniformStorage : public GPUStorage {
 	public:
-		GLUniformStorage(Shader* shader, const std::string& location, StorageFormat format, GLuint initialSize);
+		GLUniformStorage(Ref<Shader>& shader, const std::string& location, StorageFormat format, GLuint initialSize);
 		void Upload(uint32_t size, uint32_t offset, void* data) override;
 		void Bind() override;
 		size_t GetMaxCount() override;
@@ -36,7 +36,7 @@ namespace ZuneCraft {
 		void Resize(uint32_t newSize) override;
 
 	private:
-		Shader* m_Shader;
+		Ref<Shader> m_Shader;
 		GLuint m_MaxSize;
 		GLuint m_Location;
 		std::string m_UniformName;

@@ -25,7 +25,7 @@ namespace ZuneCraft {
 
 	private:
 		GLenum m_DrawMode;
-		GPUStorage* m_Buffer;
+		Ref<GPUStorage> m_Buffer;
 		GLuint m_Count;
 	};
 }

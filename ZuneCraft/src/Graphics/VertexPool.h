@@ -20,7 +20,7 @@ namespace ZuneCraft {
 
 	class VertexPool {
 	public:
-		VertexPool(Pipeline* pipeline, GPUStorage* storage);
+		VertexPool(Pipeline* pipeline, Ref<GPUStorage> storage);
 		~VertexPool();
 		VPNode* PushBack(void* meshData, size_t meshSize, size_t batchId);
 		void Free(VPNode* node);
@@ -29,7 +29,7 @@ namespace ZuneCraft {
 
 	private:
 		Pipeline* m_Pipeline;
-		GPUStorage* m_Storage;
+		Ref<GPUStorage> m_Storage;
 		VPNode* m_pLayout;
 		bool m_Invalidated;
 	};

@@ -2,7 +2,7 @@
 #include <functional>
 
 namespace ZuneCraft {
-	VertexPool::VertexPool(Pipeline* pipeline, GPUStorage* storage)
+	VertexPool::VertexPool(Pipeline* pipeline, Ref<GPUStorage> storage)
 		: m_Pipeline(pipeline), m_Storage(storage), m_Invalidated(false) {
 	
 		m_pLayout = new VPNode();

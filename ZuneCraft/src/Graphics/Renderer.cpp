@@ -120,7 +120,6 @@ namespace ZuneCraft {
 	}
 
 	Renderer::~Renderer() {
-		delete m_Device;
 		delete m_BatchMesh;
 	}
 

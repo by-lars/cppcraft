@@ -31,7 +31,7 @@ namespace ZuneCraft {
 	}
 
 	Pipeline& Pipeline::AddStorage(StorageUsage usage, StorageFormat format, uint32_t initialSize, void* initialData) {
-		GPUStorage* storage = nullptr;
+		Ref<GPUStorage> storage = nullptr;
 
 		if (usage == StorageUsage::INSTANCE_DATA && m_Device->GetCapabilities().AttributeDivisor == false) {
 			ZC_ASSERT(m_Shader != nullptr, "API: " << m_Device->GetAPIName() << ": requires a Shader in order to add a INSTANCE_DATA buffer");
@@ -99,11 +99,11 @@ namespace ZuneCraft {
 		m_CommandQueue->Clear();
 	}
 
-	Shader* Pipeline::GetShader() {
+	Ref<Shader> Pipeline::GetShader() {
 		return m_Shader;
 	}
 
-	GPUStorage* Pipeline::GetStorage(size_t index) {
+	Ref<GPUStorage> Pipeline::GetStorage(size_t index) {
 		return m_Storages[index];
 	}
 }

@@ -4,6 +4,7 @@
 
 namespace ZuneCraft {
 	class RenderAPI;
+
 	class Pipeline {
 	public:
 		Pipeline(RenderAPI* device);
@@ -21,18 +22,18 @@ namespace ZuneCraft {
 		void PushCommand(const RenderCommand& cmd);
 		void ClearCommands();
 
-		Shader* GetShader();
-		GPUStorage* GetStorage(size_t index);
+		Ref<Shader> GetShader();
+		Ref<GPUStorage> GetStorage(size_t index);
 
 	private:
+		RenderAPI* m_Device;
 		struct { uint32_t X, Y, Width, Height; } m_Viewport;
-		std::vector<GPUStorage*> m_Storages;
+		std::vector<Ref<GPUStorage>> m_Storages;
 		DrawMode m_DrawMode;
 		UsageHint m_UsageHint;
-		RenderAPI* m_Device;
-		Shader* m_Shader;
-		RenderTarget* m_RenderTarget;
-		CommandQueue* m_CommandQueue;
-		VertexLayout* m_VertexLayout;
+		Ref<Shader> m_Shader;
+		Ref<RenderTarget> m_RenderTarget;
+		Ref<CommandQueue> m_CommandQueue;
+		Ref<VertexLayout> m_VertexLayout;
 	};
 }

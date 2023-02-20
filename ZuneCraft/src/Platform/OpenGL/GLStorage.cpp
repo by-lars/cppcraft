@@ -82,7 +82,7 @@ namespace ZuneCraft {
 	}
 
 	//Shader Uniform 
-	GLUniformStorage::GLUniformStorage(Shader* shader, const std::string& location, StorageFormat format, GLuint initialSize) {
+	GLUniformStorage::GLUniformStorage(Ref<Shader>& shader, const std::string& location, StorageFormat format, GLuint initialSize) {
 		m_MaxSize = initialSize;
 		m_Shader = shader;
 		m_Format = format;

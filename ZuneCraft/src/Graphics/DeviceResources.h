@@ -105,7 +105,7 @@ namespace ZuneCraft {
 	class VertexLayout {
 	public:
 		virtual ~VertexLayout() { }
-		virtual void AddFormat(GPUStorage* storage, StorageFormat format, StorageUsage usage) = 0;
+		virtual void AddFormat(Ref<GPUStorage>& storage, StorageFormat format, StorageUsage usage) = 0;
 		virtual void Bind() = 0;
 	};
 

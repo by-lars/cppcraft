@@ -5,7 +5,7 @@
 #include "Platform/OpenGL/GLAPI.h"
 
 namespace ZuneCraft {
-	RenderAPI* RenderAPI::Create() {
+	Ref<RenderAPI> RenderAPI::Create() {
 	#ifdef ZC_PLATFORM_ZUNE
 		Game::Get().GetConfig().GraphicsAPI = RenderAPI::API::OPENGL_ES_2; 
 	#endif
@@ -15,7 +15,7 @@ namespace ZuneCraft {
 
 			case RenderAPI::API::OPENGL_4:
 			case RenderAPI::API::OPENGL_ES_2: 
-				return new OpenGLAPI(); break;
+				return CreateRef<OpenGLAPI>(); break;
 
 			default: ZC_FATAL_ERROR("Unknown RenderAPI."); break;
 		}

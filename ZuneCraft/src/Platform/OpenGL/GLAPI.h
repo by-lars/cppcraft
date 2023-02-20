@@ -13,16 +13,16 @@ namespace ZuneCraft {
 		~OpenGLAPI();
 
 		Pipeline& CreatePipeline() override;
-		CommandQueue* CreateCommandQueue(DrawMode mode, UsageHint hint) override;
-		VertexLayout* CreateVertexLayout() override;
+		Ref<CommandQueue> CreateCommandQueue(DrawMode mode, UsageHint hint) override;
+		Ref<VertexLayout> CreateVertexLayout() override;
 
-		Shader* CreateShader(const std::string& assetName) override;
-		GPUStorage* CreateStorage(StorageUsage usage, StorageFormat format, uint32_t initialCount, void* initialData) override;
-		GPUStorage* CreateShaderStorage(Shader* shader, const std::string& location, StorageFormat format, uint32_t initialSize) override;
-		Texture* CreateTexture(uint32_t width, uint32_t height, TextureFormat format, FilterMode filterMode) override;
-		RenderTarget* CreateRenderTarget(GLuint width, GLuint height) override;
+		Ref<Shader>			CreateShader(const std::string& assetName) override;
+		Ref<GPUStorage>		CreateStorage(StorageUsage usage, StorageFormat format, uint32_t initialCount, void* initialData) override;
+		Ref<GPUStorage>		CreateShaderStorage(Ref<Shader>& shader, const std::string& location, StorageFormat format, uint32_t initialSize) override;
+		Ref<Texture>		CreateTexture(uint32_t width, uint32_t height, TextureFormat format, FilterMode filterMode) override;
+		Ref<RenderTarget>	CreateRenderTarget(GLuint width, GLuint height) override;
 
-		RenderTarget* GetDefaultRenderTarget() override;
+		Ref<RenderTarget> GetDefaultRenderTarget() override;
 		
 		void ActivateTextureSlot(uint32_t slot) override;
 
@@ -36,6 +36,6 @@ namespace ZuneCraft {
 		static GLenum TextureFormatToNative(TextureFormat format);
 
 	private:
-		RenderTarget* m_DefaultRenderTarget;
+		Ref<RenderTarget> m_DefaultRenderTarget;
 	};
 }
