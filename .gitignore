@@ -1,12 +1,5 @@
 .vs
-_deploy
-ZuneCraft.ncb
+build
 *.nvbf
 *.nvbv
-ZuneCraft/bin
-ZuneCraft/obj
-ZuneCraft/ZuneCraft.vcproj.*
-Launcher/obj/
-Launcher/bin/
-*.cachefile
-Launcher/Content
+.vscode
