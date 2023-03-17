@@ -7,3 +7,6 @@
 [submodule "ZuneCraft/ext/imgui/imgui"]
 	path = ext/imgui/imgui
 	url = https://github.com/ocornut/imgui
+[submodule "ext/glfw"]
+	path = ext/glfw
+	url = https://github.com/glfw/glfw.git
