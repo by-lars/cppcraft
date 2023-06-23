@@ -7,18 +7,10 @@
 #include <stb/stb_image.h>
 
 namespace ZuneCraft {
-	#ifdef ZC_PLATFORM_WIN32 
-		std::string Asset::s_WorkingDirectory = "assets\\";
-	#elif ZC_PLATFORM_ZUNE
-		std::string Asset::s_WorkingDirectory = "\\gametitle\\584E07D1\\Content\\";
-	#endif
-
+	std::string Asset::s_WorkingDirectory = "assets/";
+	
 	Result Asset::GetShaderAttribs(const std::string& name, std::vector<std::string>* _out_Lines) {
-		#ifdef ZC_PLATFORM_ZUNE
-		std::string localPath = s_WorkingDirectory + "\\" + name;
-		#else
-		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
-		#endif
+		std::string localPath = s_WorkingDirectory + "shader/" + RenderAPI::GetAPIName() + "/" + name;
 
 		std::ifstream file(localPath.c_str());
 
@@ -36,11 +28,7 @@ namespace ZuneCraft {
 	}
 
 	std::string Asset::GetShaderSource(const std::string& name) {
-	#ifdef ZC_PLATFORM_ZUNE
-		std::string localPath = s_WorkingDirectory + "\\" + name;
-	#else
-		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
-	#endif
+		std::string localPath = s_WorkingDirectory + "shader/" + RenderAPI::GetAPIName() + "/" + name;
 
 		std::ifstream file(localPath.c_str(), std::ios::ate);
 
@@ -59,11 +47,7 @@ namespace ZuneCraft {
 	}
 
 	Result Asset::GetImage(const std::string& name, Image* _out_Image) {
-	#ifdef ZC_PLATFORM_ZUNE
-		std::string localPath = s_WorkingDirectory + "\\" + name;
-	#else
-		std::string localPath = s_WorkingDirectory + "image" + "\\" + name;
-	#endif
+		std::string localPath = s_WorkingDirectory + "image" + "/" + name;
 
 		stbi_set_flip_vertically_on_load(true);
 
@@ -77,29 +61,6 @@ namespace ZuneCraft {
 		return Result::SUCCESS;
 	}
 
-	Result Asset::GetShaderBinary(const std::string& name, std::vector<char>* _out_Binary) {
-	#ifdef ZC_PLATFORM_ZUNE
-		std::string localPath = s_WorkingDirectory + "\\" + name;
-	#else
-		std::string localPath = s_WorkingDirectory + "shader\\" + RenderAPI::GetAPIName() + "\\" + name;
-	#endif
-
-		std::ifstream file(localPath.c_str(), std::ios::ate | std::ios::binary);
-
-		if (file.is_open() == false) {
-			ZC_FATAL_ERROR("Could not open file: " << localPath);
-			return Result::FAILURE;
-		}
-
-		_out_Binary->resize(file.tellg());
-		file.seekg(0);
-
-		
-		file.read(&(*_out_Binary)[0], _out_Binary->size());
-		file.close();
-
-		return Result::SUCCESS;
-	}
 
 	TextureFormat Image::GetFormat() const {
 		if (NrChannels == 3) {

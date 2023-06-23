@@ -3,7 +3,6 @@
 #include "World/Chunk.h"
 #include "Data/Handle.h"
 #include "World/Player.h"
-#include "Threading/Mutex.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>

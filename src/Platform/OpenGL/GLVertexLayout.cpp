@@ -5,15 +5,15 @@
 namespace ZuneCraft {
 	//GL3 Vertex Layout
 	GLVertexLayout::GLVertexLayout() {
-	#ifdef ZC_PLATFORM_WIN32
+
 		glGenVertexArrays(1, &m_Handle);
-	#endif
+
 		m_AttribCounter = 0;
 		ZC_DEBUG("Created GLVertexLayout");
 	}
 
 	void GLVertexLayout::AddFormat(Ref<GPUStorage>& storage, StorageFormat format, StorageUsage usage) {
-	#ifdef ZC_PLATFORM_WIN32
+
 		Bind();
 		storage->Bind();
 
@@ -50,13 +50,13 @@ namespace ZuneCraft {
 		}
 
 		m_AttribCounter++;
-	#endif
+
 	}
 
 	void GLVertexLayout::Bind() {
-	#ifdef ZC_PLATFORM_WIN32
+	
 		glBindVertexArray(m_Handle);
-	#endif
+	
 	}
 
 	//GLES2 VertexLayout

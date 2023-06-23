@@ -1,13 +1,15 @@
 #pragma once
 #include "Core/GLWindow.h"
 
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
+
+class GLFWwindow;
 
 namespace ZuneCraft {
-	class WindowsWindow : public Window {
+	class GLFWWindow : public Window {
 	public:
-		WindowsWindow();
-		~WindowsWindow();
+		GLFWWindow();
+		~GLFWWindow();
 
 		bool ShouldClose() override;
 		void Update() override;

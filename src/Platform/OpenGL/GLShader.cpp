@@ -8,7 +8,6 @@
 namespace ZuneCraft {
 
 	void GLShader::CompileShader(GLint shader, const GLchar* source) {
-#ifdef ZC_PLATFORM_WIN32
 		glShaderSource(shader, 1, &source, 0);
 		glCompileShader(shader);
 
@@ -20,10 +19,9 @@ namespace ZuneCraft {
 			glGetShaderInfoLog(shader, 2048, 0, log);
 			ZC_FATAL_ERROR("Failed to compile shader: " << shader << "\n" << log);
 		}
-#endif
 	}
 
-	void GLShader::ShaderFromSource(const std::string& assetName) {
+	GLShader::GLShader(const std::string& assetName) {
 		std::string vertexCode = Asset::GetShaderSource(assetName + ".vs");
 		std::string fragmentCode = Asset::GetShaderSource(assetName + ".fs");
 
@@ -56,53 +54,8 @@ namespace ZuneCraft {
 			glGetProgramInfoLog(m_Program, 1024, 0, log);
 			ZC_FATAL_ERROR("Failed to link shader: " << m_Program << "\n" << log);
 		}
-	}
-
-	void GLShader::ShaderFromBinary(const std::string& assetName) {
-		std::vector<char> vertexBinary;
-		Asset::GetShaderBinary(assetName + ".nvbv", &vertexBinary);
-
-		std::vector<char> fragmentBinary;
-		Asset::GetShaderBinary(assetName + ".nvbf", &fragmentBinary);
-
-		m_Program = glCreateProgram();
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-		glShaderBinary(1, &vertexShader, GL_NVIDIA_PLATFORM_BINARY_NV, &vertexBinary[0], vertexBinary.size());
-		glShaderBinary(1, &fragmentShader, GL_NVIDIA_PLATFORM_BINARY_NV, &fragmentBinary[0], fragmentBinary.size());
-
-		glAttachShader(m_Program, vertexShader);
-		glAttachShader(m_Program, fragmentShader);
-
-		std::vector<std::string> attributes;
-		Asset::GetShaderAttribs(assetName + ".attribs", &attributes);
-
-		for (int i = 0; i < attributes.size(); i++) {
-			ZC_DEBUG("Bound " << attributes[i] << " to location " << i);
-			glBindAttribLocation(m_Program, i, attributes[i].c_str());
-		}
-
-		glLinkProgram(m_Program);
-
-		GLint didLink = 0;
-		glGetProgramiv(m_Program, GL_LINK_STATUS, &didLink);
-		if (didLink == false) {
-			char info[1024];
-			GLsizei len = 0;
-			glGetProgramInfoLog(m_Program, 1024, &len, info);
-			ZC_FATAL_ERROR("Could not link shaders:" << info);
-		}
-
-	}
-
-	GLShader::GLShader(const std::string& shaderName) {
-#ifdef ZC_PLATFORM_ZUNE
-		ShaderFromBinary(shaderName);
-#else
-		ShaderFromSource(shaderName);
-#endif
-		ZC_DEBUG("Created GLShader '" << shaderName << "'");
+		
+		ZC_DEBUG("Created GLShader '" << assetName << "'");
 	}
 
 	GLShader::~GLShader() {

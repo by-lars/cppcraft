@@ -2,15 +2,14 @@
 #include "Core/Base.h"
 
 #include <iostream>
-#include <windows.h>
 
 namespace ZuneCraft {
 	void Logger::Init() {
-		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-		DWORD dwMode = 0;
-		GetConsoleMode(hOut, &dwMode);
-		dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-		SetConsoleMode(hOut, dwMode);
+		// HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+		// DWORD dwMode = 0;
+		// GetConsoleMode(hOut, &dwMode);
+		// dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+		// SetConsoleMode(hOut, dwMode);
 	}
 
 	void Logger::Shutdown() {

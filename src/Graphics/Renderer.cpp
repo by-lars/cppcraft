@@ -44,22 +44,13 @@ namespace ZuneCraft {
 		   0.0f, 1.0f, 1.0f,
 	};
 
-#ifdef ZC_PLATFORM_ZUNE
-	//Texture coords are rotated, to render in landscape on a portrait buffer
-	static const unsigned char FullscreenQuad[] = {
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		1, 1, 0, 1,
-		1, 0, 1, 1
-	};
-#elif ZC_PLATFORM_WIN32
 	static const unsigned char FullscreenQuad[] = {
 		0, 1, 0, 1,
 		0, 0, 0, 0,
 		1, 1, 1, 1,
 		1, 0, 1, 0
 	};
-#endif
+
 
 
 	static const size_t MAX_BATCH_MESHES = 512;

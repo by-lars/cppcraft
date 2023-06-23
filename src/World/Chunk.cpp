@@ -6,6 +6,7 @@
 
 #include <time.h>
 #include <fastnoise/FastNoiseLite.h>
+#include <cstring>
 
 namespace ZuneCraft {
 	Chunk::Chunk() {
@@ -130,7 +131,7 @@ namespace ZuneCraft {
 
 			int normal = 2 * (d % 2) - 1;
 
-			memset(mask, 0, Chunk::AREA_SIZE);
+			std::memset(mask, 0, Chunk::AREA_SIZE);
 
 			//Go through each slice of the chunk
 			// (di, u, v); (v, di, u); (u, v, di);
@@ -227,7 +228,7 @@ namespace ZuneCraft {
 	}
 
 	void Chunk::GenTerrain() {
-		memset(&m_Voxels[0], 0, VOLUME_SIZE);
+		std::memset(&m_Voxels[0], 0, VOLUME_SIZE);
 		FastNoiseLite noise;
 
 		noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);

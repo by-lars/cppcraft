@@ -27,6 +27,7 @@ namespace ZuneCraft {
 		m_Buffer = device->CreateStorage(StorageUsage::DRAW_COMMAND, StorageFormat::DRAW_COMMAND, 512, 0);
 		m_Count = 0;
 		m_DrawMode = drawMode;
+		ZC_DEBUG("Created GLIndirectCommandQueue");
 	}
 
 	void GLIndirectCommandQueue::Push(const RenderCommand& cmd) {
@@ -39,9 +40,7 @@ namespace ZuneCraft {
 	}
 
 	void GLIndirectCommandQueue::Draw() {
-#ifdef ZC_PLATFORM_WIN32
 		glMultiDrawArraysIndirect(m_DrawMode, 0, m_Count, 0);
-#endif
 	}
 
 }

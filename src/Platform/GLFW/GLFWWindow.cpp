@@ -1,10 +1,11 @@
-#include "Platform/Windows/WindowsWindow.h"
+#include "Platform/GLFW/GLFWWindow.h"
 #include "Core/Base.h"
 #include "Graphics/Renderer.h"
 #include "Core/Service.h"
 #include "Core/Game.h"
 
 #include <glad/gl.h>
+#include <GLFW/glfw3.h>
 
 #include <iostream>
 
@@ -58,7 +59,7 @@ namespace ZuneCraft {
         
     }
 
-	WindowsWindow::WindowsWindow() {
+	GLFWWindow::GLFWWindow() {
         if (glfwInit() != 1) { ZC_FATAL_ERROR("Could not initialize GLFW"); }
 
 		m_Height = 272 * 4;
@@ -90,26 +91,26 @@ namespace ZuneCraft {
         glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
         #endif
 
-        glfwSetFramebufferSizeCallback(m_Window, WindowsWindow::OnWindowResized);
+        glfwSetFramebufferSizeCallback(m_Window, GLFWWindow::OnWindowResized);
         glfwSwapInterval(1);
         
     }
 
-    void WindowsWindow::OnWindowResized(GLFWwindow* window, int width, int height) {
+    void GLFWWindow::OnWindowResized(GLFWwindow* window, int width, int height) {
         if (width > 0 && height > 0) {
             Services::Get<Renderer>()->SetResolution(width, height);
         }
     }
 
-	bool WindowsWindow::ShouldClose() {
+	bool GLFWWindow::ShouldClose() {
 		return glfwWindowShouldClose(m_Window);
 	}
 
-	void* WindowsWindow::GetNativeWindow() {
+	void* GLFWWindow::GetNativeWindow() {
 		return m_Window;
 	}
 
-	void WindowsWindow::Update() {
+	void GLFWWindow::Update() {
         static double lastTime = 0;
         double frameTime = glfwGetTime();
         double frameDelta = frameTime - lastTime;
@@ -125,7 +126,7 @@ namespace ZuneCraft {
 		glfwSwapBuffers(m_Window);
 	}
 
-	WindowsWindow::~WindowsWindow() {
+	GLFWWindow::~GLFWWindow() {
 		glfwTerminate();
 	}
 }

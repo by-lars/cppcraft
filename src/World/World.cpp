@@ -55,7 +55,7 @@ namespace ZuneCraft {
 			return chunk->GetVoxel(chunkCoords);
 		}
 
-		ZC_WARN("Could not get chunk");
+		ZC_WARN("Could not get chunk at X" << pos.x << " Y" << pos.y << " Z" << pos.z);
 		return Material::AIR;
 	}
 
@@ -78,7 +78,6 @@ namespace ZuneCraft {
 		pos.y = 0;
 
 		ChunkIndex currentChunk = ToChunkIndex(m_Player.GetPos());
-		ChunkIndex chunkDelta = currentChunk - lastChunk;
 		if (currentChunk - lastChunk == glm::ivec2(0, 0) && !forceLoad) { return; }
 
 		for (auto it = m_ChunkMap.begin(); it != m_ChunkMap.end();) {

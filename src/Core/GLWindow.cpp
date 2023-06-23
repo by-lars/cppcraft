@@ -1,8 +1,8 @@
 #include "Core/GLWindow.h"
 
 
-#ifdef ZC_PLATFORM_WIN32
-#include "Platform/Windows/WindowsWindow.h"
+#if defined(ZC_PLATFORM_WIN32) || defined(ZC_PLATFORM_LINUX)
+#include "Platform/GLFW/GLFWWindow.h"
 #elif ZC_PLATFORM_ZUNE
 #include "Platform/Zune/ZuneWindow.h"
 
@@ -11,12 +11,15 @@
 
 namespace ZuneCraft {
 	Window* Window::Create() {
-	#ifdef ZC_PLATFORM_WIN32
-		return new WindowsWindow();
+	#if defined(ZC_PLATFORM_WIN32) || defined(ZC_PLATFORM_LINUX)
+		return new GLFWWindow();
 	#elif ZC_PLATFORM_ZUNE
 		return new ZuneWindow();
 	#else
 	#error Unknown Platform
-	#endif 
+	#endif
+
+	return nullptr;
 	}
+
 }

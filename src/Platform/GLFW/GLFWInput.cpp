@@ -9,7 +9,6 @@ namespace ZuneCraft {
 
 	Input::Input() {
 		glfwSetInputMode((GLFWwindow*)Game::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		QueryPerformanceFrequency((LARGE_INTEGER*)&m_TimerFrequency);
 	}
 
 	Input::~Input() {
@@ -17,9 +16,7 @@ namespace ZuneCraft {
 	}
 
 	double Input::GetTime() {
-		uint64_t time = 0;
-		QueryPerformanceCounter((LARGE_INTEGER*)&time);
-		return (float)time / (float)m_TimerFrequency;
+		return glfwGetTime();
 	}
 	
 	void Input::CheckToggleFocus() {

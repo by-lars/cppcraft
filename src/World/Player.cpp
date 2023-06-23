@@ -17,6 +17,7 @@ namespace ZuneCraft {
 
 		m_Position = glm::vec3(0, 255, 0);
 		m_MovementSpeed = 0.05f;
+		m_Velocity = glm::vec3(0,0,0);
 	}
 
 	void Player::Tick() {

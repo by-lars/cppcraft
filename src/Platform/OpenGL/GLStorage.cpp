@@ -38,10 +38,9 @@ namespace ZuneCraft {
 	static std::string ToType(GLenum e) {
 		switch (e) {
 		case GL_ARRAY_BUFFER: return "GL_ARRAY_BUFFER";
-	#ifdef ZC_PLATFORM_WIN32
 		case GL_VERTEX_ARRAY: return "GL_VERTEX_ARRAY";
 		case GL_DRAW_INDIRECT_BUFFER: return "GL_DRAW_INDIRECT_BUFFER";
-	#endif
+
 		default: return "Unknown";
 		}
 	}
@@ -56,7 +55,7 @@ namespace ZuneCraft {
 	}
 
 	void GLVBOStorage::Resize(uint32_t newSize) {
-	#ifdef ZC_PLATFORM_WIN32
+
 		GLuint tmpHandle = 0;
 
 		glGenBuffers(1, &tmpHandle);
@@ -77,9 +76,6 @@ namespace ZuneCraft {
 		OnResize.Invoke(m_MaxCount);
 
 		ZC_DEBUG("Growing buffer #" << m_Handle << "(" << ToType(m_Type) << ")" << " new size: " << m_MaxCount);
-	#else
-		ZC_DEBUG("GLVBOStroage::Resize is not implemented yet");
-	#endif
 	}
 
 	//Shader Uniform 
