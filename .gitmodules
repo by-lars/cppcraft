@@ -16,3 +16,6 @@
 [submodule "ext/FastNoiseLite"]
 	path = ext/FastNoiseLite
 	url = https://github.com/Auburn/FastNoiseLite.git
+[submodule "ext/stb"]
+	path = ext/stb
+	url = https://github.com/nothings/stb.git
